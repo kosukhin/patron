@@ -1,7 +1,7 @@
 import dts from "rollup-plugin-dts";
 import esbuild from "rollup-plugin-esbuild";
 
-const name = require("./package.json").main.replace(/\.js$/, "");
+const name = "dist/patron";
 
 const bundle = (config) => ({
   ...config,

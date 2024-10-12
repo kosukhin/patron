@@ -2,6 +2,7 @@
   "name": "patron",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "dist/patron.js",
   "module": "dist/patron.mjs",
   "typings": "dist/patron.d.ts",
@@ -39,7 +40,7 @@
       "path": "./node_modules/cz-customizable"
     },
     "cz-customizable": {
-      "config": "./commitizen.js"
+      "config": "./commitizen.cjs"
     }
   }
 }
