@@ -1,5 +1,5 @@
-import { PoolType } from './PoolType';
-import { GuestType, ReceiveOptions } from './GuestType';
+import { PoolType } from "./PoolType";
+import { GuestType, ReceiveOptions } from "./GuestType";
 
 const poolSets = new Map<PoolType, Set<GuestType>>();
 
@@ -20,7 +20,7 @@ export class PatronPool<T> implements PoolType<T> {
   public constructor(private initiator: unknown) {
     poolSets.set(this, this.patrons);
 
-    let lastMicrotask: any = null;
+    let lastMicrotask: (() => void) | null = null;
     const doReceive = (value: T, options?: ReceiveOptions) => {
       this.patrons.forEach((target) => {
         this.sendValueToGuest(value, target, options);
@@ -39,7 +39,10 @@ export class PatronPool<T> implements PoolType<T> {
   }
 
   public add(shouldBePatron: GuestType<T>) {
-    if (shouldBePatron.introduction && shouldBePatron.introduction() === 'patron') {
+    if (
+      shouldBePatron.introduction &&
+      shouldBePatron.introduction() === "patron"
+    ) {
       this.patrons.add(shouldBePatron);
     }
     return this;
@@ -56,7 +59,11 @@ export class PatronPool<T> implements PoolType<T> {
     return this;
   }
 
-  private sendValueToGuest(value: T, guest: GuestType<T>, options?: ReceiveOptions) {
+  private sendValueToGuest(
+    value: T,
+    guest: GuestType<T>,
+    options?: ReceiveOptions,
+  ) {
     guest.receive(value, {
       ...options,
       data: {

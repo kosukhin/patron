@@ -1,14 +1,16 @@
-import { expect, test } from 'vitest';
-import { Factory } from './Factory';
-import { FakeSource } from '@/modules/system/fake/FakeSource';
-import { Guest } from './Guest';
+import { expect, test } from "vitest";
+import { Factory } from "./Factory";
+import { Guest } from "./Guest";
+import { Source } from "@/Source";
 
-test('factory', () => {
-  const sourceFactory = new Factory(FakeSource);
+test("factory", () => {
+  const sourceFactory = new Factory(Source);
 
   const source = sourceFactory.create(42);
 
-  source.data(new Guest((value) => {
-    expect(value).toBe(42);
-  }));
+  source.receiving(
+    new Guest((value) => {
+      expect(value).toBe(42);
+    }),
+  );
 });

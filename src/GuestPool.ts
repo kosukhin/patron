@@ -1,9 +1,6 @@
-import { PatronPool } from './PatronPool';
-import { PoolType } from './PoolType';
-import {
-  GuestType,
-  ReceiveOptions,
-} from './GuestType';
+import { PatronPool } from "./PatronPool";
+import { PoolType } from "./PoolType";
+import { GuestType, ReceiveOptions } from "./GuestType";
 
 export class GuestPool<T> implements GuestType<T>, PoolType<T> {
   private guests = new Set<GuestType<T>>();
@@ -21,7 +18,7 @@ export class GuestPool<T> implements GuestType<T>, PoolType<T> {
   }
 
   public add(guest: GuestType<T>): this {
-    if (!guest.introduction || guest.introduction() === 'guest') {
+    if (!guest.introduction || guest.introduction() === "guest") {
       this.guests.add(guest);
     }
     this.patronPool.add(guest);

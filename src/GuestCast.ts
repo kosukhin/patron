@@ -1,15 +1,14 @@
-import { GuestType, ReceiveOptions } from './GuestType';
+import { GuestType, ReceiveOptions } from "./GuestType";
 
 export class GuestCast<T> implements GuestType<T> {
   public constructor(
     private sourceGuest: GuestType<unknown>,
     private targetGuest: GuestType<T>,
-  ) {
-  }
+  ) {}
 
   introduction() {
     if (!this.sourceGuest.introduction) {
-      return 'guest';
+      return "guest";
     }
     return this.sourceGuest.introduction();
   }

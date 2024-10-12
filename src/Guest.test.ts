@@ -1,11 +1,13 @@
-import { expect, test } from 'vitest';
-import { FakeSource } from '@/modules/system/fake/FakeSource';
-import { Guest } from './Guest';
+import { expect, test } from "vitest";
+import { Guest } from "./Guest";
+import { Source } from "@/Source";
 
-test('guest dynamic', () => {
-  const one = new FakeSource(1);
+test("guest dynamic", () => {
+  const one = new Source(1);
 
-  one.data(new Guest((value) => {
-    expect(value).toBe(1);
-  }));
+  one.receiving(
+    new Guest((value) => {
+      expect(value).toBe(1);
+    }),
+  );
 });

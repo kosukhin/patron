@@ -1,7 +1,4 @@
-import {
-  GuestType,
-  ReceiveOptions,
-} from './GuestType';
+import { GuestType, ReceiveOptions } from "./GuestType";
 
 export class GuestInTheMiddle<T> implements GuestType<T> {
   public constructor(
@@ -11,7 +8,7 @@ export class GuestInTheMiddle<T> implements GuestType<T> {
 
   introduction() {
     if (!this.baseGuest.introduction) {
-      return 'guest';
+      return "guest";
     }
     return this.baseGuest.introduction();
   }

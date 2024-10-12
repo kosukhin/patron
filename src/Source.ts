@@ -1,6 +1,6 @@
-import { GuestType } from './GuestType';
-import { PatronPool } from './PatronPool';
-import { SourceType } from './SourceType';
+import { GuestType } from "./GuestType";
+import { PatronPool } from "./PatronPool";
+import { SourceType } from "./SourceType";
 
 export class Source<T> implements SourceType<T> {
   private pool = new PatronPool(this);

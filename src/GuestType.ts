@@ -1,7 +1,7 @@
-type GuestIntroduction = 'guest' | 'patron';
+type GuestIntroduction = "guest" | "patron";
 
 export interface ReceiveOptions {
-  data?: unknown,
+  data?: unknown;
 }
 
 export interface GuestType<T = unknown> {

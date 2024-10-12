@@ -1,4 +1,4 @@
-import { GuestType } from './GuestType';
+import { GuestType } from "./GuestType";
 
 export interface ChainType<T = unknown> {
   result(guest: GuestType<T>): this;

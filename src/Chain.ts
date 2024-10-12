@@ -1,12 +1,12 @@
-import { Cache } from './Cache';
-import { Guest } from './Guest';
-import { GuestPool } from './GuestPool';
-import { ChainType } from './ChainType';
-import { GuestInTheMiddle } from './GuestInTheMiddle';
-import { GuestType } from './GuestType';
+import { Cache } from "./Cache";
+import { Guest } from "./Guest";
+import { GuestPool } from "./GuestPool";
+import { ChainType } from "./ChainType";
+import { GuestInTheMiddle } from "./GuestInTheMiddle";
+import { GuestType } from "./GuestType";
 
 export class Chain<T> implements ChainType<T> {
-  private theChain: Cache<Record<string, any>>
+  private theChain: Cache<Record<string, unknown>>;
 
   private keysKnown = new Set();
 
@@ -15,17 +15,21 @@ export class Chain<T> implements ChainType<T> {
   private filledChainPool = new GuestPool(this);
 
   public constructor() {
-    this.theChain = new Cache<Record<string, any>>(this, {});
+    this.theChain = new Cache<Record<string, unknown>>(this, {});
   }
 
   public resultArray(guest: GuestType<T>) {
     this.filledChainPool.add(
-      new GuestInTheMiddle(guest, (value: Record<string, unknown>) => Object.values(value)),
+      new GuestInTheMiddle(guest, (value: Record<string, unknown>) =>
+        Object.values(value),
+      ),
     );
     if (this.isChainFilled()) {
-      this.theChain.receiving(new Guest((chain) => {
-        this.filledChainPool.receive(Object.values(chain));
-      }));
+      this.theChain.receiving(
+        new Guest((chain) => {
+          this.filledChainPool.receive(Object.values(chain));
+        }),
+      );
     }
 
     return this;
@@ -34,9 +38,11 @@ export class Chain<T> implements ChainType<T> {
   public result(guest: GuestType<T>) {
     if (this.isChainFilled()) {
       this.filledChainPool.add(guest);
-      this.theChain.receiving(new Guest((chain) => {
-        this.filledChainPool.receive(chain);
-      }));
+      this.theChain.receiving(
+        new Guest((chain) => {
+          this.filledChainPool.receive(chain);
+        }),
+      );
     } else {
       this.filledChainPool.add(guest);
     }
@@ -48,22 +54,26 @@ export class Chain<T> implements ChainType<T> {
     return new Guest((value) => {
       // Обернул в очередь чтобы можно было синхронно наполнить очередь известных ключей
       queueMicrotask(() => {
-        this.theChain.receiving(new Guest((chain) => {
-          this.keysFilled.add(key);
-          const lastChain = {
-            ...chain,
-            [key]: value,
-          };
-          this.theChain.receive(lastChain as any);
-          if (this.isChainFilled()) {
-            this.filledChainPool.receive(lastChain);
-          }
-        }));
+        this.theChain.receiving(
+          new Guest((chain) => {
+            this.keysFilled.add(key);
+            const lastChain = {
+              ...chain,
+              [key]: value,
+            };
+            this.theChain.receive(lastChain);
+            if (this.isChainFilled()) {
+              this.filledChainPool.receive(lastChain);
+            }
+          }),
+        );
       });
     });
   }
 
   private isChainFilled() {
-    return this.keysFilled.size > 0 && this.keysFilled.size === this.keysKnown.size;
+    return (
+      this.keysFilled.size > 0 && this.keysFilled.size === this.keysKnown.size
+    );
   }
 }

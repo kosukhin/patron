@@ -1,6 +1,6 @@
-import { PatronPool } from './PatronPool';
-import { CacheType } from './CacheType';
-import { GuestType, ReceiveOptions } from './GuestType';
+import { PatronPool } from "./PatronPool";
+import { CacheType } from "./CacheType";
+import { GuestType, ReceiveOptions } from "./GuestType";
 
 export class Cache<T> implements CacheType<T> {
   private pool: PatronPool<T>;
