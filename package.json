@@ -1,11 +1,12 @@
 {
-  "name": "patron",
+  "name": "patron-oop",
   "version": "1.1.0",
   "description": "",
   "type": "module",
   "main": "dist/patron.js",
   "module": "dist/patron.mjs",
   "typings": "dist/patron.d.ts",
+  "keywords": ["oop"],
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint src",
