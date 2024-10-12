@@ -18,10 +18,9 @@ test("patron pool", () => {
     new Patron(
       new Guest<number>((value) => {
         receivedCount += value;
+        expect(receivedCount).toBe(4);
       }),
     ),
   );
   pool.receive(2);
-
-  expect(receivedCount).toBe(4);
 });

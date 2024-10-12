@@ -12,11 +12,6 @@
     "sourceMap": true,
     "baseUrl": ".",
     "resolveJsonModule": true,
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
     "lib": [
       "es2022",
       "dom"

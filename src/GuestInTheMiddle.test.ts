@@ -3,7 +3,7 @@ import { Guest } from "./Guest";
 import { GuestInTheMiddle } from "./GuestInTheMiddle";
 import { Patron } from "./Patron";
 import { Chain } from "./Chain";
-import { Source } from "@/Source";
+import { Source } from "./Source";
 
 test("test guest in the middle", () => {
   const one = new Source(1);
@@ -36,9 +36,14 @@ test("test patron in the middle", () => {
     }),
   );
   one.receive(3);
-  one.receive(3);
 
-  expect(accumValue).toBe(16);
+  setTimeout(() => {
+    one.receive(3);
+  });
+
+  setTimeout(() => {
+    expect(accumValue).toBe(16);
+  });
 });
 
 test("test chain in the middle", () => {

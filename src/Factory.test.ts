@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import { Factory } from "./Factory";
 import { Guest } from "./Guest";
-import { Source } from "@/Source";
+import { Source } from "./Source";
 
 test("factory", () => {
   const sourceFactory = new Factory(Source);

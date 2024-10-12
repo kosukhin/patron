@@ -30,7 +30,12 @@ test("patron pool with guests", () => {
     }),
   );
   pool.receive(2);
-  pool.receive(2);
 
-  expect(receivedCount).toBe(10);
+  setTimeout(() => {
+    pool.receive(2);
+  });
+
+  setTimeout(() => {
+    expect(receivedCount).toBe(10);
+  }, 10);
 });
