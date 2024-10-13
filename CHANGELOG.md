@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/kosukhin/patron/compare/v1.3.0...v1.4.0) (2024-10-13)
+
+
+### Features
+
+* **main:** заготовка для описания каждого класса ([03344dd](https://github.com/kosukhin/patron/commit/03344dd86952422e055c581a5b38944d89240db1))
+* **main:** убрать типы из отдельных файлов ([1b27b36](https://github.com/kosukhin/patron/commit/1b27b36870a3fb07ce5eb875f88a88d6efa86e65))
+
 ## [1.3.0](https://github.com/kosukhin/patron/compare/v1.2.1...v1.3.0) (2024-10-13)
 
 
