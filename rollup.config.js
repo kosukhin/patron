@@ -1,5 +1,6 @@
 import dts from "rollup-plugin-dts";
 import esbuild from "rollup-plugin-esbuild";
+import terser from "@rollup/plugin-terser";
 
 const name = "dist/patron";
 
@@ -22,6 +23,11 @@ export default [
         file: `${name}.mjs`,
         format: "es",
         sourcemap: true,
+      },
+      {
+        file: `${name}.min.js`,
+        format: "cjs",
+        plugins: [terser()],
       },
     ],
   }),

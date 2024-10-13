@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reactive Patron</title>
+</head>
+<body>
+    <h1>Reactive example</h1>
+    <div>
+        <label>
+            Поле ввода:
+            <input onkeyup="input.receive(this.value)">
+        </label>
+    </div>
+    <div>
+        Результат ввода: <span class="result"></span>
+    </div>
     <script type="module">
         import {Guest, Source, Patron} from 'https://cdn.jsdelivr.net/npm/patron-oop@1.1.0/dist/patron.mjs';
 
@@ -20,17 +32,5 @@
         window.input = new Source(1);
         input.receiving(new Patron(new Text('.result')));
     </script>
-</head>
-<body>
-    <h1>Reactive example</h1>
-    <div>
-        <label>
-            Поле ввода:
-            <input onkeyup="input.receive(this.value)">
-        </label>
-    </div>
-    <div>
-        Результат ввода: <span class="result"></span>
-    </div>
 </body>
 </html>
