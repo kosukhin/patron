@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/kosukhin/patron/compare/v1.2.1...v1.3.0) (2024-10-13)
+
+
+### Features
+
+* **main:** сделать min версию в iife формате ([c99a5e6](https://github.com/kosukhin/patron/commit/c99a5e6e74f1ca68dd3808070e410c8799ac9d04))
+
 ### [1.2.1](https://github.com/kosukhin/patron/compare/v1.2.0...v1.2.1) (2024-10-13)
 
 ## [1.2.0](https://github.com/kosukhin/patron/compare/v1.1.0...v1.2.0) (2024-10-13)
