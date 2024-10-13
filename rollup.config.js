@@ -26,7 +26,7 @@ export default [
       },
       {
         file: `${name}.min.js`,
-        format: "cjs",
+        format: "iife",
         plugins: [terser()],
       },
     ],
