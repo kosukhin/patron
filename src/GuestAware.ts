@@ -1,5 +1,8 @@
-import { GuestType } from "./GuestType";
-import { GuestAwareType } from "./GuestAwareType";
+import { GuestType } from "./Guest";
+
+export interface GuestAwareType<T = unknown> {
+  receiving(guest: GuestType<T>): unknown;
+}
 
 export class GuestAware<T = unknown> implements GuestAwareType<T> {
   public constructor(private guestReceiver: (guest: GuestType<T>) => void) {}

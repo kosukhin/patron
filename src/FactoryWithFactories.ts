@@ -1,4 +1,4 @@
-import { FactoryType } from "./FactoryType";
+import { FactoryType } from "./Factory";
 
 interface Constructable<T> {
   new (...args: unknown[]): T;

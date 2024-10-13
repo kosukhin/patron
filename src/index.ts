@@ -2,7 +2,6 @@ export * from "./Cache";
 export * from "./Chain";
 export * from "./Factory";
 export * from "./FactoryDynamic";
-export * from "./FactoryType";
 export * from "./FactoryWithFactories";
 export * from "./Guest";
 export * from "./GuestAware";

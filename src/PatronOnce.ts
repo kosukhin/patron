@@ -1,4 +1,4 @@
-import { GuestType, ReceiveOptions } from "./GuestType";
+import { GuestType, ReceiveOptions } from "./Guest";
 import { PoolType } from "./PoolType";
 
 type PoolAware = {
@@ -20,7 +20,7 @@ export class PatronOnce<T> implements GuestType<T> {
     }
 
     const data = options?.data as PoolAware;
-    // Если есть пул, то удаляем себя из пула
+
     if (data?.pool) {
       data.pool.remove(this);
     }

@@ -1,4 +1,4 @@
-import { GuestType, ReceiveOptions } from "./GuestType";
+import { GuestType, ReceiveOptions } from "./Guest";
 
 /**
  * Патрон - это постоянный посетитель

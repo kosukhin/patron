@@ -1,9 +1,13 @@
 import { Cache } from "./Cache";
-import { Guest } from "./Guest";
+import { Guest, GuestType } from "./Guest";
 import { GuestPool } from "./GuestPool";
-import { ChainType } from "./ChainType";
 import { GuestInTheMiddle } from "./GuestInTheMiddle";
-import { GuestType } from "./GuestType";
+
+export interface ChainType<T = unknown> {
+  result(guest: GuestType<T>): this;
+  resultArray(guest: GuestType<T>): this;
+  receiveKey<R>(key: string): GuestType<R>;
+}
 
 export class Chain<T> implements ChainType<T> {
   private theChain: Cache<Record<string, unknown>>;

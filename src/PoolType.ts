@@ -1,4 +1,4 @@
-import { GuestType } from "./GuestType";
+import { GuestType } from "./Guest";
 
 export interface PoolType<T = unknown> extends GuestType<T> {
   add(guest: GuestType<T>): this;

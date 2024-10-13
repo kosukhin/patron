@@ -1,6 +1,8 @@
-import { GuestType } from "./GuestType";
+import { GuestAwareType } from "src/GuestAware";
+import { GuestType } from "./Guest";
 import { PatronPool } from "./PatronPool";
-import { SourceType } from "./SourceType";
+
+export type SourceType<T = unknown> = GuestAwareType<T> & GuestType<T>;
 
 export class Source<T> implements SourceType<T> {
   private pool = new PatronPool(this);

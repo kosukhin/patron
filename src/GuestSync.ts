@@ -1,4 +1,8 @@
-import { GuestValueType } from "./GuestValueType";
+import { GuestType } from "./Guest";
+
+export interface GuestValueType<T = unknown> extends GuestType<T> {
+  value(): T;
+}
 
 export class GuestSync<T> implements GuestValueType<T> {
   public constructor(private theValue: T) {}

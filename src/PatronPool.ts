@@ -1,5 +1,5 @@
 import { PoolType } from "./PoolType";
-import { GuestType, ReceiveOptions } from "./GuestType";
+import { GuestType, ReceiveOptions } from "./Guest";
 
 const poolSets = new Map<PoolType, Set<GuestType>>();
 

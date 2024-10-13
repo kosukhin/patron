@@ -1,4 +1,4 @@
-import { FactoryType } from "./FactoryType";
+import { FactoryType } from "./Factory";
 
 export class FactoryDynamic<T> implements FactoryType<T> {
   public constructor(private creationFn: (...args: unknown[]) => T) {}

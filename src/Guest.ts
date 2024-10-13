@@ -1,5 +1,15 @@
-import { GuestExecutorType } from "./GuestExecutorType";
-import { GuestType, ReceiveOptions } from "./GuestType";
+type GuestIntroduction = "guest" | "patron";
+
+export interface ReceiveOptions {
+  data?: unknown;
+}
+
+export type GuestExecutorType<T> = (value: T, options?: ReceiveOptions) => void;
+
+export interface GuestType<T = unknown> {
+  receive(value: T, options?: ReceiveOptions): this;
+  introduction?(): GuestIntroduction;
+}
 
 export class Guest<T> implements GuestType<T> {
   public constructor(private receiver: GuestExecutorType<T>) {}
