@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
-import { Guest } from "./Guest";
-import { Patron } from "./Patron";
+import { GuestCallback } from "./GuestCallback";
 import { GuestPool } from "./GuestPool";
+import { PatronOfGuest } from "../Patron/PatronOfGuest";
 
 test("patron pool with guests", () => {
   const pool = new GuestPool(null);
@@ -9,23 +9,23 @@ test("patron pool with guests", () => {
 
   // 2 + 2
   pool.add(
-    new Patron(
-      new Guest<number>((value) => {
+    new PatronOfGuest(
+      new GuestCallback<number>((value) => {
         receivedCount += value;
       }),
     ),
   );
   // 2 + 2
   pool.add(
-    new Patron(
-      new Guest<number>((value) => {
+    new PatronOfGuest(
+      new GuestCallback<number>((value) => {
         receivedCount += value;
       }),
     ),
   );
   // 2
   pool.add(
-    new Guest<number>((value) => {
+    new GuestCallback<number>((value) => {
       receivedCount += value;
     }),
   );

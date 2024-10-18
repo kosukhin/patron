@@ -1,4 +1,4 @@
-import { GuestType, ReceiveOptions } from "./Guest";
+import { GuestType, ReceiveOptions } from "./GuestCallback";
 
 export class GuestCast<T> implements GuestType<T> {
   public constructor(

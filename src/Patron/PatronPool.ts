@@ -1,5 +1,4 @@
-import { PoolType } from "./PoolType";
-import { GuestType, ReceiveOptions } from "./Guest";
+import { GuestType, ReceiveOptions } from "../Guest/GuestCallback";
 
 const poolSets = new Map<PoolType, Set<GuestType>>();
 
@@ -11,6 +10,12 @@ export const removePatronFromPools = (patron: GuestType) => {
     pool.delete(patron);
   });
 };
+
+export interface PoolType<T = unknown> extends GuestType<T> {
+  add(guest: GuestType<T>): this;
+  distribute(receiving: T, possiblePatron: GuestType<T>): this;
+  remove(patron: GuestType<T>): this;
+}
 
 export class PatronPool<T> implements PoolType<T> {
   private patrons = new Set<GuestType<T>>();

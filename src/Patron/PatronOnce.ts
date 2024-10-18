@@ -1,5 +1,5 @@
-import { GuestType, ReceiveOptions } from "./Guest";
-import { PoolType } from "./PoolType";
+import { PoolType } from "./PatronPool";
+import { GuestType, ReceiveOptions } from "../Guest/GuestCallback";
 
 type PoolAware = {
   pool?: PoolType;
