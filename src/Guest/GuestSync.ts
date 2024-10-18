@@ -1,4 +1,4 @@
-import { GuestType } from "./Guest";
+import { GuestType } from "./GuestCallback";
 
 export interface GuestValueType<T = unknown> extends GuestType<T> {
   value(): T;

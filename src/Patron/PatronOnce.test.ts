@@ -1,13 +1,13 @@
 import { expect, test } from "vitest";
-import { Source } from "./Source";
 import { PatronOnce } from "./PatronOnce";
-import { Guest } from "./Guest";
+import { GuestCallback } from "../Guest/GuestCallback";
+import { SourceOfValue } from "../Source/SourceOfValue";
 
 test("patron once", () => {
-  const source = new Source(42);
+  const source = new SourceOfValue(42);
   let calls = 0;
   const patron = new PatronOnce(
-    new Guest(() => {
+    new GuestCallback(() => {
       calls += 1;
     }),
   );
