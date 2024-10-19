@@ -6,7 +6,7 @@ export class Source {
     return new SourceOfValue(sourceDocument);
   }
 
-  public applySources() {
-    return new SourcesApplied();
+  public applySources<P>(target: P, methodsSources: Record<string, unknown[]>) {
+    return new SourcesApplied(target, methodsSources);
   }
 }
