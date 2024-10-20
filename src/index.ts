@@ -1,15 +1,24 @@
-export * from "./Cache";
-export * from "./Chain";
-export * from "./Factory";
-export * from "./FactoryDynamic";
-export * from "./FactoryWithFactories";
-export * from "./Guest";
-export * from "./GuestAware";
-export * from "./GuestCast";
-export * from "./GuestInTheMiddle";
-export * from "./GuestPool";
-export * from "./GuestSync";
-export * from "./Patron";
-export * from "./PatronOnce";
-export * from "./PatronPool";
-export * from "./Source";
+import {
+  GuestExecutorType,
+  GuestType,
+  ReceiveOptions,
+} from "./Guest/GuestCallback";
+import { ChainType } from "./Guest/GuestChain";
+import { GuestValueType } from "./Guest/GuestSync";
+import { PoolType, removePatronFromPools } from "./Patron/PatronPool";
+import { SourceType } from "./Source/SourceOfValue";
+
+export * from "./Guest/Guest";
+export * from "./Patron/Patron";
+export * from "./Source/Source";
+
+export {
+  removePatronFromPools,
+  GuestType,
+  GuestExecutorType,
+  ReceiveOptions,
+  ChainType,
+  GuestValueType,
+  PoolType,
+  SourceType,
+};

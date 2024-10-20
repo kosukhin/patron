@@ -1,9 +1,9 @@
-import { GuestType, ReceiveOptions } from "./Guest";
+import { GuestType, ReceiveOptions } from "../Guest/GuestCallback";
 
 /**
  * Патрон - это постоянный посетитель
  */
-export class Patron<T> implements GuestType<T> {
+export class PatronOfGuest<T> implements GuestType<T> {
   public constructor(private willBePatron: GuestType<T>) {}
 
   public introduction() {

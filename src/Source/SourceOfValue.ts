@@ -1,10 +1,10 @@
-import { GuestAwareType } from "src/GuestAware";
-import { GuestType } from "./Guest";
-import { PatronPool } from "./PatronPool";
+import { GuestAwareType } from "../Guest/GuestAware";
+import { GuestType } from "../Guest/GuestCallback";
+import { PatronPool } from "../Patron/PatronPool";
 
 export type SourceType<T = unknown> = GuestAwareType<T> & GuestType<T>;
 
-export class Source<T> implements SourceType<T> {
+export class SourceOfValue<T> implements SourceType<T> {
   private pool = new PatronPool(this);
 
   public constructor(private sourceDocument: T) {}

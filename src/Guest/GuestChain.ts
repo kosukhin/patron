@@ -1,7 +1,7 @@
-import { Cache } from "./Cache";
-import { Guest, GuestType } from "./Guest";
+import { GuestCallback, GuestType } from "./GuestCallback";
 import { GuestPool } from "./GuestPool";
 import { GuestInTheMiddle } from "./GuestInTheMiddle";
+import { SourceOfValue } from "../Source/SourceOfValue";
 
 export interface ChainType<T = unknown> {
   result(guest: GuestType<T>): this;
@@ -9,8 +9,8 @@ export interface ChainType<T = unknown> {
   receiveKey<R>(key: string): GuestType<R>;
 }
 
-export class Chain<T> implements ChainType<T> {
-  private theChain: Cache<Record<string, unknown>>;
+export class GuestChain<T> implements ChainType<T> {
+  private theChain: SourceOfValue<Record<string, unknown>>;
 
   private keysKnown = new Set();
 
@@ -19,7 +19,7 @@ export class Chain<T> implements ChainType<T> {
   private filledChainPool = new GuestPool(this);
 
   public constructor() {
-    this.theChain = new Cache<Record<string, unknown>>(this, {});
+    this.theChain = new SourceOfValue<Record<string, unknown>>({});
   }
 
   public resultArray(guest: GuestType<T>) {
@@ -30,7 +30,7 @@ export class Chain<T> implements ChainType<T> {
     );
     if (this.isChainFilled()) {
       this.theChain.receiving(
-        new Guest((chain) => {
+        new GuestCallback((chain: Record<string, unknown>) => {
           this.filledChainPool.receive(Object.values(chain));
         }),
       );
@@ -43,7 +43,7 @@ export class Chain<T> implements ChainType<T> {
     if (this.isChainFilled()) {
       this.filledChainPool.add(guest);
       this.theChain.receiving(
-        new Guest((chain) => {
+        new GuestCallback((chain) => {
           this.filledChainPool.receive(chain);
         }),
       );
@@ -55,11 +55,11 @@ export class Chain<T> implements ChainType<T> {
 
   public receiveKey<R>(key: string): GuestType<R> {
     this.keysKnown.add(key);
-    return new Guest((value) => {
+    return new GuestCallback((value) => {
       // Обернул в очередь чтобы можно было синхронно наполнить очередь известных ключей
       queueMicrotask(() => {
         this.theChain.receiving(
-          new Guest((chain) => {
+          new GuestCallback((chain: Record<string, unknown>) => {
             this.keysFilled.add(key);
             const lastChain = {
               ...chain,

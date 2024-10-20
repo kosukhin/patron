@@ -11,7 +11,7 @@ export interface GuestType<T = unknown> {
   introduction?(): GuestIntroduction;
 }
 
-export class Guest<T> implements GuestType<T> {
+export class GuestCallback<T> implements GuestType<T> {
   public constructor(private receiver: GuestExecutorType<T>) {}
 
   public receive(value: T, options?: ReceiveOptions) {
