@@ -1,5 +1,5 @@
 import { SourceOfValue } from "./SourceOfValue";
-import { SourcesApplied } from "./SourcesApplied";
+import { sourcesApplied } from "./SourcesApplied";
 
 export class Source {
   public ofValue<P>(sourceDocument: P) {
@@ -7,6 +7,6 @@ export class Source {
   }
 
   public applySources<P>(target: P, methodsSources: Record<string, unknown[]>) {
-    return new SourcesApplied(target, methodsSources);
+    return sourcesApplied(target, methodsSources);
   }
 }
