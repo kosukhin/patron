@@ -15,7 +15,9 @@
     </div>
     <div>Результат ввода: <span class="result"></span></div>
     <script type="module">
-      import "https://cdn.jsdelivr.net/npm/patron-oop@1.5.1/dist/patron.min.js";
+      import "https://cdn.jsdelivr.net/npm/patron-oop@1.5.2/dist/patron.min.js";
+
+      const gl = window.GUEST_LIBRARY;
 
       // Presentation of input with relation to source value
       class Input {
@@ -28,8 +30,8 @@
         bindTo(selector) {
           const el = document.querySelector(selector);
           this.#source.receiving(
-            patron.ofGuest(
-              guest.callback((value) => {
+            gl.patron.ofGuest(
+              gl.guest.callback((value) => {
                 el.value = value;
               }),
             ),
@@ -64,9 +66,9 @@
         }
       }
 
-      new Input(source.ofValue(2))
+      new Input(gl.source.ofValue(2))
         .bindTo(".input-1")
-        .receiving(patron.ofGuest(new Text(".result")));
+        .receiving(gl.patron.ofGuest(new Text(".result")));
     </script>
   </body>
 </html>
