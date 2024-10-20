@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/kosukhin/patron/compare/v1.4.0...v1.5.0) (2024-10-20)
+
+
+### Features
+
+* **issue-1:** доделал основные классы - фабрики ([a44fc85](https://github.com/kosukhin/patron/commit/a44fc853f7a1bd7ad8abf9428709eaec3d979b3f))
+* **issue-1:** заготовка для фабрик основного функционала ([4f22d35](https://github.com/kosukhin/patron/commit/4f22d357188add1baf374c207b321f4c47e99997))
+* **issue-1:** наработка для сорс апплиед ([c704597](https://github.com/kosukhin/patron/commit/c7045970265d843c77b6f657b60d629a1f0d3298))
+* **main:** guest cast поправить ([211e05c](https://github.com/kosukhin/patron/commit/211e05c576b7c86b5d39537a8da5f5f83d071b46))
+
 ## [1.4.0](https://github.com/kosukhin/patron/compare/v1.3.0...v1.4.0) (2024-10-13)
 
 
