@@ -1,69 +1,72 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reactive Patron</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Reactive example</h1>
     <div>
-        <label>
-            Поле ввода:
-            <input class="input-1">
-        </label>
+      <label>
+        Поле ввода:
+        <input class="input-1" />
+      </label>
     </div>
-    <div>   
-        Результат ввода: <span class="result"></span>
-    </div>
+    <div>Результат ввода: <span class="result"></span></div>
     <script type="module">
-        import {Guest, Source, Patron} from 'https://cdn.jsdelivr.net/npm/patron-oop@1.2.0/dist/patron.mjs';
+      import "https://cdn.jsdelivr.net/npm/patron-oop@1.5.1/dist/patron.min.js";
 
-        // Presentation of input with relation to source value
-        class Input {
-            #source;
+      // Presentation of input with relation to source value
+      class Input {
+        #source;
 
-            constructor(source) {
-                this.#source = source;
-            }
-
-            bindTo(selector) {
-                const el = document.querySelector(selector);
-                this.#source.receiving(new Patron(new Guest((value) => {
-                    el.value = value;
-                })));
-                el.addEventListener('keyup', (e) => {
-                    this.receive(e.target.value);
-                });
-                el.addEventListener('change', (e) => {
-                    this.receive(e.target.value);
-                });
-                return this;
-            }
-
-            receiving(guest) {
-                this.#source.receiving(guest);
-                return this;
-            }
-
-            receive(value) {
-                this.#source.receive(value);
-                return this;
-            }
+        constructor(source) {
+          this.#source = source;
         }
 
-        class Text {
-            constructor(selector) {
-                this.element = document.querySelector(selector);
-            }
-
-            receive(value) {
-                this.element.innerText = value;
-            }
+        bindTo(selector) {
+          const el = document.querySelector(selector);
+          this.#source.receiving(
+            patron.ofGuest(
+              guest.callback((value) => {
+                el.value = value;
+              }),
+            ),
+          );
+          el.addEventListener("keyup", (e) => {
+            this.receive(e.target.value);
+          });
+          el.addEventListener("change", (e) => {
+            this.receive(e.target.value);
+          });
+          return this;
         }
 
-        window.input = new Input(new Source(2)).bindTo('.input-1');
-        input.receiving(new Patron(new Text('.result')));
+        receiving(guest) {
+          this.#source.receiving(guest);
+          return this;
+        }
+
+        receive(value) {
+          this.#source.receive(value);
+          return this;
+        }
+      }
+
+      class Text {
+        constructor(selector) {
+          this.element = document.querySelector(selector);
+        }
+
+        receive(value) {
+          this.element.innerText = value;
+        }
+      }
+
+      new Input(source.ofValue(2))
+        .bindTo(".input-1")
+        .receiving(patron.ofGuest(new Text(".result")));
     </script>
-</body>
+  </body>
 </html>

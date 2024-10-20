@@ -1,124 +1,126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Elegant Objects</h1>
-    <p>
-        Композиция объектов описывает поведение
-    </p>
-    <p>
-        Умножение: num1 * num2 = result
-    </p>
+    <p>Композиция объектов описывает поведение</p>
+    <p>Умножение: num1 * num2 = result</p>
     <div>
-        <label>
-            num1:
-            <input type="number" class="input-1" />
-        </label>
+      <label>
+        num1:
+        <input type="number" class="input-1" />
+      </label>
     </div>
     <div>
-        <label>
-            num2:
-            <input type="number" class="input-2" />
-        </label>
+      <label>
+        num2:
+        <input type="number" class="input-2" />
+      </label>
     </div>
-    <div>
-        result = <b class="result"></b>
-    </div>
+    <div>result = <b class="result"></b></div>
     <script type="module">
-        import {Guest, Source, Patron, Chain, GuestCast, GuestInTheMiddle} from 'https://cdn.jsdelivr.net/npm/patron-oop@1.1.0/dist/patron.mjs';
+      import "https://cdn.jsdelivr.net/npm/patron-oop@1.5.1/dist/patron.min.js";
 
-        // Presentation of text in document
-        class TextInDocument {
-            bindTo(selector) {
-                const element = document.querySelector(selector);
-                return new Guest((value) => {
-                    element.innerText = value;
-                });
-            }
+      // Presentation of text in document
+      class TextInDocument {
+        bindTo(selector) {
+          const element = document.querySelector(selector);
+          return guest.callback((value) => {
+            element.innerText = value;
+          });
+        }
+      }
+
+      // Presentation of input with relation to source value
+      class Input {
+        #source;
+
+        constructor(source) {
+          this.#source = source;
         }
 
-        // Presentation of input with relation to source value
-        class Input {
-            #source;
-
-            constructor(source) {
-                this.#source = source;
-            }
-
-            bindTo(selector) {
-                const el = document.querySelector(selector);
-                this.#source.receiving(new Patron(new Guest((value) => {
-                    el.value = value;
-                })));
-                el.addEventListener('keyup', (e) => {
-                    this.receive(e.target.value);
-                });
-                el.addEventListener('change', (e) => {
-                    this.receive(e.target.value);
-                });
-                return this;
-            }
-
-            receiving(guest) {
-                this.#source.receiving(guest);
-                return this;
-            }
-
-            receive(value) {
-                this.#source.receive(value);
-                return this;
-            }
+        bindTo(selector) {
+          const el = document.querySelector(selector);
+          this.#source.receiving(
+            patron.ofGuest(
+              guest.callback((value) => {
+                el.value = value;
+              }),
+            ),
+          );
+          el.addEventListener("keyup", (e) => {
+            this.receive(e.target.value);
+          });
+          el.addEventListener("change", (e) => {
+            this.receive(e.target.value);
+          });
+          return this;
         }
 
-        // Number presentation
-        class NumberOf {
-            #source;
-
-            constructor(source) {
-                this.#source = source;
-            }
-
-            number(guest) {
-                this.#source.receiving(guest);
-                return this;
-            }
-
-            receive(value) {
-                this.#source.receive(value);
-            }
+        receiving(guest) {
+          this.#source.receiving(guest);
+          return this;
         }
 
-        // Multiplication
-        class Mul {
-            #num1;
-            #num2;
+        receive(value) {
+          this.#source.receive(value);
+          return this;
+        }
+      }
 
-            constructor(num1, num2) {
-                this.#num1 = num1;
-                this.#num2 = num2;
-            }
+      // Number presentation
+      class NumberOf {
+        #source;
 
-            result(guest) {
-                const chain = new Chain();
-                this.#num1.number(new GuestCast(guest, chain.receiveKey('num1')));
-                this.#num2.number(new GuestCast(guest, chain.receiveKey('num2')));
-                chain.result(new GuestInTheMiddle(guest, ({num1, num2}) => {
-                    guest.receive(num1 * num2)
-                }));
-            }
+        constructor(source) {
+          this.#source = source;
         }
 
-        window.input1 = new Input(new Source(2)).bindTo('.input-1');
-        window.input2 = new Input(new Source(2)).bindTo('.input-2');
-        const multiplication = new Mul(
-            new NumberOf(window.input1),
-            new NumberOf(window.input2)
-        )
-        multiplication.result(new Patron(new TextInDocument().bindTo('.result')));
+        number(guest) {
+          this.#source.receiving(guest);
+          return this;
+        }
+
+        receive(value) {
+          this.#source.receive(value);
+        }
+      }
+
+      // Multiplication
+      class Mul {
+        #num1;
+        #num2;
+
+        constructor(num1, num2) {
+          this.#num1 = num1;
+          this.#num2 = num2;
+        }
+
+        result(guest) {
+          const chain = window.guest.chain();
+          this.#num1.number(window.guest.cast(guest, chain.receiveKey("num1")));
+          this.#num2.number(window.guest.cast(guest, chain.receiveKey("num2")));
+          chain.result(
+            window.guest.middleware(guest, ({ num1, num2 }) => {
+              guest.receive(num1 * num2);
+            }),
+          );
+        }
+      }
+
+      window.input1 = new Input(source.ofValue(2)).bindTo(".input-1");
+      window.input2 = new Input(source.ofValue(2)).bindTo(".input-2");
+      const multiplication = new Mul(
+        new NumberOf(window.input1),
+        new NumberOf(window.input2),
+      );
+      multiplication.result(
+        patron.ofGuest(new TextInDocument().bindTo(".result")),
+      );
     </script>
-</body>
+  </body>
 </html>
