@@ -17,24 +17,23 @@ export const sourcesApplied = <T>(
   target: T,
   methodsSources: Record<string, unknown[]>,
 ) => {
-  return Object.fromEntries(
-    Object.entries(target as object).map(([key, value]) => {
-      if (value instanceof Function && methodsSources[key]) {
-        const methodArgs = methodsSources[key];
-        return [
-          key,
-          new Proxy(value, {
-            apply(target: Function, thisArg: any, argArray: any[]): any {
-              return target.apply(thisArg, [
-                ...methodsSources[key],
-                ...argArray,
-              ]);
-            },
-          }) as (...args: Parameters<typeof value>) => ReturnType<typeof value>,
-        ];
+  return new Proxy(target as object, {
+    get: function (target: any, property) {
+      const maybeMethod = target[property];
+
+      if (typeof maybeMethod !== "function") {
+        return maybeMethod;
       }
 
-      return [key, value];
-    }),
-  );
+      return (...args: any[]) => {
+        const appliedArgs = (methodsSources as any)[property];
+
+        if (appliedArgs) {
+          return maybeMethod(...appliedArgs, ...args);
+        }
+
+        return maybeMethod(...args);
+      };
+    },
+  });
 };

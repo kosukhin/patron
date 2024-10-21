@@ -12,3 +12,15 @@ test("sources applied", () => {
   });
   expect(targetApplied.one()).toBe("hello world after");
 });
+
+test("sources applied classes", () => {
+  class Target {
+    one(data: { one: string }, after: string) {
+      return data.one + " " + after;
+    }
+  }
+  const targetApplied = sourcesApplied(new Target(), {
+    one: [{ one: "good bye" }, "after"],
+  });
+  expect(targetApplied.one()).toBe("good bye after");
+});
