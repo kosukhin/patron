@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/kosukhin/patron/compare/v1.5.2...v1.6.0) (2024-10-21)
+
+
+### Features
+
+* **main:** добавил выгрузку из библиотек в window ([71fe03d](https://github.com/kosukhin/patron/commit/71fe03d74725f676a245161b5305577182ecb2a0))
+* **main:** исправить применение источников чтобы классы работали ([ab9e58b](https://github.com/kosukhin/patron/commit/ab9e58b71615dd9c4374ad4d2feb04baeb0d1dec))
+* **main:** обновить примеры ([9003280](https://github.com/kosukhin/patron/commit/900328076b634b54b1457d8f6d80b27dcaec76aa))
+
 ### [1.5.2](https://github.com/kosukhin/patron/compare/v1.5.1...v1.5.2) (2024-10-20)
 
 ### [1.5.1](https://github.com/kosukhin/patron/compare/v1.5.0...v1.5.1) (2024-10-20)
