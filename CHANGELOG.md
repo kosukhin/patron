@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/kosukhin/patron/compare/v1.6.1...v1.7.0) (2024-10-25)
+
+
+### Features
+
+* **main:** возвращение к классам ([037837a](https://github.com/kosukhin/patron/commit/037837a0d08208edb99a2a02c4a32bd1ea36e650))
+
 ### [1.6.1](https://github.com/kosukhin/patron/compare/v1.6.0...v1.6.1) (2024-10-25)
 
 ## [1.6.0](https://github.com/kosukhin/patron/compare/v1.5.2...v1.6.0) (2024-10-21)
