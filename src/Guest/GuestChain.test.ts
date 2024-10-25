@@ -1,12 +1,12 @@
 import { expect, test } from "vitest";
 import { GuestChain } from "./GuestChain";
 import { Guest } from "./Guest";
-import { SourceOfValue } from "../Source/SourceOfValue";
+import { Source } from "../Source/Source";
 import { Patron } from "../Patron/Patron";
 
 test("chain guest returns 2 values after result guest", () => {
-  const one = new SourceOfValue(1);
-  const two = new SourceOfValue(2);
+  const one = new Source(1);
+  const two = new Source(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
   chain.result(
@@ -20,8 +20,8 @@ test("chain guest returns 2 values after result guest", () => {
 });
 
 test("chain guest returns 2 values before result guest", () => {
-  const one = new SourceOfValue(1);
-  const two = new SourceOfValue(2);
+  const one = new Source(1);
+  const two = new Source(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
   one.receiving(chain.receiveKey("one"));
@@ -35,8 +35,8 @@ test("chain guest returns 2 values before result guest", () => {
 });
 
 test("chain with patron", () => {
-  const one = new SourceOfValue(1);
-  const two = new SourceOfValue(2);
+  const one = new Source(1);
+  const two = new Source(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
   one.receiving(new Patron(chain.receiveKey("one")));
@@ -55,8 +55,8 @@ test("chain with patron", () => {
 });
 
 test("chain as array", () => {
-  const one = new SourceOfValue(1);
-  const two = new SourceOfValue(2);
+  const one = new Source(1);
+  const two = new Source(2);
   const chain = new GuestChain<[number, number]>();
 
   one.receiving(new Patron(chain.receiveKey("0")));

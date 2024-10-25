@@ -165,7 +165,7 @@ class GuestInTheMiddle {
 var __defProp$2 = Object.defineProperty;
 var __defNormalProp$2 = (obj, key, value) => key in obj ? __defProp$2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField$2 = (obj, key, value) => __defNormalProp$2(obj, key + "" , value);
-class SourceOfValue {
+class Source {
   constructor(sourceDocument) {
     this.sourceDocument = sourceDocument;
     __publicField$2(this, "pool", new PatronPool(this));
@@ -194,7 +194,7 @@ class GuestChain {
     __publicField$1(this, "keysKnown", /* @__PURE__ */ new Set());
     __publicField$1(this, "keysFilled", /* @__PURE__ */ new Set());
     __publicField$1(this, "filledChainPool", new GuestPool(this));
-    this.theChain = new SourceOfValue({});
+    this.theChain = new Source({});
   }
   resultArray(guest) {
     this.filledChainPool.add(
@@ -313,7 +313,7 @@ if (globalThis) {
     Patron,
     PatronOnce,
     PatronPool,
-    SourceOfValue
+    Source
   };
 }
 
@@ -327,7 +327,7 @@ exports.GuestSync = GuestSync;
 exports.Patron = Patron;
 exports.PatronOnce = PatronOnce;
 exports.PatronPool = PatronPool;
-exports.SourceOfValue = SourceOfValue;
+exports.Source = Source;
 exports.give = give;
 exports.removePatronFromPools = removePatronFromPools;
 //# sourceMappingURL=patron.js.map

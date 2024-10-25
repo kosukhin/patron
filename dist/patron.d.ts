@@ -117,7 +117,7 @@ declare class PatronOnce<T> implements GuestObjectType<T> {
 }
 
 type SourceType<T = unknown> = GuestAwareType<T> & GuestObjectType<T>;
-declare class SourceOfValue<T> implements SourceType<T> {
+declare class Source<T> implements SourceType<T> {
     private sourceDocument;
     private pool;
     constructor(sourceDocument: T);
@@ -125,4 +125,4 @@ declare class SourceOfValue<T> implements SourceType<T> {
     receiving(guest: GuestType<T>): this;
 }
 
-export { type ChainType, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestInTheMiddle, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, type ReceiveOptions, SourceOfValue, type SourceType, give, removePatronFromPools };
+export { type ChainType, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestInTheMiddle, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, type ReceiveOptions, Source, type SourceType, give, removePatronFromPools };

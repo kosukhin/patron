@@ -4,7 +4,7 @@ import { PatronPool } from "../Patron/PatronPool";
 
 export type SourceType<T = unknown> = GuestAwareType<T> & GuestObjectType<T>;
 
-export class SourceOfValue<T> implements SourceType<T> {
+export class Source<T> implements SourceType<T> {
   private pool = new PatronPool(this);
 
   public constructor(private sourceDocument: T) {}

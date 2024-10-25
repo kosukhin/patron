@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
-import { SourceOfValue } from "./SourceOfValue";
+import { Source } from "./Source";
 
 test("source", () => {
-  const source = new SourceOfValue(42);
+  const source = new Source(42);
 
   source.receiving((value) => {
     expect(value).toBe(42);

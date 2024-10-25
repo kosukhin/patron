@@ -1,7 +1,7 @@
 import { Guest, GuestObjectType } from "./Guest";
 import { GuestPool } from "./GuestPool";
 import { GuestInTheMiddle } from "./GuestInTheMiddle";
-import { SourceOfValue } from "../Source/SourceOfValue";
+import { Source } from "../Source/Source";
 
 export interface ChainType<T = unknown> {
   result(guest: GuestObjectType<T>): this;
@@ -10,7 +10,7 @@ export interface ChainType<T = unknown> {
 }
 
 export class GuestChain<T> implements ChainType<T> {
-  private theChain: SourceOfValue<Record<string, unknown>>;
+  private theChain: Source<Record<string, unknown>>;
 
   private keysKnown = new Set();
 
@@ -19,7 +19,7 @@ export class GuestChain<T> implements ChainType<T> {
   private filledChainPool = new GuestPool(this);
 
   public constructor() {
-    this.theChain = new SourceOfValue<Record<string, unknown>>({});
+    this.theChain = new Source<Record<string, unknown>>({});
   }
 
   public resultArray(guest: GuestObjectType<T>) {

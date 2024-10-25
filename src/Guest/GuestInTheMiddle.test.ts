@@ -2,11 +2,11 @@ import { expect, test } from "vitest";
 import { Guest } from "./Guest";
 import { GuestInTheMiddle } from "./GuestInTheMiddle";
 import { GuestChain } from "./GuestChain";
-import { SourceOfValue } from "../Source/SourceOfValue";
+import { Source } from "../Source/Source";
 import { Patron } from "../Patron/Patron";
 
 test("test guest in the middle", () => {
-  const one = new SourceOfValue(1);
+  const one = new Source(1);
 
   let accumValue = 0;
   const guest = new Guest((value: number) => {
@@ -22,7 +22,7 @@ test("test guest in the middle", () => {
 });
 
 test("test patron in the middle", () => {
-  const one = new SourceOfValue(1);
+  const one = new Source(1);
 
   let accumValue = 0;
   const guest = new Patron(
@@ -47,8 +47,8 @@ test("test patron in the middle", () => {
 });
 
 test("test chain in the middle", () => {
-  const one = new SourceOfValue(1);
-  const two = new SourceOfValue(2);
+  const one = new Source(1);
+  const two = new Source(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
   one.receiving(new Patron(chain.receiveKey("one")));

@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
 import { Patron } from "./Patron";
-import { SourceOfValue } from "../Source/SourceOfValue";
+import { Source } from "../Source/Source";
 
 test("patron always guest", () => {
-  const one = new SourceOfValue(1);
+  const one = new Source(1);
   let patronCalledTimes = 0;
   const patron = new Patron(() => {
     patronCalledTimes += 1;

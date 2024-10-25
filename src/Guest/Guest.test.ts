@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
-import { SourceOfValue } from "../Source/SourceOfValue";
+import { Source } from "../Source/Source";
 
 test("guest callback", () => {
-  const one = new SourceOfValue(1);
+  const one = new Source(1);
 
   one.receiving((value) => {
     expect(value).toBe(1);

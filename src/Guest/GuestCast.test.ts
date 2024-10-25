@@ -1,11 +1,11 @@
 import { expect, test } from "vitest";
-import { SourceOfValue } from "../Source/SourceOfValue";
+import { Source } from "../Source/Source";
 import { Patron } from "../Patron/Patron";
 import { give, Guest } from "./Guest";
 import { GuestCast } from "./GuestCast";
 
 test("chain guest returns 2 values after result guest", () => {
-  const source = new SourceOfValue(1);
+  const source = new Source(1);
   let acc = 0;
   const mainGuest = new Patron(
     new Guest((value: number) => {

@@ -8,7 +8,7 @@ import { GuestPool } from "./Guest/GuestPool";
 import { GuestSync } from "./Guest/GuestSync";
 import { Patron } from "./Patron/Patron";
 import { PatronOnce } from "./Patron/PatronOnce";
-import { SourceOfValue } from "./Source/SourceOfValue";
+import { Source } from "./Source/Source";
 
 export * from "./Guest/GuestAware";
 export * from "./Guest/Guest";
@@ -20,7 +20,7 @@ export * from "./Guest/GuestSync";
 export * from "./Patron/Patron";
 export * from "./Patron/PatronOnce";
 export * from "./Patron/PatronPool";
-export * from "./Source/SourceOfValue";
+export * from "./Source/Source";
 
 declare var globalThis: any;
 
@@ -38,6 +38,6 @@ if (globalThis) {
     Patron,
     PatronOnce,
     PatronPool,
-    SourceOfValue,
+    Source,
   };
 }
