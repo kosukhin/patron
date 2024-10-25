@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/kosukhin/patron/compare/v1.7.0...v1.8.0) (2024-10-25)
+
+
+### Features
+
+* **main:** вернул название Source ([9350b13](https://github.com/kosukhin/patron/commit/9350b13eb9d2ad2f26bb5697a8ff42332ef16607))
+
 ## [1.7.0](https://github.com/kosukhin/patron/compare/v1.6.1...v1.7.0) (2024-10-25)
 
 
