@@ -1,15 +1,13 @@
 import { expect, test } from "vitest";
 import { GuestAware } from "./GuestAware";
-import { GuestCallback } from "./GuestCallback";
+import { give } from "./Guest";
 
 test("guest aware", () => {
-  const awared = new GuestAware((guest) => {
-    guest.receive(111);
+  const aware = new GuestAware((guest) => {
+    give(111, guest);
   });
 
-  awared.receiving(
-    new GuestCallback((value) => {
-      expect(value).toBe(111);
-    }),
-  );
+  aware.receiving((value) => {
+    expect(value).toBe(111);
+  });
 });

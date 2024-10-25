@@ -1,18 +1,22 @@
-import { PatronOfGuest } from "./PatronOfGuest";
-import { GuestType } from "../Guest/GuestCallback";
-import { PatronOnce } from "./PatronOnce";
-import { PatronPool } from "./PatronPool";
+import {
+  give,
+  GuestObjectType,
+  GuestType,
+  ReceiveOptions,
+} from "../Guest/Guest";
 
-export class Patron {
-  public ofGuest<P>(willBePatron: GuestType<P>) {
-    return new PatronOfGuest(willBePatron);
+/**
+ * Патрон - это постоянный посетитель
+ */
+export class Patron<T> implements GuestObjectType<T> {
+  public constructor(private willBePatron: GuestType<T>) {}
+
+  public introduction() {
+    return "patron" as const;
   }
 
-  public once<P>(baseGuest: GuestType<P>) {
-    return new PatronOnce(baseGuest);
-  }
-
-  public pool(initiator: unknown) {
-    return new PatronPool(initiator);
+  public receive(value: T, options?: ReceiveOptions): this {
+    give(value, this.willBePatron, options);
+    return this;
   }
 }

@@ -1,11 +1,16 @@
 import { PoolType } from "./PatronPool";
-import { GuestType, ReceiveOptions } from "../Guest/GuestCallback";
+import {
+  give,
+  GuestObjectType,
+  GuestType,
+  ReceiveOptions,
+} from "../Guest/Guest";
 
 type PoolAware = {
   pool?: PoolType;
 };
 
-export class PatronOnce<T> implements GuestType<T> {
+export class PatronOnce<T> implements GuestObjectType<T> {
   private received = false;
 
   public constructor(private baseGuest: GuestType<T>) {}
@@ -16,7 +21,7 @@ export class PatronOnce<T> implements GuestType<T> {
 
   public receive(value: T, options?: ReceiveOptions): this {
     if (!this.received) {
-      this.baseGuest.receive(value, options);
+      give(value, this.baseGuest, options);
     }
 
     const data = options?.data as PoolAware;

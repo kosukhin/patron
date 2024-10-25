@@ -1,26 +1,21 @@
 import { expect, test } from "vitest";
 import { PatronPool } from "./PatronPool";
-import { PatronOfGuest } from "./PatronOfGuest";
-import { GuestCallback } from "../Guest/GuestCallback";
+import { Patron } from "./Patron";
 
 test("patron pool", () => {
-  const pool = new PatronPool(null);
+  const pool = new PatronPool<number>(null);
   let receivedCount = 0;
 
   pool.add(
-    new PatronOfGuest(
-      new GuestCallback<number>((value) => {
-        receivedCount += value;
-      }),
-    ),
+    new Patron((value) => {
+      receivedCount += value;
+    }),
   );
   pool.add(
-    new PatronOfGuest(
-      new GuestCallback<number>((value) => {
-        receivedCount += value;
-        expect(receivedCount).toBe(4);
-      }),
-    ),
+    new Patron((value) => {
+      receivedCount += value;
+      expect(receivedCount).toBe(4);
+    }),
   );
   pool.receive(2);
 });

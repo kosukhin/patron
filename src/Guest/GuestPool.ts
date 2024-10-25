@@ -1,8 +1,8 @@
 import { PatronPool } from "../Patron/PatronPool";
 import { PoolType } from "../Patron/PatronPool";
-import { GuestType, ReceiveOptions } from "./GuestCallback";
+import { give, GuestObjectType, GuestType, ReceiveOptions } from "./Guest";
 
-export class GuestPool<T> implements GuestType<T>, PoolType<T> {
+export class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
   private guests = new Set<GuestType<T>>();
 
   private patronPool: PatronPool<T>;
@@ -18,20 +18,24 @@ export class GuestPool<T> implements GuestType<T>, PoolType<T> {
   }
 
   public add(guest: GuestType<T>): this {
-    if (!guest.introduction || guest.introduction() === "guest") {
+    if (
+      typeof guest === "function" ||
+      !guest.introduction ||
+      guest.introduction() === "guest"
+    ) {
       this.guests.add(guest);
     }
     this.patronPool.add(guest);
     return this;
   }
 
-  public remove(patron: GuestType<T>): this {
+  public remove(patron: GuestObjectType<T>): this {
     this.guests.delete(patron);
     this.patronPool.remove(patron);
     return this;
   }
 
-  public distribute(receiving: T, possiblePatron: GuestType<T>): this {
+  public distribute(receiving: T, possiblePatron: GuestObjectType<T>): this {
     this.add(possiblePatron);
     this.receive(receiving);
     return this;
@@ -39,7 +43,7 @@ export class GuestPool<T> implements GuestType<T>, PoolType<T> {
 
   private deliverToGuests(value: T, options?: ReceiveOptions) {
     this.guests.forEach((target) => {
-      target.receive(value, options);
+      give(value, target, options);
     });
     this.guests.clear();
   }

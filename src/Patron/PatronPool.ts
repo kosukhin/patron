@@ -1,24 +1,29 @@
-import { GuestType, ReceiveOptions } from "../Guest/GuestCallback";
+import {
+  give,
+  GuestObjectType,
+  GuestType,
+  ReceiveOptions,
+} from "../Guest/Guest";
 
-const poolSets = new Map<PoolType, Set<GuestType>>();
+const poolSets = new Map<PoolType, Set<GuestObjectType>>();
 
 /**
  * Удалить патрон из всех пулов
  */
-export const removePatronFromPools = (patron: GuestType) => {
+export const removePatronFromPools = (patron: GuestObjectType) => {
   poolSets.forEach((pool) => {
     pool.delete(patron);
   });
 };
 
-export interface PoolType<T = unknown> extends GuestType<T> {
-  add(guest: GuestType<T>): this;
-  distribute(receiving: T, possiblePatron: GuestType<T>): this;
-  remove(patron: GuestType<T>): this;
+export interface PoolType<T = unknown> extends GuestObjectType<T> {
+  add(guest: GuestObjectType<T>): this;
+  distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
+  remove(patron: GuestObjectType<T>): this;
 }
 
 export class PatronPool<T> implements PoolType<T> {
-  private patrons = new Set<GuestType<T>>();
+  private patrons = new Set<GuestObjectType<T>>();
 
   public receive: (value: T, options?: ReceiveOptions) => this;
 
@@ -45,6 +50,7 @@ export class PatronPool<T> implements PoolType<T> {
 
   public add(shouldBePatron: GuestType<T>) {
     if (
+      typeof shouldBePatron !== "function" &&
       shouldBePatron.introduction &&
       shouldBePatron.introduction() === "patron"
     ) {
@@ -53,7 +59,7 @@ export class PatronPool<T> implements PoolType<T> {
     return this;
   }
 
-  public remove(patron: GuestType<T>) {
+  public remove(patron: GuestObjectType<T>) {
     this.patrons.delete(patron);
     return this;
   }
@@ -69,7 +75,7 @@ export class PatronPool<T> implements PoolType<T> {
     guest: GuestType<T>,
     options?: ReceiveOptions,
   ) {
-    guest.receive(value, {
+    give(value, guest, {
       ...options,
       data: {
         ...((options?.data as Record<string, unknown>) ?? {}),

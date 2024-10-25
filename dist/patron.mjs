@@ -1,4 +1,11 @@
-class GuestCallback {
+function give(data, guest, options) {
+  if (typeof guest === "function") {
+    guest(data, options);
+  } else {
+    guest.receive(data, options);
+  }
+}
+class Guest {
   constructor(receiver) {
     this.receiver = receiver;
   }
@@ -41,7 +48,7 @@ class PatronPool {
     };
   }
   add(shouldBePatron) {
-    if (shouldBePatron.introduction && shouldBePatron.introduction() === "patron") {
+    if (typeof shouldBePatron !== "function" && shouldBePatron.introduction && shouldBePatron.introduction() === "patron") {
       this.patrons.add(shouldBePatron);
     }
     return this;
@@ -56,7 +63,7 @@ class PatronPool {
     return this;
   }
   sendValueToGuest(value, guest, options) {
-    guest.receive(value, {
+    give(value, guest, {
       ...options,
       data: {
         ...options?.data ?? {},
@@ -64,6 +71,36 @@ class PatronPool {
         pool: this
       }
     });
+  }
+}
+
+class GuestAware {
+  constructor(guestReceiver) {
+    this.guestReceiver = guestReceiver;
+  }
+  receiving(guest) {
+    this.guestReceiver(guest);
+    return guest;
+  }
+}
+
+class GuestCast {
+  constructor(sourceGuest, targetGuest) {
+    this.sourceGuest = sourceGuest;
+    this.targetGuest = targetGuest;
+  }
+  introduction() {
+    if (typeof this.sourceGuest === "function") {
+      return "guest";
+    }
+    if (!this.sourceGuest.introduction) {
+      return "guest";
+    }
+    return this.sourceGuest.introduction();
+  }
+  receive(value, options) {
+    give(value, this.targetGuest, options);
+    return this;
   }
 }
 
@@ -82,7 +119,7 @@ class GuestPool {
     return this;
   }
   add(guest) {
-    if (!guest.introduction || guest.introduction() === "guest") {
+    if (typeof guest === "function" || !guest.introduction || guest.introduction() === "guest") {
       this.guests.add(guest);
     }
     this.patronPool.add(guest);
@@ -100,7 +137,7 @@ class GuestPool {
   }
   deliverToGuests(value, options) {
     this.guests.forEach((target) => {
-      target.receive(value, options);
+      give(value, target, options);
     });
     this.guests.clear();
   }
@@ -137,7 +174,11 @@ class SourceOfValue {
     return this;
   }
   receiving(guest) {
-    this.pool.distribute(this.sourceDocument, guest);
+    if (typeof guest === "function") {
+      this.pool.distribute(this.sourceDocument, new Guest(guest));
+    } else {
+      this.pool.distribute(this.sourceDocument, guest);
+    }
     return this;
   }
 }
@@ -162,7 +203,7 @@ class GuestChain {
     );
     if (this.isChainFilled()) {
       this.theChain.receiving(
-        new GuestCallback((chain) => {
+        new Guest((chain) => {
           this.filledChainPool.receive(Object.values(chain));
         })
       );
@@ -173,7 +214,7 @@ class GuestChain {
     if (this.isChainFilled()) {
       this.filledChainPool.add(guest);
       this.theChain.receiving(
-        new GuestCallback((chain) => {
+        new Guest((chain) => {
           this.filledChainPool.receive(chain);
         })
       );
@@ -184,10 +225,10 @@ class GuestChain {
   }
   receiveKey(key) {
     this.keysKnown.add(key);
-    return new GuestCallback((value) => {
+    return new Guest((value) => {
       queueMicrotask(() => {
         this.theChain.receiving(
-          new GuestCallback((chain) => {
+          new Guest((chain) => {
             this.keysFilled.add(key);
             const lastChain = {
               ...chain,
@@ -220,58 +261,7 @@ class GuestSync {
   }
 }
 
-class GuestCast {
-  constructor(sourceGuest, targetGuest) {
-    this.sourceGuest = sourceGuest;
-    this.targetGuest = targetGuest;
-  }
-  introduction() {
-    if (!this.sourceGuest.introduction) {
-      return "guest";
-    }
-    return this.sourceGuest.introduction();
-  }
-  receive(value, options) {
-    this.targetGuest.receive(value, options);
-    return this;
-  }
-}
-
-class GuestAware {
-  constructor(guestReceiver) {
-    this.guestReceiver = guestReceiver;
-  }
-  receiving(guest) {
-    this.guestReceiver(guest);
-    return guest;
-  }
-}
-
-class Guest {
-  callback(receiver) {
-    return new GuestCallback(receiver);
-  }
-  chain() {
-    return new GuestChain();
-  }
-  cast(sourceGuest, targetGuest) {
-    return new GuestCast(sourceGuest, targetGuest);
-  }
-  middleware(baseGuest, middleFn) {
-    return new GuestInTheMiddle(baseGuest, middleFn);
-  }
-  pool(initiator) {
-    return new GuestPool(initiator);
-  }
-  aware(guestReceiver) {
-    return new GuestAware(guestReceiver);
-  }
-  sync(value) {
-    return new GuestSync(value);
-  }
-}
-
-class PatronOfGuest {
+class Patron {
   constructor(willBePatron) {
     this.willBePatron = willBePatron;
   }
@@ -279,7 +269,7 @@ class PatronOfGuest {
     return "patron";
   }
   receive(value, options) {
-    this.willBePatron.receive(value, options);
+    give(value, this.willBePatron, options);
     return this;
   }
 }
@@ -297,7 +287,7 @@ class PatronOnce {
   }
   receive(value, options) {
     if (!this.received) {
-      this.baseGuest.receive(value, options);
+      give(value, this.baseGuest, options);
     }
     const data = options?.data;
     if (data?.pool) {
@@ -307,56 +297,23 @@ class PatronOnce {
   }
 }
 
-class Patron {
-  ofGuest(willBePatron) {
-    return new PatronOfGuest(willBePatron);
-  }
-  once(baseGuest) {
-    return new PatronOnce(baseGuest);
-  }
-  pool(initiator) {
-    return new PatronPool(initiator);
-  }
-}
-
-const sourcesApplied = (target, methodsSources) => {
-  return Object.fromEntries(
-    Object.entries(target).map(([key, value]) => {
-      if (value instanceof Function && methodsSources[key]) {
-        methodsSources[key];
-        return [
-          key,
-          new Proxy(value, {
-            apply(target2, thisArg, argArray) {
-              return target2.apply(thisArg, [
-                ...methodsSources[key],
-                ...argArray
-              ]);
-            }
-          })
-        ];
-      }
-      return [key, value];
-    })
-  );
-};
-
-class Source {
-  ofValue(sourceDocument) {
-    return new SourceOfValue(sourceDocument);
-  }
-  applySources(target, methodsSources) {
-    return sourcesApplied(target, methodsSources);
-  }
-}
-
-if (window) {
-  window["GUEST_LIBRARY"] = {
-    guest: new Guest(),
-    patron: new Patron(),
-    source: new Source()
+if (globalThis) {
+  globalThis["GUEST_LIBRARY"] = {
+    give,
+    removePatronFromPools,
+    GuestAware,
+    Guest,
+    GuestCast,
+    GuestChain,
+    GuestInTheMiddle,
+    GuestPool,
+    GuestSync,
+    Patron,
+    PatronOnce,
+    PatronPool,
+    SourceOfValue
   };
 }
 
-export { Guest, GuestCallback, GuestChain, GuestSync, Patron, PatronPool, Source, SourceOfValue, removePatronFromPools };
+export { Guest, GuestAware, GuestCast, GuestChain, GuestInTheMiddle, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, SourceOfValue, give, removePatronFromPools };
 //# sourceMappingURL=patron.mjs.map

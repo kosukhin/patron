@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
 import { GuestChain } from "./GuestChain";
-import { GuestCallback } from "./GuestCallback";
+import { Guest } from "./Guest";
 import { SourceOfValue } from "../Source/SourceOfValue";
-import { PatronOfGuest } from "../Patron/PatronOfGuest";
+import { Patron } from "../Patron/Patron";
 
 test("chain guest returns 2 values after result guest", () => {
   const one = new SourceOfValue(1);
@@ -10,7 +10,7 @@ test("chain guest returns 2 values after result guest", () => {
   const chain = new GuestChain<{ one: number; two: number }>();
 
   chain.result(
-    new GuestCallback((value) => {
+    new Guest((value) => {
       expect(Object.values(value).join()).toBe("1,2");
     }),
   );
@@ -28,7 +28,7 @@ test("chain guest returns 2 values before result guest", () => {
   two.receiving(chain.receiveKey("two"));
 
   chain.result(
-    new GuestCallback((value) => {
+    new Guest((value) => {
       expect(Object.values(value).join()).toBe("1,2");
     }),
   );
@@ -39,15 +39,15 @@ test("chain with patron", () => {
   const two = new SourceOfValue(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
-  one.receiving(new PatronOfGuest(chain.receiveKey("one")));
-  two.receiving(new PatronOfGuest(chain.receiveKey("two")));
+  one.receiving(new Patron(chain.receiveKey("one")));
+  two.receiving(new Patron(chain.receiveKey("two")));
 
   one.receive(3);
   one.receive(4);
 
   chain.result(
-    new PatronOfGuest(
-      new GuestCallback((value: Record<string, unknown>) => {
+    new Patron(
+      new Guest((value: Record<string, unknown>) => {
         expect(Object.values(value).length).toBe(2);
       }),
     ),
@@ -59,12 +59,12 @@ test("chain as array", () => {
   const two = new SourceOfValue(2);
   const chain = new GuestChain<[number, number]>();
 
-  one.receiving(new PatronOfGuest(chain.receiveKey("0")));
-  two.receiving(new PatronOfGuest(chain.receiveKey("1")));
+  one.receiving(new Patron(chain.receiveKey("0")));
+  two.receiving(new Patron(chain.receiveKey("1")));
 
   chain.resultArray(
-    new PatronOfGuest(
-      new GuestCallback((value) => {
+    new Patron(
+      new Guest((value) => {
         expect(JSON.stringify(value)).toBe("[1, 2]");
       }),
     ),

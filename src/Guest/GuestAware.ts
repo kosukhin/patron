@@ -1,4 +1,4 @@
-import { GuestType } from "./GuestCallback";
+import { GuestType } from "./Guest";
 
 export interface GuestAwareType<T = unknown> {
   receiving(guest: GuestType<T>): unknown;

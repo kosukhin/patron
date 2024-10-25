@@ -1,15 +1,15 @@
 import { expect, test } from "vitest";
-import { GuestCallback } from "./GuestCallback";
+import { Guest } from "./Guest";
 import { GuestInTheMiddle } from "./GuestInTheMiddle";
 import { GuestChain } from "./GuestChain";
 import { SourceOfValue } from "../Source/SourceOfValue";
-import { PatronOfGuest } from "../Patron/PatronOfGuest";
+import { Patron } from "../Patron/Patron";
 
 test("test guest in the middle", () => {
   const one = new SourceOfValue(1);
 
   let accumValue = 0;
-  const guest = new GuestCallback((value: number) => {
+  const guest = new Guest((value: number) => {
     accumValue += value;
   });
   one.receiving(
@@ -25,8 +25,8 @@ test("test patron in the middle", () => {
   const one = new SourceOfValue(1);
 
   let accumValue = 0;
-  const guest = new PatronOfGuest(
-    new GuestCallback((value: number) => {
+  const guest = new Patron(
+    new Guest((value: number) => {
       accumValue += value;
     }),
   );
@@ -51,14 +51,14 @@ test("test chain in the middle", () => {
   const two = new SourceOfValue(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
-  one.receiving(new PatronOfGuest(chain.receiveKey("one")));
-  two.receiving(new PatronOfGuest(chain.receiveKey("two")));
+  one.receiving(new Patron(chain.receiveKey("one")));
+  two.receiving(new Patron(chain.receiveKey("two")));
 
   one.receive(3);
   one.receive(4);
 
-  const guest = new PatronOfGuest(
-    new GuestCallback((value: { one: number; two: number; three: number }) => {
+  const guest = new Patron(
+    new Guest((value: { one: number; two: number; three: number }) => {
       expect(Object.values(value).length).toBe(3);
     }),
   );

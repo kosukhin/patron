@@ -1,8 +1,8 @@
 import { GuestAwareType } from "../Guest/GuestAware";
-import { GuestType } from "../Guest/GuestCallback";
+import { Guest, GuestObjectType, GuestType } from "../Guest/Guest";
 import { PatronPool } from "../Patron/PatronPool";
 
-export type SourceType<T = unknown> = GuestAwareType<T> & GuestType<T>;
+export type SourceType<T = unknown> = GuestAwareType<T> & GuestObjectType<T>;
 
 export class SourceOfValue<T> implements SourceType<T> {
   private pool = new PatronPool(this);
@@ -16,7 +16,11 @@ export class SourceOfValue<T> implements SourceType<T> {
   }
 
   public receiving(guest: GuestType<T>): this {
-    this.pool.distribute(this.sourceDocument, guest);
+    if (typeof guest === "function") {
+      this.pool.distribute(this.sourceDocument, new Guest(guest));
+    } else {
+      this.pool.distribute(this.sourceDocument, guest);
+    }
     return this;
   }
 }
