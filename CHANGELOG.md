@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/kosukhin/patron/compare/v1.8.0...v1.9.0) (2024-10-27)
+
+
+### Features
+
+* **main:** обновить примеры ([e9397fb](https://github.com/kosukhin/patron/commit/e9397fb05fea53287ebaa099a7be7b9acb494575))
+* **main:** поправить guest middle чтобы работал с колбэками ([88fc391](https://github.com/kosukhin/patron/commit/88fc391f32ef2246dd13ff6f4acd00a64e81de0b))
+
 ## [1.8.0](https://github.com/kosukhin/patron/compare/v1.7.0...v1.8.0) (2024-10-25)
 
 
