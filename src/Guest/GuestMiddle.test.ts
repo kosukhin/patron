@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { Guest } from "./Guest";
-import { GuestInTheMiddle } from "./GuestInTheMiddle";
+import { GuestMiddle } from "./GuestMiddle";
 import { GuestChain } from "./GuestChain";
 import { Source } from "../Source/Source";
 import { Patron } from "../Patron/Patron";
@@ -13,7 +13,7 @@ test("test guest in the middle", () => {
     accumValue += value;
   });
   one.receiving(
-    new GuestInTheMiddle(guest, (value: number) => {
+    new GuestMiddle(guest, (value: number) => {
       guest.receive(value + 3);
     }),
   );
@@ -31,7 +31,7 @@ test("test patron in the middle", () => {
     }),
   );
   one.receiving(
-    new GuestInTheMiddle(guest, (value: number) => {
+    new GuestMiddle(guest, (value: number) => {
       guest.receive(value + 3);
     }),
   );
@@ -64,7 +64,7 @@ test("test chain in the middle", () => {
   );
 
   chain.result(
-    new GuestInTheMiddle(guest, (value) => {
+    new GuestMiddle(guest, (value) => {
       guest.receive({ ...value, three: 99 });
     }),
   );

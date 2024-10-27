@@ -145,13 +145,13 @@ class GuestPool {
   }
 }
 
-class GuestInTheMiddle {
+class GuestMiddle {
   constructor(baseGuest, middleFn) {
     this.baseGuest = baseGuest;
     this.middleFn = middleFn;
   }
   introduction() {
-    if (!this.baseGuest.introduction) {
+    if (typeof this.baseGuest === "function" || !this.baseGuest.introduction) {
       return "guest";
     }
     return this.baseGuest.introduction();
@@ -198,7 +198,7 @@ class GuestChain {
   }
   resultArray(guest) {
     this.filledChainPool.add(
-      new GuestInTheMiddle(
+      new GuestMiddle(
         guest,
         (value) => Object.values(value)
       )
@@ -307,7 +307,7 @@ if (globalThis) {
     Guest,
     GuestCast,
     GuestChain,
-    GuestInTheMiddle,
+    GuestInTheMiddle: GuestMiddle,
     GuestPool,
     GuestSync,
     Patron,
@@ -321,7 +321,7 @@ exports.Guest = Guest;
 exports.GuestAware = GuestAware;
 exports.GuestCast = GuestCast;
 exports.GuestChain = GuestChain;
-exports.GuestInTheMiddle = GuestInTheMiddle;
+exports.GuestMiddle = GuestMiddle;
 exports.GuestPool = GuestPool;
 exports.GuestSync = GuestSync;
 exports.Patron = Patron;

@@ -1,7 +1,6 @@
 import { expect, test } from "vitest";
 import { GuestSync } from "./GuestSync";
 import { Source } from "../Source/Source";
-import { Guest } from "./Guest";
 
 test("guest sync", () => {
   const source = new Source(123);

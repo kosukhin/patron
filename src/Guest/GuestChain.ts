@@ -1,6 +1,6 @@
 import { Guest, GuestObjectType } from "./Guest";
 import { GuestPool } from "./GuestPool";
-import { GuestInTheMiddle } from "./GuestInTheMiddle";
+import { GuestMiddle } from "./GuestMiddle";
 import { Source } from "../Source/Source";
 
 export interface ChainType<T = unknown> {
@@ -24,7 +24,7 @@ export class GuestChain<T> implements ChainType<T> {
 
   public resultArray(guest: GuestObjectType<T>) {
     this.filledChainPool.add(
-      new GuestInTheMiddle(guest, (value: Record<string, unknown>) =>
+      new GuestMiddle(guest, (value: Record<string, unknown>) =>
         Object.values(value),
       ),
     );

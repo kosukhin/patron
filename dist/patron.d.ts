@@ -49,10 +49,10 @@ declare class GuestChain<T> implements ChainType<T> {
     private isChainFilled;
 }
 
-declare class GuestInTheMiddle<T> implements GuestObjectType<T> {
+declare class GuestMiddle<T> implements GuestObjectType<T> {
     private baseGuest;
     private middleFn;
-    constructor(baseGuest: GuestObjectType<unknown>, middleFn: (value: T, options?: ReceiveOptions) => void);
+    constructor(baseGuest: GuestType<unknown>, middleFn: (value: T, options?: ReceiveOptions) => void);
     introduction(): "guest" | "patron";
     receive(value: T, options?: ReceiveOptions): this;
 }
@@ -125,4 +125,4 @@ declare class Source<T> implements SourceType<T> {
     receiving(guest: GuestType<T>): this;
 }
 
-export { type ChainType, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestInTheMiddle, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, type ReceiveOptions, Source, type SourceType, give, removePatronFromPools };
+export { type ChainType, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestMiddle, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, type ReceiveOptions, Source, type SourceType, give, removePatronFromPools };

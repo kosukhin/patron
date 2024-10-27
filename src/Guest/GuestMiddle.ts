@@ -1,13 +1,13 @@
-import { GuestObjectType, ReceiveOptions } from "./Guest";
+import { GuestObjectType, GuestType, ReceiveOptions } from "./Guest";
 
-export class GuestInTheMiddle<T> implements GuestObjectType<T> {
+export class GuestMiddle<T> implements GuestObjectType<T> {
   public constructor(
-    private baseGuest: GuestObjectType<unknown>,
+    private baseGuest: GuestType<unknown>,
     private middleFn: (value: T, options?: ReceiveOptions) => void,
   ) {}
 
   introduction() {
-    if (!this.baseGuest.introduction) {
+    if (typeof this.baseGuest === "function" || !this.baseGuest.introduction) {
       return "guest";
     }
     return this.baseGuest.introduction();
