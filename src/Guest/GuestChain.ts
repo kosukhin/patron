@@ -1,7 +1,8 @@
-import { Guest, GuestObjectType } from "./Guest";
+import { Guest, GuestObjectType, GuestType } from "./Guest";
 import { GuestPool } from "./GuestPool";
 import { GuestMiddle } from "./GuestMiddle";
 import { Source } from "../Source/Source";
+import { GuestObject } from "./GuestObject";
 
 export interface ChainType<T = unknown> {
   result(guest: GuestObjectType<T>): this;
@@ -22,9 +23,10 @@ export class GuestChain<T> implements ChainType<T> {
     this.theChain = new Source<Record<string, unknown>>({});
   }
 
-  public resultArray(guest: GuestObjectType<T>) {
+  public resultArray(guest: GuestType<T>) {
+    const guestObject = new GuestObject(guest);
     this.filledChainPool.add(
-      new GuestMiddle(guest, (value: Record<string, unknown>) =>
+      new GuestMiddle(guestObject, (value: Record<string, unknown>) =>
         Object.values(value),
       ),
     );
@@ -39,16 +41,17 @@ export class GuestChain<T> implements ChainType<T> {
     return this;
   }
 
-  public result(guest: GuestObjectType<T>) {
+  public result(guest: GuestType<T>) {
+    const guestObject = new GuestObject(guest);
     if (this.isChainFilled()) {
-      this.filledChainPool.add(guest);
+      this.filledChainPool.add(guestObject);
       this.theChain.receiving(
         new Guest((chain) => {
           this.filledChainPool.receive(chain);
         }),
       );
     } else {
-      this.filledChainPool.add(guest);
+      this.filledChainPool.add(guestObject);
     }
     return this;
   }

@@ -1,6 +1,5 @@
 import { expect, test } from "vitest";
 import { GuestChain } from "./GuestChain";
-import { Guest } from "./Guest";
 import { Source } from "../Source/Source";
 import { Patron } from "../Patron/Patron";
 
@@ -9,11 +8,9 @@ test("chain guest returns 2 values after result guest", () => {
   const two = new Source(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
-  chain.result(
-    new Guest((value) => {
-      expect(Object.values(value).join()).toBe("1,2");
-    }),
-  );
+  chain.result((value) => {
+    expect(Object.values(value).join()).toBe("1,2");
+  });
 
   one.receiving(chain.receiveKey("one"));
   two.receiving(chain.receiveKey("two"));
@@ -27,11 +24,9 @@ test("chain guest returns 2 values before result guest", () => {
   one.receiving(chain.receiveKey("one"));
   two.receiving(chain.receiveKey("two"));
 
-  chain.result(
-    new Guest((value) => {
-      expect(Object.values(value).join()).toBe("1,2");
-    }),
-  );
+  chain.result((value) => {
+    expect(Object.values(value).join()).toBe("1,2");
+  });
 });
 
 test("chain with patron", () => {
@@ -46,11 +41,9 @@ test("chain with patron", () => {
   one.receive(4);
 
   chain.result(
-    new Patron(
-      new Guest((value: Record<string, unknown>) => {
-        expect(Object.values(value).length).toBe(2);
-      }),
-    ),
+    new Patron((value: Record<string, unknown>) => {
+      expect(Object.values(value).length).toBe(2);
+    }),
   );
 });
 
@@ -63,10 +56,8 @@ test("chain as array", () => {
   two.receiving(new Patron(chain.receiveKey("1")));
 
   chain.resultArray(
-    new Patron(
-      new Guest((value) => {
-        expect(JSON.stringify(value)).toBe("[1, 2]");
-      }),
-    ),
+    new Patron((value) => {
+      expect(JSON.stringify(value)).toBe("[1, 2]");
+    }),
   );
 });

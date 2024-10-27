@@ -6,6 +6,7 @@ import { GuestChain } from "./Guest/GuestChain";
 import { GuestMiddle } from "./Guest/GuestMiddle";
 import { GuestPool } from "./Guest/GuestPool";
 import { GuestSync } from "./Guest/GuestSync";
+import { GuestObject } from "./Guest/GuestObject";
 import { Patron } from "./Patron/Patron";
 import { PatronOnce } from "./Patron/PatronOnce";
 import { Source } from "./Source/Source";
@@ -21,6 +22,7 @@ export * from "./Patron/Patron";
 export * from "./Patron/PatronOnce";
 export * from "./Patron/PatronPool";
 export * from "./Source/Source";
+export * from "./Guest/GuestObject";
 
 declare var globalThis: any;
 
@@ -35,6 +37,7 @@ if (globalThis) {
     GuestMiddle,
     GuestPool,
     GuestSync,
+    GuestObject,
     Patron,
     PatronOnce,
     PatronPool,

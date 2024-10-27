@@ -183,6 +183,26 @@ class Source {
   }
 }
 
+class GuestObject {
+  constructor(baseGuest) {
+    this.baseGuest = baseGuest;
+  }
+  receive(value, options) {
+    let guest = this.baseGuest;
+    if (typeof guest === "function") {
+      guest = new Guest(guest);
+    }
+    guest.receive(value, options);
+    return this;
+  }
+  introduction() {
+    if (typeof this.baseGuest === "function" || !this.baseGuest.introduction) {
+      return "guest";
+    }
+    return this.baseGuest.introduction();
+  }
+}
+
 var __defProp$1 = Object.defineProperty;
 var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -195,9 +215,10 @@ class GuestChain {
     this.theChain = new Source({});
   }
   resultArray(guest) {
+    const guestObject = new GuestObject(guest);
     this.filledChainPool.add(
       new GuestMiddle(
-        guest,
+        guestObject,
         (value) => Object.values(value)
       )
     );
@@ -211,15 +232,16 @@ class GuestChain {
     return this;
   }
   result(guest) {
+    const guestObject = new GuestObject(guest);
     if (this.isChainFilled()) {
-      this.filledChainPool.add(guest);
+      this.filledChainPool.add(guestObject);
       this.theChain.receiving(
         new Guest((chain) => {
           this.filledChainPool.receive(chain);
         })
       );
     } else {
-      this.filledChainPool.add(guest);
+      this.filledChainPool.add(guestObject);
     }
     return this;
   }
@@ -308,6 +330,7 @@ if (globalThis) {
     GuestMiddle,
     GuestPool,
     GuestSync,
+    GuestObject,
     Patron,
     PatronOnce,
     PatronPool,
@@ -315,5 +338,5 @@ if (globalThis) {
   };
 }
 
-export { Guest, GuestAware, GuestCast, GuestChain, GuestMiddle, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, give, removePatronFromPools };
+export { Guest, GuestAware, GuestCast, GuestChain, GuestMiddle, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, give, removePatronFromPools };
 //# sourceMappingURL=patron.mjs.map
