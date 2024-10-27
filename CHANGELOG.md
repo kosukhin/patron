@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/kosukhin/patron/compare/v1.9.0...v1.10.0) (2024-10-27)
+
+
+### Features
+
+* **main:** исправить экспорт для GuestMiddle ([b6e4bce](https://github.com/kosukhin/patron/commit/b6e4bce91950cdb68b5e2648bb99c075513b793e))
+
 ## [1.9.0](https://github.com/kosukhin/patron/compare/v1.8.0...v1.9.0) (2024-10-27)
 
 
