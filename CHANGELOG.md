@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/kosukhin/patron/compare/v1.10.0...v1.11.0) (2024-10-27)
+
+
+### Features
+
+* **main:** исправить chain и сделать guestobject ([a2c858f](https://github.com/kosukhin/patron/commit/a2c858f58f04109ca54215423aa8162ea1078dbd))
+
 ## [1.10.0](https://github.com/kosukhin/patron/compare/v1.9.0...v1.10.0) (2024-10-27)
 
 
