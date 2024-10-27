@@ -32,7 +32,7 @@ if (globalThis) {
     Guest,
     GuestCast,
     GuestChain,
-    GuestInTheMiddle: GuestMiddle,
+    GuestMiddle,
     GuestPool,
     GuestSync,
     Patron,
