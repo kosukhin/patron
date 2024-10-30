@@ -10,7 +10,7 @@ import { GuestObject } from "./Guest/GuestObject";
 import { Patron } from "./Patron/Patron";
 import { PatronOnce } from "./Patron/PatronOnce";
 import { Source } from "./Source/Source";
-import { Factory } from "src/Factory/Factory";
+import { Factory } from "./Factory/Factory";
 
 export * from "./Guest/GuestAware";
 export * from "./Guest/Guest";

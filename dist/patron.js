@@ -1,7 +1,5 @@
 'use strict';
 
-var Factory$1 = require('src/Factory/Factory');
-
 function give(data, guest, options) {
   if (typeof guest === "function") {
     guest(data, options);
@@ -349,7 +347,7 @@ if (globalThis) {
     PatronOnce,
     PatronPool,
     Source,
-    Factory: Factory$1.Factory
+    Factory
   };
 }
 

@@ -1,5 +1,3 @@
-import { Factory as Factory$1 } from 'src/Factory/Factory';
-
 function give(data, guest, options) {
   if (typeof guest === "function") {
     guest(data, options);
@@ -347,7 +345,7 @@ if (globalThis) {
     PatronOnce,
     PatronPool,
     Source,
-    Factory: Factory$1
+    Factory
   };
 }
 
