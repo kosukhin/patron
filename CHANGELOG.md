@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/kosukhin/patron/compare/v1.11.0...v1.12.0) (2024-10-30)
+
+
+### Features
+
+* **main:** добавил класс - фабрику ([95900a2](https://github.com/kosukhin/patron/commit/95900a2a2da2a107c684e6cf27f04f22046c8d75))
+* **main:** заготовка для ObjectOf возвращение к фабрике после абстрактных объектов ([7c73f58](https://github.com/kosukhin/patron/commit/7c73f588ebb3485cb3548d5d9d302a8aac0bf253))
+
 ## [1.11.0](https://github.com/kosukhin/patron/compare/v1.10.0...v1.11.0) (2024-10-27)
 
 
