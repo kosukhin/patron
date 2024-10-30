@@ -10,6 +10,7 @@ import { GuestObject } from "./Guest/GuestObject";
 import { Patron } from "./Patron/Patron";
 import { PatronOnce } from "./Patron/PatronOnce";
 import { Source } from "./Source/Source";
+import { Factory } from "src/Factory/Factory";
 
 export * from "./Guest/GuestAware";
 export * from "./Guest/Guest";
@@ -23,6 +24,7 @@ export * from "./Patron/PatronOnce";
 export * from "./Patron/PatronPool";
 export * from "./Source/Source";
 export * from "./Guest/GuestObject";
+export * from "./Factory/Factory";
 
 declare var globalThis: any;
 
@@ -42,5 +44,6 @@ if (globalThis) {
     PatronOnce,
     PatronPool,
     Source,
+    Factory,
   };
 }

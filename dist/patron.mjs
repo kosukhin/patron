@@ -1,3 +1,5 @@
+import { Factory as Factory$1 } from 'src/Factory/Factory';
+
 function give(data, guest, options) {
   if (typeof guest === "function") {
     guest(data, options);
@@ -319,6 +321,16 @@ class PatronOnce {
   }
 }
 
+class Factory {
+  constructor(constructorFn, factories = {}) {
+    this.constructorFn = constructorFn;
+    this.factories = factories;
+  }
+  create(...args) {
+    return new this.constructorFn(...args, this.factories);
+  }
+}
+
 if (globalThis) {
   globalThis["GUEST_LIBRARY"] = {
     give,
@@ -334,9 +346,10 @@ if (globalThis) {
     Patron,
     PatronOnce,
     PatronPool,
-    Source
+    Source,
+    Factory: Factory$1
   };
 }
 
-export { Guest, GuestAware, GuestCast, GuestChain, GuestMiddle, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, give, removePatronFromPools };
+export { Factory, Guest, GuestAware, GuestCast, GuestChain, GuestMiddle, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, give, removePatronFromPools };
 //# sourceMappingURL=patron.mjs.map

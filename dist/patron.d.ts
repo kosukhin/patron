@@ -132,4 +132,17 @@ declare class GuestObject<T> implements GuestObjectType<T> {
     introduction(): "guest" | "patron";
 }
 
-export { type ChainType, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestMiddle, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, type ReceiveOptions, Source, type SourceType, give, removePatronFromPools };
+interface Prototyped<T> {
+    prototype: T;
+}
+interface FactoryType<T> {
+    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
+}
+declare class Factory<T> implements FactoryType<T> {
+    private constructorFn;
+    private factories;
+    constructor(constructorFn: Prototyped<T>, factories?: Record<string, unknown>);
+    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
+}
+
+export { type ChainType, Factory, type FactoryType, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestMiddle, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, type ReceiveOptions, Source, type SourceType, give, removePatronFromPools };
