@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/kosukhin/patron/compare/v1.12.0...v1.13.0) (2024-10-30)
+
+
+### Features
+
+* **main:** исправить импорт factory ([6637a59](https://github.com/kosukhin/patron/commit/6637a59fe54e2a15c96ee1f77fdee394528f1efb))
+
 ## [1.12.0](https://github.com/kosukhin/patron/compare/v1.11.0...v1.12.0) (2024-10-30)
 
 
