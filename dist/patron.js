@@ -1,9 +1,5 @@
 'use strict';
 
-var Guest$1 = require('src/Guest/Guest');
-var GuestMiddle$1 = require('src/Guest/GuestMiddle');
-var Source$1 = require('src/Source/Source');
-
 class GuestAware {
   constructor(guestReceiver) {
     this.guestReceiver = guestReceiver;
@@ -330,13 +326,13 @@ var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { en
 var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
 class SourceEmpty {
   constructor() {
-    __publicField(this, "baseSource", new Source$1.Source(null));
+    __publicField(this, "baseSource", new Source(null));
   }
   receiving(guest) {
     this.baseSource.receiving(
-      new GuestMiddle$1.GuestMiddle(guest, (value) => {
+      new GuestMiddle(guest, (value) => {
         if (value !== null) {
-          Guest$1.give(value, guest);
+          give(value, guest);
         }
       })
     );

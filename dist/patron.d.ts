@@ -1,6 +1,3 @@
-import { GuestType as GuestType$1 } from 'src/Guest/Guest';
-import { SourceType as SourceType$1 } from 'src/Source/Source';
-
 type GuestIntroduction = "guest" | "patron";
 interface ReceiveOptions {
     data?: unknown;
@@ -128,9 +125,9 @@ declare class Source<T> implements SourceType<T> {
     receiving(guest: GuestType<T>): this;
 }
 
-declare class SourceEmpty<T> implements SourceType$1<T> {
+declare class SourceEmpty<T> implements SourceType<T> {
     private baseSource;
-    receiving(guest: GuestType$1<T>): this;
+    receiving(guest: GuestType<T>): this;
     receive(value: T): this;
 }
 

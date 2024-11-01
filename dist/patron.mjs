@@ -1,7 +1,3 @@
-import { give as give$1 } from 'src/Guest/Guest';
-import { GuestMiddle as GuestMiddle$1 } from 'src/Guest/GuestMiddle';
-import { Source as Source$1 } from 'src/Source/Source';
-
 class GuestAware {
   constructor(guestReceiver) {
     this.guestReceiver = guestReceiver;
@@ -328,13 +324,13 @@ var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { en
 var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
 class SourceEmpty {
   constructor() {
-    __publicField(this, "baseSource", new Source$1(null));
+    __publicField(this, "baseSource", new Source(null));
   }
   receiving(guest) {
     this.baseSource.receiving(
-      new GuestMiddle$1(guest, (value) => {
+      new GuestMiddle(guest, (value) => {
         if (value !== null) {
-          give$1(value, guest);
+          give(value, guest);
         }
       })
     );

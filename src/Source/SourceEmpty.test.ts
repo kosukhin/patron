@@ -1,4 +1,4 @@
-import { SourceEmpty } from "src/Source/SourceEmpty";
+import { SourceEmpty } from "./SourceEmpty";
 import { expect, test } from "vitest";
 
 test("source", () => {

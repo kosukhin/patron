@@ -1,6 +1,6 @@
-import { give, GuestType } from "src/Guest/Guest";
-import { GuestMiddle } from "src/Guest/GuestMiddle";
-import { Source, SourceType } from "src/Source/Source";
+import { give, GuestType } from "./../Guest/Guest";
+import { GuestMiddle } from "./../Guest/GuestMiddle";
+import { Source, SourceType } from "./Source";
 
 export class SourceEmpty<T> implements SourceType<T> {
   private baseSource = new Source<T | null>(null);
