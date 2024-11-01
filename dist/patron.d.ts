@@ -1,3 +1,6 @@
+import { GuestType as GuestType$1 } from 'src/Guest/Guest';
+import { SourceType as SourceType$1 } from 'src/Source/Source';
+
 type GuestIntroduction = "guest" | "patron";
 interface ReceiveOptions {
     data?: unknown;
@@ -125,6 +128,12 @@ declare class Source<T> implements SourceType<T> {
     receiving(guest: GuestType<T>): this;
 }
 
+declare class SourceEmpty<T> implements SourceType$1<T> {
+    private baseSource;
+    receiving(guest: GuestType$1<T>): this;
+    receive(value: T): this;
+}
+
 declare class GuestObject<T> implements GuestObjectType<T> {
     private baseGuest;
     constructor(baseGuest: GuestType<T>);
@@ -145,4 +154,4 @@ declare class Factory<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestMiddle, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, type ReceiveOptions, Source, type SourceType, give, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestMiddle, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, type ReceiveOptions, Source, SourceEmpty, type SourceType, give, removePatronFromPools };
