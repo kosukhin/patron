@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/kosukhin/patron/compare/v1.14.0...v1.15.0) (2024-11-01)
+
+
+### Features
+
+* **main:** исправление путей импортов для SourceEmpty ([609cae1](https://github.com/kosukhin/patron/commit/609cae1506abf9ba7f073316814f2008d7e9f53d))
+
 ## [1.14.0](https://github.com/kosukhin/patron/compare/v1.13.0...v1.14.0) (2024-11-01)
 
 
