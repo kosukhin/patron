@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/kosukhin/patron/compare/v1.16.0...v1.17.0) (2024-11-02)
+
+
+### Features
+
+* **main:** исправить настройку роллап ([d699b15](https://github.com/kosukhin/patron/commit/d699b15df9be703461b3de0c13a34956f3008d71))
+
 ## [1.16.0](https://github.com/kosukhin/patron/compare/v1.15.0...v1.16.0) (2024-11-02)
 
 
