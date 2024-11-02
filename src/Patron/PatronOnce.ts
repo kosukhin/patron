@@ -1,10 +1,5 @@
 import { PoolType } from "./PatronPool";
-import {
-  give,
-  GuestObjectType,
-  GuestType,
-  ReceiveOptions,
-} from "../Guest/Guest";
+import { give, GuestObjectType, GuestType, GiveOptions } from "../Guest/Guest";
 
 type PoolAware = {
   pool?: PoolType;
@@ -19,17 +14,14 @@ export class PatronOnce<T> implements GuestObjectType<T> {
     return "patron" as const;
   }
 
-  public receive(value: T, options?: ReceiveOptions): this {
+  public give(value: T, options?: GiveOptions): this {
     if (!this.received) {
       give(value, this.baseGuest, options);
     }
-
     const data = options?.data as PoolAware;
-
     if (data?.pool) {
       data.pool.remove(this);
     }
-
     return this;
   }
 }

@@ -1,14 +1,14 @@
-import { Guest, GuestObjectType, GuestType, ReceiveOptions } from "./Guest";
+import { Guest, GuestObjectType, GuestType, GiveOptions } from "./Guest";
 
 export class GuestObject<T> implements GuestObjectType<T> {
   public constructor(private baseGuest: GuestType<T>) {}
 
-  public receive(value: T, options?: ReceiveOptions): this {
+  public give(value: T, options?: GiveOptions): this {
     let guest = this.baseGuest;
     if (typeof guest === "function") {
       guest = new Guest(guest);
     }
-    guest.receive(value, options);
+    guest.give(value, options);
     return this;
   }
 
@@ -16,7 +16,6 @@ export class GuestObject<T> implements GuestObjectType<T> {
     if (typeof this.baseGuest === "function" || !this.baseGuest.introduction) {
       return "guest";
     }
-
     return this.baseGuest.introduction();
   }
 }

@@ -8,8 +8,8 @@ test("patron always guest", () => {
   const patron = new Patron(() => {
     patronCalledTimes += 1;
   });
-  one.receiving(patron);
-  one.receive(2);
+  one.value(patron);
+  one.give(2);
 
   queueMicrotask(() => {
     expect(patronCalledTimes).toBe(2);

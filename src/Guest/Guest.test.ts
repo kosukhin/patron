@@ -4,7 +4,7 @@ import { Source } from "../Source/Source";
 test("guest callback", () => {
   const one = new Source(1);
 
-  one.receiving((value) => {
+  one.value((value) => {
     expect(value).toBe(1);
   });
 });

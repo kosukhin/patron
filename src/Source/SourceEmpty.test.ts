@@ -6,13 +6,13 @@ test("source", () => {
   let accumulator = 0;
 
   // Не вызывается потому что нет значения
-  source.receiving(() => {
+  source.value(() => {
     accumulator += 100;
   });
 
   // Вызывается после прихода значения
-  source.receive(200);
-  source.receiving((value) => {
+  source.give(200);
+  source.value((value) => {
     accumulator += value;
   });
 

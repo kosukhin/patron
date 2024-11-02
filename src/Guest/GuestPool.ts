@@ -1,6 +1,6 @@
 import { PatronPool } from "../Patron/PatronPool";
 import { PoolType } from "../Patron/PatronPool";
-import { give, GuestObjectType, GuestType, ReceiveOptions } from "./Guest";
+import { give, GuestObjectType, GuestType, GiveOptions } from "./Guest";
 
 export class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
   private guests = new Set<GuestType<T>>();
@@ -11,9 +11,9 @@ export class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
     this.patronPool = new PatronPool(initiator);
   }
 
-  public receive(value: T, options?: ReceiveOptions): this {
+  public give(value: T, options?: GiveOptions): this {
     this.deliverToGuests(value, options);
-    this.patronPool.receive(value, options);
+    this.patronPool.give(value, options);
     return this;
   }
 
@@ -37,11 +37,11 @@ export class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
 
   public distribute(receiving: T, possiblePatron: GuestObjectType<T>): this {
     this.add(possiblePatron);
-    this.receive(receiving);
+    this.give(receiving);
     return this;
   }
 
-  private deliverToGuests(value: T, options?: ReceiveOptions) {
+  private deliverToGuests(value: T, options?: GiveOptions) {
     this.guests.forEach((target) => {
       give(value, target, options);
     });

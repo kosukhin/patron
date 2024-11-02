@@ -2,7 +2,7 @@ class GuestAware {
   constructor(guestReceiver) {
     this.guestReceiver = guestReceiver;
   }
-  receiving(guest) {
+  value(guest) {
     this.guestReceiver(guest);
     return guest;
   }
@@ -12,14 +12,14 @@ function give(data, guest, options) {
   if (typeof guest === "function") {
     guest(data, options);
   } else {
-    guest.receive(data, options);
+    guest.give(data, options);
   }
 }
 class Guest {
   constructor(receiver) {
     this.receiver = receiver;
   }
-  receive(value, options) {
+  give(value, options) {
     this.receiver(value, options);
     return this;
   }
@@ -39,7 +39,7 @@ class GuestCast {
     }
     return this.sourceGuest.introduction();
   }
-  receive(value, options) {
+  give(value, options) {
     give(value, this.targetGuest, options);
     return this;
   }
@@ -58,7 +58,7 @@ class PatronPool {
   constructor(initiator) {
     this.initiator = initiator;
     __publicField$5(this, "patrons", /* @__PURE__ */ new Set());
-    __publicField$5(this, "receive");
+    __publicField$5(this, "give");
     poolSets.set(this, this.patrons);
     let lastMicrotask = null;
     const doReceive = (value, options) => {
@@ -66,7 +66,7 @@ class PatronPool {
         this.sendValueToGuest(value, target, options);
       });
     };
-    this.receive = (value, options) => {
+    this.give = (value, options) => {
       const currentMicroTask = () => {
         if (currentMicroTask === lastMicrotask) {
           doReceive(value, options);
@@ -113,9 +113,9 @@ class GuestPool {
     __publicField$4(this, "patronPool");
     this.patronPool = new PatronPool(initiator);
   }
-  receive(value, options) {
+  give(value, options) {
     this.deliverToGuests(value, options);
-    this.patronPool.receive(value, options);
+    this.patronPool.give(value, options);
     return this;
   }
   add(guest) {
@@ -132,7 +132,7 @@ class GuestPool {
   }
   distribute(receiving, possiblePatron) {
     this.add(possiblePatron);
-    this.receive(receiving);
+    this.give(receiving);
     return this;
   }
   deliverToGuests(value, options) {
@@ -154,7 +154,7 @@ class GuestMiddle {
     }
     return this.baseGuest.introduction();
   }
-  receive(value, options) {
+  give(value, options) {
     this.middleFn(value, options);
     return this;
   }
@@ -168,12 +168,12 @@ class Source {
     this.sourceDocument = sourceDocument;
     __publicField$3(this, "pool", new PatronPool(this));
   }
-  receive(value) {
+  give(value) {
     this.sourceDocument = value;
-    this.pool.receive(this.sourceDocument);
+    this.pool.give(this.sourceDocument);
     return this;
   }
-  receiving(guest) {
+  value(guest) {
     if (typeof guest === "function") {
       this.pool.distribute(this.sourceDocument, new Guest(guest));
     } else {
@@ -187,12 +187,12 @@ class GuestObject {
   constructor(baseGuest) {
     this.baseGuest = baseGuest;
   }
-  receive(value, options) {
+  give(value, options) {
     let guest = this.baseGuest;
     if (typeof guest === "function") {
       guest = new Guest(guest);
     }
-    guest.receive(value, options);
+    guest.give(value, options);
     return this;
   }
   introduction() {
@@ -223,9 +223,9 @@ class GuestChain {
       )
     );
     if (this.isChainFilled()) {
-      this.theChain.receiving(
+      this.theChain.value(
         new Guest((chain) => {
-          this.filledChainPool.receive(Object.values(chain));
+          this.filledChainPool.give(Object.values(chain));
         })
       );
     }
@@ -235,9 +235,9 @@ class GuestChain {
     const guestObject = new GuestObject(guest);
     if (this.isChainFilled()) {
       this.filledChainPool.add(guestObject);
-      this.theChain.receiving(
+      this.theChain.value(
         new Guest((chain) => {
-          this.filledChainPool.receive(chain);
+          this.filledChainPool.give(chain);
         })
       );
     } else {
@@ -249,16 +249,16 @@ class GuestChain {
     this.keysKnown.add(key);
     return new Guest((value) => {
       queueMicrotask(() => {
-        this.theChain.receiving(
+        this.theChain.value(
           new Guest((chain) => {
             this.keysFilled.add(key);
             const lastChain = {
               ...chain,
               [key]: value
             };
-            this.theChain.receive(lastChain);
+            this.theChain.give(lastChain);
             if (this.isChainFilled()) {
-              this.filledChainPool.receive(lastChain);
+              this.filledChainPool.give(lastChain);
             }
           })
         );
@@ -274,7 +274,7 @@ class GuestSync {
   constructor(theValue) {
     this.theValue = theValue;
   }
-  receive(value) {
+  give(value) {
     this.theValue = value;
     return this;
   }
@@ -290,7 +290,7 @@ class Patron {
   introduction() {
     return "patron";
   }
-  receive(value, options) {
+  give(value, options) {
     give(value, this.willBePatron, options);
     return this;
   }
@@ -307,7 +307,7 @@ class PatronOnce {
   introduction() {
     return "patron";
   }
-  receive(value, options) {
+  give(value, options) {
     if (!this.received) {
       give(value, this.baseGuest, options);
     }
@@ -326,8 +326,8 @@ class SourceEmpty {
   constructor() {
     __publicField(this, "baseSource", new Source(null));
   }
-  receiving(guest) {
-    this.baseSource.receiving(
+  value(guest) {
+    this.baseSource.value(
       new GuestMiddle(guest, (value) => {
         if (value !== null) {
           give(value, guest);
@@ -336,8 +336,8 @@ class SourceEmpty {
     );
     return this;
   }
-  receive(value) {
-    this.baseSource.receive(value);
+  give(value) {
+    this.baseSource.give(value);
     return this;
   }
 }
@@ -348,7 +348,10 @@ class Factory {
     this.factories = factories;
   }
   create(...args) {
-    return new this.constructorFn(...args, this.factories);
+    return new this.constructorFn(
+      ...args,
+      this.factories
+    );
   }
 }
 

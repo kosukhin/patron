@@ -12,9 +12,9 @@ test("test guest in the middle", () => {
   const guest = new Guest((value: number) => {
     accumValue += value;
   });
-  one.receiving(
+  one.value(
     new GuestMiddle(guest, (value: number) => {
-      guest.receive(value + 3);
+      guest.give(value + 3);
     }),
   );
 
@@ -30,15 +30,15 @@ test("test patron in the middle", () => {
       accumValue += value;
     }),
   );
-  one.receiving(
+  one.value(
     new GuestMiddle(guest, (value: number) => {
-      guest.receive(value + 3);
+      guest.give(value + 3);
     }),
   );
-  one.receive(3);
+  one.give(3);
 
   setTimeout(() => {
-    one.receive(3);
+    one.give(3);
   });
 
   setTimeout(() => {
@@ -51,11 +51,11 @@ test("test chain in the middle", () => {
   const two = new Source(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
-  one.receiving(new Patron(chain.receiveKey("one")));
-  two.receiving(new Patron(chain.receiveKey("two")));
+  one.value(new Patron(chain.receiveKey("one")));
+  two.value(new Patron(chain.receiveKey("two")));
 
-  one.receive(3);
-  one.receive(4);
+  one.give(3);
+  one.give(4);
 
   const guest = new Patron(
     new Guest((value: { one: number; two: number; three: number }) => {
@@ -65,7 +65,7 @@ test("test chain in the middle", () => {
 
   chain.result(
     new GuestMiddle(guest, (value) => {
-      guest.receive({ ...value, three: 99 });
+      guest.give({ ...value, three: 99 });
     }),
   );
 });

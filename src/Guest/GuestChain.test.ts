@@ -12,8 +12,8 @@ test("chain guest returns 2 values after result guest", () => {
     expect(Object.values(value).join()).toBe("1,2");
   });
 
-  one.receiving(chain.receiveKey("one"));
-  two.receiving(chain.receiveKey("two"));
+  one.value(chain.receiveKey("one"));
+  two.value(chain.receiveKey("two"));
 });
 
 test("chain guest returns 2 values before result guest", () => {
@@ -21,8 +21,8 @@ test("chain guest returns 2 values before result guest", () => {
   const two = new Source(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
-  one.receiving(chain.receiveKey("one"));
-  two.receiving(chain.receiveKey("two"));
+  one.value(chain.receiveKey("one"));
+  two.value(chain.receiveKey("two"));
 
   chain.result((value) => {
     expect(Object.values(value).join()).toBe("1,2");
@@ -34,11 +34,11 @@ test("chain with patron", () => {
   const two = new Source(2);
   const chain = new GuestChain<{ one: number; two: number }>();
 
-  one.receiving(new Patron(chain.receiveKey("one")));
-  two.receiving(new Patron(chain.receiveKey("two")));
+  one.value(new Patron(chain.receiveKey("one")));
+  two.value(new Patron(chain.receiveKey("two")));
 
-  one.receive(3);
-  one.receive(4);
+  one.give(3);
+  one.give(4);
 
   chain.result(
     new Patron((value: Record<string, unknown>) => {
@@ -52,8 +52,8 @@ test("chain as array", () => {
   const two = new Source(2);
   const chain = new GuestChain<[number, number]>();
 
-  one.receiving(new Patron(chain.receiveKey("0")));
-  two.receiving(new Patron(chain.receiveKey("1")));
+  one.value(new Patron(chain.receiveKey("0")));
+  two.value(new Patron(chain.receiveKey("1")));
 
   chain.resultArray(
     new Patron((value) => {

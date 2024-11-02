@@ -20,8 +20,8 @@ test("chain guest returns 2 values after result guest", () => {
     }),
   );
 
-  source.receiving(mainGuest);
-  source.receiving(secondGuest);
+  source.value(mainGuest);
+  source.value(secondGuest);
 
   give(2, source);
 

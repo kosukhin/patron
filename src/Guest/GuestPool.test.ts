@@ -22,10 +22,10 @@ test("patron pool with guests", () => {
   pool.add((value) => {
     receivedCount += value;
   });
-  pool.receive(2);
+  pool.give(2);
 
   setTimeout(() => {
-    pool.receive(2);
+    pool.give(2);
   });
 
   setTimeout(() => {

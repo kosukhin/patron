@@ -1,15 +1,8 @@
-import {
-  give,
-  GuestObjectType,
-  GuestType,
-  ReceiveOptions,
-} from "../Guest/Guest";
+import { give, GuestObjectType, GuestType, GiveOptions } from "../Guest/Guest";
 
 const poolSets = new Map<PoolType, Set<GuestObjectType>>();
 
-/**
- * Удалить патрон из всех пулов
- */
+// remove patron from all pools
 export const removePatronFromPools = (patron: GuestObjectType) => {
   poolSets.forEach((pool) => {
     pool.delete(patron);
@@ -25,18 +18,17 @@ export interface PoolType<T = unknown> extends GuestObjectType<T> {
 export class PatronPool<T> implements PoolType<T> {
   private patrons = new Set<GuestObjectType<T>>();
 
-  public receive: (value: T, options?: ReceiveOptions) => this;
+  public give: (value: T, options?: GiveOptions) => this;
 
   public constructor(private initiator: unknown) {
     poolSets.set(this, this.patrons);
-
     let lastMicrotask: (() => void) | null = null;
-    const doReceive = (value: T, options?: ReceiveOptions) => {
+    const doReceive = (value: T, options?: GiveOptions) => {
       this.patrons.forEach((target) => {
         this.sendValueToGuest(value, target, options);
       });
     };
-    this.receive = (value: T, options?: ReceiveOptions) => {
+    this.give = (value: T, options?: GiveOptions) => {
       const currentMicroTask = () => {
         if (currentMicroTask === lastMicrotask) {
           doReceive(value, options);
@@ -73,7 +65,7 @@ export class PatronPool<T> implements PoolType<T> {
   private sendValueToGuest(
     value: T,
     guest: GuestType<T>,
-    options?: ReceiveOptions,
+    options?: GiveOptions,
   ) {
     give(value, guest, {
       ...options,
