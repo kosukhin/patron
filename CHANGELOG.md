@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/kosukhin/patron/compare/v1.15.0...v1.16.0) (2024-11-02)
+
+
+### Features
+
+* **main:** переименовать receive-receiving в give-value ([02c5eb7](https://github.com/kosukhin/patron/commit/02c5eb70c2305a304a96c5772ddce1b309772457))
+
 ## [1.15.0](https://github.com/kosukhin/patron/compare/v1.14.0...v1.15.0) (2024-11-01)
 
 
