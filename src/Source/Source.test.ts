@@ -4,7 +4,7 @@ import { Source } from "./Source";
 test("source", () => {
   const source = new Source(42);
 
-  source.receiving((value) => {
+  source.value((value) => {
     expect(value).toBe(42);
   });
 });

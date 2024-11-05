@@ -7,7 +7,7 @@ export interface GuestValueType<T = unknown> extends GuestObjectType<T> {
 export class GuestSync<T> implements GuestValueType<T> {
   public constructor(private theValue: T) {}
 
-  public receive(value: T): this {
+  public give(value: T): this {
     this.theValue = value;
     return this;
   }

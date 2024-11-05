@@ -1,23 +1,53 @@
+class GuestAware {
+  constructor(guestReceiver) {
+    this.guestReceiver = guestReceiver;
+  }
+  value(guest) {
+    this.guestReceiver(guest);
+    return guest;
+  }
+}
+
 function give(data, guest, options) {
   if (typeof guest === "function") {
     guest(data, options);
   } else {
-    guest.receive(data, options);
+    guest.give(data, options);
   }
 }
 class Guest {
   constructor(receiver) {
     this.receiver = receiver;
   }
-  receive(value, options) {
+  give(value, options) {
     this.receiver(value, options);
     return this;
   }
 }
 
-var __defProp$4 = Object.defineProperty;
-var __defNormalProp$4 = (obj, key, value) => key in obj ? __defProp$4(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$4 = (obj, key, value) => __defNormalProp$4(obj, typeof key !== "symbol" ? key + "" : key, value);
+class GuestCast {
+  constructor(sourceGuest, targetGuest) {
+    this.sourceGuest = sourceGuest;
+    this.targetGuest = targetGuest;
+  }
+  introduction() {
+    if (typeof this.sourceGuest === "function") {
+      return "guest";
+    }
+    if (!this.sourceGuest.introduction) {
+      return "guest";
+    }
+    return this.sourceGuest.introduction();
+  }
+  give(value, options) {
+    give(value, this.targetGuest, options);
+    return this;
+  }
+}
+
+var __defProp$5 = Object.defineProperty;
+var __defNormalProp$5 = (obj, key, value) => key in obj ? __defProp$5(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$5 = (obj, key, value) => __defNormalProp$5(obj, typeof key !== "symbol" ? key + "" : key, value);
 const poolSets = /* @__PURE__ */ new Map();
 const removePatronFromPools = (patron) => {
   poolSets.forEach((pool) => {
@@ -27,8 +57,8 @@ const removePatronFromPools = (patron) => {
 class PatronPool {
   constructor(initiator) {
     this.initiator = initiator;
-    __publicField$4(this, "patrons", /* @__PURE__ */ new Set());
-    __publicField$4(this, "receive");
+    __publicField$5(this, "patrons", /* @__PURE__ */ new Set());
+    __publicField$5(this, "give");
     poolSets.set(this, this.patrons);
     let lastMicrotask = null;
     const doReceive = (value, options) => {
@@ -36,7 +66,7 @@ class PatronPool {
         this.sendValueToGuest(value, target, options);
       });
     };
-    this.receive = (value, options) => {
+    this.give = (value, options) => {
       const currentMicroTask = () => {
         if (currentMicroTask === lastMicrotask) {
           doReceive(value, options);
@@ -74,48 +104,18 @@ class PatronPool {
   }
 }
 
-class GuestAware {
-  constructor(guestReceiver) {
-    this.guestReceiver = guestReceiver;
-  }
-  receiving(guest) {
-    this.guestReceiver(guest);
-    return guest;
-  }
-}
-
-class GuestCast {
-  constructor(sourceGuest, targetGuest) {
-    this.sourceGuest = sourceGuest;
-    this.targetGuest = targetGuest;
-  }
-  introduction() {
-    if (typeof this.sourceGuest === "function") {
-      return "guest";
-    }
-    if (!this.sourceGuest.introduction) {
-      return "guest";
-    }
-    return this.sourceGuest.introduction();
-  }
-  receive(value, options) {
-    give(value, this.targetGuest, options);
-    return this;
-  }
-}
-
-var __defProp$3 = Object.defineProperty;
-var __defNormalProp$3 = (obj, key, value) => key in obj ? __defProp$3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$3 = (obj, key, value) => __defNormalProp$3(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __defProp$4 = Object.defineProperty;
+var __defNormalProp$4 = (obj, key, value) => key in obj ? __defProp$4(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$4 = (obj, key, value) => __defNormalProp$4(obj, typeof key !== "symbol" ? key + "" : key, value);
 class GuestPool {
   constructor(initiator) {
-    __publicField$3(this, "guests", /* @__PURE__ */ new Set());
-    __publicField$3(this, "patronPool");
+    __publicField$4(this, "guests", /* @__PURE__ */ new Set());
+    __publicField$4(this, "patronPool");
     this.patronPool = new PatronPool(initiator);
   }
-  receive(value, options) {
+  give(value, options) {
     this.deliverToGuests(value, options);
-    this.patronPool.receive(value, options);
+    this.patronPool.give(value, options);
     return this;
   }
   add(guest) {
@@ -132,7 +132,7 @@ class GuestPool {
   }
   distribute(receiving, possiblePatron) {
     this.add(possiblePatron);
-    this.receive(receiving);
+    this.give(receiving);
     return this;
   }
   deliverToGuests(value, options) {
@@ -154,26 +154,26 @@ class GuestMiddle {
     }
     return this.baseGuest.introduction();
   }
-  receive(value, options) {
+  give(value, options) {
     this.middleFn(value, options);
     return this;
   }
 }
 
-var __defProp$2 = Object.defineProperty;
-var __defNormalProp$2 = (obj, key, value) => key in obj ? __defProp$2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$2 = (obj, key, value) => __defNormalProp$2(obj, key + "" , value);
+var __defProp$3 = Object.defineProperty;
+var __defNormalProp$3 = (obj, key, value) => key in obj ? __defProp$3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$3 = (obj, key, value) => __defNormalProp$3(obj, key + "" , value);
 class Source {
   constructor(sourceDocument) {
     this.sourceDocument = sourceDocument;
-    __publicField$2(this, "pool", new PatronPool(this));
+    __publicField$3(this, "pool", new PatronPool(this));
   }
-  receive(value) {
+  give(value) {
     this.sourceDocument = value;
-    this.pool.receive(this.sourceDocument);
+    this.pool.give(this.sourceDocument);
     return this;
   }
-  receiving(guest) {
+  value(guest) {
     if (typeof guest === "function") {
       this.pool.distribute(this.sourceDocument, new Guest(guest));
     } else {
@@ -187,12 +187,12 @@ class GuestObject {
   constructor(baseGuest) {
     this.baseGuest = baseGuest;
   }
-  receive(value, options) {
+  give(value, options) {
     let guest = this.baseGuest;
     if (typeof guest === "function") {
       guest = new Guest(guest);
     }
-    guest.receive(value, options);
+    guest.give(value, options);
     return this;
   }
   introduction() {
@@ -203,15 +203,15 @@ class GuestObject {
   }
 }
 
-var __defProp$1 = Object.defineProperty;
-var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __defProp$2 = Object.defineProperty;
+var __defNormalProp$2 = (obj, key, value) => key in obj ? __defProp$2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$2 = (obj, key, value) => __defNormalProp$2(obj, typeof key !== "symbol" ? key + "" : key, value);
 class GuestChain {
   constructor() {
-    __publicField$1(this, "theChain");
-    __publicField$1(this, "keysKnown", /* @__PURE__ */ new Set());
-    __publicField$1(this, "keysFilled", /* @__PURE__ */ new Set());
-    __publicField$1(this, "filledChainPool", new GuestPool(this));
+    __publicField$2(this, "theChain");
+    __publicField$2(this, "keysKnown", /* @__PURE__ */ new Set());
+    __publicField$2(this, "keysFilled", /* @__PURE__ */ new Set());
+    __publicField$2(this, "filledChainPool", new GuestPool(this));
     this.theChain = new Source({});
   }
   resultArray(guest) {
@@ -223,9 +223,9 @@ class GuestChain {
       )
     );
     if (this.isChainFilled()) {
-      this.theChain.receiving(
+      this.theChain.value(
         new Guest((chain) => {
-          this.filledChainPool.receive(Object.values(chain));
+          this.filledChainPool.give(Object.values(chain));
         })
       );
     }
@@ -235,9 +235,9 @@ class GuestChain {
     const guestObject = new GuestObject(guest);
     if (this.isChainFilled()) {
       this.filledChainPool.add(guestObject);
-      this.theChain.receiving(
+      this.theChain.value(
         new Guest((chain) => {
-          this.filledChainPool.receive(chain);
+          this.filledChainPool.give(chain);
         })
       );
     } else {
@@ -249,16 +249,16 @@ class GuestChain {
     this.keysKnown.add(key);
     return new Guest((value) => {
       queueMicrotask(() => {
-        this.theChain.receiving(
+        this.theChain.value(
           new Guest((chain) => {
             this.keysFilled.add(key);
             const lastChain = {
               ...chain,
               [key]: value
             };
-            this.theChain.receive(lastChain);
+            this.theChain.give(lastChain);
             if (this.isChainFilled()) {
-              this.filledChainPool.receive(lastChain);
+              this.filledChainPool.give(lastChain);
             }
           })
         );
@@ -274,7 +274,7 @@ class GuestSync {
   constructor(theValue) {
     this.theValue = theValue;
   }
-  receive(value) {
+  give(value) {
     this.theValue = value;
     return this;
   }
@@ -290,24 +290,24 @@ class Patron {
   introduction() {
     return "patron";
   }
-  receive(value, options) {
+  give(value, options) {
     give(value, this.willBePatron, options);
     return this;
   }
 }
 
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
+var __defProp$1 = Object.defineProperty;
+var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "" , value);
 class PatronOnce {
   constructor(baseGuest) {
     this.baseGuest = baseGuest;
-    __publicField(this, "received", false);
+    __publicField$1(this, "received", false);
   }
   introduction() {
     return "patron";
   }
-  receive(value, options) {
+  give(value, options) {
     if (!this.received) {
       give(value, this.baseGuest, options);
     }
@@ -319,35 +319,41 @@ class PatronOnce {
   }
 }
 
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
+class SourceEmpty {
+  constructor() {
+    __publicField(this, "baseSource", new Source(null));
+  }
+  value(guest) {
+    this.baseSource.value(
+      new GuestMiddle(guest, (value) => {
+        if (value !== null) {
+          give(value, guest);
+        }
+      })
+    );
+    return this;
+  }
+  give(value) {
+    this.baseSource.give(value);
+    return this;
+  }
+}
+
 class Factory {
   constructor(constructorFn, factories = {}) {
     this.constructorFn = constructorFn;
     this.factories = factories;
   }
   create(...args) {
-    return new this.constructorFn(...args, this.factories);
+    return new this.constructorFn(
+      ...args,
+      this.factories
+    );
   }
 }
 
-if (globalThis) {
-  globalThis["GUEST_LIBRARY"] = {
-    give,
-    removePatronFromPools,
-    GuestAware,
-    Guest,
-    GuestCast,
-    GuestChain,
-    GuestMiddle,
-    GuestPool,
-    GuestSync,
-    GuestObject,
-    Patron,
-    PatronOnce,
-    PatronPool,
-    Source,
-    Factory
-  };
-}
-
-export { Factory, Guest, GuestAware, GuestCast, GuestChain, GuestMiddle, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, give, removePatronFromPools };
+export { Factory, Guest, GuestAware, GuestCast, GuestChain, GuestMiddle, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, removePatronFromPools };
 //# sourceMappingURL=patron.mjs.map

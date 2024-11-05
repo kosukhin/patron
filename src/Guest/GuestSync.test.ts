@@ -5,8 +5,8 @@ import { Source } from "../Source/Source";
 test("guest sync", () => {
   const source = new Source(123);
   const syncGuest = new GuestSync(111);
-  syncGuest.receive(222);
+  syncGuest.give(222);
   expect(syncGuest.value()).toBe(222);
-  source.receiving(syncGuest);
+  source.value(syncGuest);
   expect(syncGuest.value()).toBe(123);
 });

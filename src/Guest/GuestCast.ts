@@ -1,4 +1,4 @@
-import { give, GuestObjectType, GuestType, ReceiveOptions } from "./Guest";
+import { give, GuestObjectType, GuestType, GiveOptions } from "./Guest";
 
 // TODO GuestMiddle - можно убрать т.к теперь этот класс делает то же самое и даже больше
 export class GuestCast<T> implements GuestObjectType<T> {
@@ -7,18 +7,17 @@ export class GuestCast<T> implements GuestObjectType<T> {
     private targetGuest: GuestType<T>,
   ) {}
 
-  introduction() {
+  public introduction() {
     if (typeof this.sourceGuest === "function") {
       return "guest";
     }
-
     if (!this.sourceGuest.introduction) {
       return "guest";
     }
     return this.sourceGuest.introduction();
   }
 
-  receive(value: T, options?: ReceiveOptions): this {
+  public give(value: T, options?: GiveOptions): this {
     give(value, this.targetGuest, options);
     return this;
   }

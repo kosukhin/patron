@@ -9,13 +9,13 @@ export class Source<T> implements SourceType<T> {
 
   public constructor(private sourceDocument: T) {}
 
-  public receive(value: T): this {
+  public give(value: T): this {
     this.sourceDocument = value;
-    this.pool.receive(this.sourceDocument);
+    this.pool.give(this.sourceDocument);
     return this;
   }
 
-  public receiving(guest: GuestType<T>): this {
+  public value(guest: GuestType<T>): this {
     if (typeof guest === "function") {
       this.pool.distribute(this.sourceDocument, new Guest(guest));
     } else {

@@ -7,5 +7,5 @@ test("guest object", () => {
   const fnGuest = (value: number) => {
     expect(value).toBe(1);
   };
-  source.receiving(new GuestObject(fnGuest));
+  source.value(new GuestObject(fnGuest));
 });

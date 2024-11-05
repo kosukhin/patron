@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://github.com/kosukhin/patron/compare/v1.17.0...v1.18.0) (2024-11-02)
+
+
+### Features
+
+* **main:** исправить команду релиза ([1166dde](https://github.com/kosukhin/patron/commit/1166dde209a59b844acccb99ad2e584b246f747c))
+
+## [1.17.0](https://github.com/kosukhin/patron/compare/v1.16.0...v1.17.0) (2024-11-02)
+
+
+### Features
+
+* **main:** исправить настройку роллап ([d699b15](https://github.com/kosukhin/patron/commit/d699b15df9be703461b3de0c13a34956f3008d71))
+
+## [1.16.0](https://github.com/kosukhin/patron/compare/v1.15.0...v1.16.0) (2024-11-02)
+
+
+### Features
+
+* **main:** переименовать receive-receiving в give-value ([02c5eb7](https://github.com/kosukhin/patron/commit/02c5eb70c2305a304a96c5772ddce1b309772457))
+
+## [1.15.0](https://github.com/kosukhin/patron/compare/v1.14.0...v1.15.0) (2024-11-01)
+
+
+### Features
+
+* **main:** исправление путей импортов для SourceEmpty ([609cae1](https://github.com/kosukhin/patron/commit/609cae1506abf9ba7f073316814f2008d7e9f53d))
+
+## [1.14.0](https://github.com/kosukhin/patron/compare/v1.13.0...v1.14.0) (2024-11-01)
+
+
+### Features
+
+* **main:** новый класс SourceEmpty ([184232c](https://github.com/kosukhin/patron/commit/184232cf30a88c7902b2d6be5d6f6f378905e57f))
+
 ## [1.13.0](https://github.com/kosukhin/patron/compare/v1.12.0...v1.13.0) (2024-10-30)
 
 

@@ -17,5 +17,5 @@ test("patron pool", () => {
       expect(receivedCount).toBe(4);
     }),
   );
-  pool.receive(2);
+  pool.give(2);
 });

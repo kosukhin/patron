@@ -23,26 +23,26 @@
     constructor(source, selector) {
       this.source = source;
       const el = document.querySelector(selector);
-      this.source.receiving(
+      this.source.value(
           new Patron((value) => {
             el.value = value;
           }),
       );
       el.addEventListener('keyup', (e) => {
-        this.receive(e.target.value);
+        this.give(e.target.value);
       });
       el.addEventListener('change', (e) => {
-        this.receive(e.target.value);
+        this.give(e.target.value);
       });
     }
 
     receiving(guest) {
-      this.source.receiving(guest);
+      this.source.value(guest);
       return this;
     }
 
     receive(value) {
-      this.source.receive(value);
+      this.source.give(value);
       return this;
     }
   }
@@ -57,7 +57,7 @@
     }
   }
 
-  new Input(new Source(2), '.input-1').receiving(
+  new Input(new Source(2), '.input-1').value(
       new Patron(new Text('.result')),
   );
 </script>

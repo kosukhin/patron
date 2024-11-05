@@ -7,7 +7,7 @@ test("guest aware", () => {
     give(111, guest);
   });
 
-  aware.receiving((value) => {
+  aware.value((value) => {
     expect(value).toBe(111);
   });
 });

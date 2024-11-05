@@ -31,13 +31,12 @@ export class GuestChain<T> implements ChainType<T> {
       ),
     );
     if (this.isChainFilled()) {
-      this.theChain.receiving(
+      this.theChain.value(
         new Guest((chain: Record<string, unknown>) => {
-          this.filledChainPool.receive(Object.values(chain));
+          this.filledChainPool.give(Object.values(chain));
         }),
       );
     }
-
     return this;
   }
 
@@ -45,9 +44,9 @@ export class GuestChain<T> implements ChainType<T> {
     const guestObject = new GuestObject(guest);
     if (this.isChainFilled()) {
       this.filledChainPool.add(guestObject);
-      this.theChain.receiving(
+      this.theChain.value(
         new Guest((chain) => {
-          this.filledChainPool.receive(chain);
+          this.filledChainPool.give(chain);
         }),
       );
     } else {
@@ -61,16 +60,16 @@ export class GuestChain<T> implements ChainType<T> {
     return new Guest((value) => {
       // Обернул в очередь чтобы можно было синхронно наполнить очередь известных ключей
       queueMicrotask(() => {
-        this.theChain.receiving(
+        this.theChain.value(
           new Guest((chain: Record<string, unknown>) => {
             this.keysFilled.add(key);
             const lastChain = {
               ...chain,
               [key]: value,
             };
-            this.theChain.receive(lastChain);
+            this.theChain.give(lastChain);
             if (this.isChainFilled()) {
-              this.filledChainPool.receive(lastChain);
+              this.filledChainPool.give(lastChain);
             }
           }),
         );

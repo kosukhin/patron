@@ -8,8 +8,10 @@ test("patron once", () => {
   const patron = new PatronOnce(() => {
     calls += 1;
   });
-  source.receiving(patron);
-  source.receive(22);
+  source.value(patron);
+  source.give(22);
+  source.give(22);
+  source.give(22);
 
   expect(calls).toBe(1);
 });

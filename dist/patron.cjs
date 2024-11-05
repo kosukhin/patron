@@ -1,3 +1,5 @@
+'use strict';
+
 class GuestAware {
   constructor(guestReceiver) {
     this.guestReceiver = guestReceiver;
@@ -355,5 +357,20 @@ class Factory {
   }
 }
 
-export { Factory, Guest, GuestAware, GuestCast, GuestChain, GuestMiddle, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, removePatronFromPools };
-//# sourceMappingURL=patron.js.map
+exports.Factory = Factory;
+exports.Guest = Guest;
+exports.GuestAware = GuestAware;
+exports.GuestCast = GuestCast;
+exports.GuestChain = GuestChain;
+exports.GuestMiddle = GuestMiddle;
+exports.GuestObject = GuestObject;
+exports.GuestPool = GuestPool;
+exports.GuestSync = GuestSync;
+exports.Patron = Patron;
+exports.PatronOnce = PatronOnce;
+exports.PatronPool = PatronPool;
+exports.Source = Source;
+exports.SourceEmpty = SourceEmpty;
+exports.give = give;
+exports.removePatronFromPools = removePatronFromPools;
+//# sourceMappingURL=patron.cjs.map

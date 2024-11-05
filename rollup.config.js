@@ -15,13 +15,24 @@ export default [
     plugins: [esbuild()],
     output: [
       {
-        file: `${name}.js`,
+        file: `${name}.cjs`,
         format: "cjs",
+        sourcemap: true,
+      },
+      {
+        file: `${name}.js`,
+        format: "es",
         sourcemap: true,
       },
       {
         file: `${name}.mjs`,
         format: "es",
+        sourcemap: true,
+      },
+      {
+        file: `${name}.min.mjs`,
+        format: "es",
+        plugins: [terser()],
         sourcemap: true,
       },
       {
