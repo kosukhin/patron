@@ -229,7 +229,9 @@ class GuestChain {
     this.filledChainPool.add(
       new GuestMiddle(
         guestObject,
-        (value) => Object.values(value)
+        (value) => {
+          guestObject.give(Object.values(value));
+        }
       )
     );
     if (this.isChainFilled()) {
