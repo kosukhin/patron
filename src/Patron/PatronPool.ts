@@ -9,6 +9,17 @@ export const removePatronFromPools = (patron: GuestObjectType) => {
   });
 };
 
+// check patron existed in any pool
+export const isPatronInPools = (patron: GuestObjectType) => {
+  let inPool = false;
+  poolSets.forEach((pool) => {
+    if (!inPool) {
+      inPool = pool.has(patron);
+    }
+  });
+  return inPool;
+}
+
 export interface PoolType<T = unknown> extends GuestObjectType<T> {
   add(guest: GuestObjectType<T>): this;
   distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
@@ -16,11 +27,12 @@ export interface PoolType<T = unknown> extends GuestObjectType<T> {
 }
 
 export class PatronPool<T> implements PoolType<T> {
-  private patrons = new Set<GuestObjectType<T>>();
+  private patrons: Set<GuestObjectType<T>>;
 
   public give: (value: T, options?: GiveOptions) => this;
 
   public constructor(private initiator: unknown) {
+    this.patrons = new Set<GuestObjectType<T>>();
     poolSets.set(this, this.patrons);
     let lastMicrotask: (() => void) | null = null;
     const doReceive = (value: T, options?: GiveOptions) => {
