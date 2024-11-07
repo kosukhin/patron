@@ -41,6 +41,9 @@ export class PatronPool<T> implements PoolType<T> {
   }
 
   public add(shouldBePatron: GuestType<T>) {
+    if (!shouldBePatron) {
+      throw new Error("PatronPool add method received nothing!");
+    }
     if (
       typeof shouldBePatron !== "function" &&
       shouldBePatron.introduction &&
