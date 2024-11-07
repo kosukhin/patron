@@ -58,6 +58,7 @@ declare class GuestMiddle<T> implements GuestObjectType<T> {
 }
 
 declare const removePatronFromPools: (patron: GuestObjectType) => void;
+declare const isPatronInPools: (patron: GuestObjectType) => boolean;
 interface PoolType<T = unknown> extends GuestObjectType<T> {
     add(guest: GuestObjectType<T>): this;
     distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
@@ -145,4 +146,4 @@ declare class Factory<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestMiddle, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, Source, SourceEmpty, type SourceType, give, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestMiddle, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

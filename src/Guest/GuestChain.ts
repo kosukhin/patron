@@ -26,8 +26,9 @@ export class GuestChain<T> implements ChainType<T> {
   public resultArray(guest: GuestType<T>) {
     const guestObject = new GuestObject(guest);
     this.filledChainPool.add(
-      new GuestMiddle(guestObject, (value: Record<string, unknown>) =>
-        Object.values(value),
+      new GuestMiddle(guestObject, (value: Record<string, unknown>) => {
+        guestObject.give(Object.values(value) as T);
+      }
       ),
     );
     if (this.isChainFilled()) {

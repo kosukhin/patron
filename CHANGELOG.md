@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/kosukhin/patron/compare/v1.19.0...v1.20.0) (2024-11-06)
+
+
+### Features
+
+* **main:** исправить ошибку в guestchain ([07a8973](https://github.com/kosukhin/patron/commit/07a8973030d057ccd6723e33ac0b2a0bd1875097))
+
+## [1.19.0](https://github.com/kosukhin/patron/compare/v1.18.0...v1.19.0) (2024-11-06)
+
+
+### Features
+
+* **main:** добавлена функция inPatronInPools для проверки патрона в каком-либо пуле ([246ddc5](https://github.com/kosukhin/patron/commit/246ddc5dd1f897a9265341e19af364d9c1760419))
+* **main:** отсавил туду в guestcast ([68386cb](https://github.com/kosukhin/patron/commit/68386cb42e921ce8d9f541f0d04c86d65a445ef8))
+
 ## [1.18.0](https://github.com/kosukhin/patron/compare/v1.17.0...v1.18.0) (2024-11-02)
 
 

@@ -56,11 +56,21 @@ const removePatronFromPools = (patron) => {
     pool.delete(patron);
   });
 };
+const isPatronInPools = (patron) => {
+  let inPool = false;
+  poolSets.forEach((pool) => {
+    if (!inPool) {
+      inPool = pool.has(patron);
+    }
+  });
+  return inPool;
+};
 class PatronPool {
   constructor(initiator) {
     this.initiator = initiator;
-    __publicField$5(this, "patrons", /* @__PURE__ */ new Set());
+    __publicField$5(this, "patrons");
     __publicField$5(this, "give");
+    this.patrons = /* @__PURE__ */ new Set();
     poolSets.set(this, this.patrons);
     let lastMicrotask = null;
     const doReceive = (value, options) => {
@@ -221,7 +231,9 @@ class GuestChain {
     this.filledChainPool.add(
       new GuestMiddle(
         guestObject,
-        (value) => Object.values(value)
+        (value) => {
+          guestObject.give(Object.values(value));
+        }
       )
     );
     if (this.isChainFilled()) {
@@ -372,5 +384,6 @@ exports.PatronPool = PatronPool;
 exports.Source = Source;
 exports.SourceEmpty = SourceEmpty;
 exports.give = give;
+exports.isPatronInPools = isPatronInPools;
 exports.removePatronFromPools = removePatronFromPools;
 //# sourceMappingURL=patron.cjs.map

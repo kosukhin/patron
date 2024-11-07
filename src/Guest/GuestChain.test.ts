@@ -57,7 +57,7 @@ test("chain as array", () => {
 
   chain.resultArray(
     new Patron((value) => {
-      expect(JSON.stringify(value)).toBe("[1, 2]");
+      expect(JSON.stringify(value)).toBe("[1,2]");
     }),
   );
 });
