@@ -1,5 +1,5 @@
 import { Factory, FactoryType } from "src/Factory/Factory";
-import { GuestType } from "src/Guest/Guest";
+import { GuestType } from "../Guest/Guest";
 import { Source, SourceType } from "src/Source/Source";
 import { expect, test } from "vitest";
 

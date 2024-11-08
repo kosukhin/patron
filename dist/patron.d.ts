@@ -49,14 +49,6 @@ declare class GuestChain<T> implements ChainType<T> {
     private isChainFilled;
 }
 
-declare class GuestMiddle<T> implements GuestObjectType<T> {
-    private baseGuest;
-    private middleFn;
-    constructor(baseGuest: GuestType<unknown>, middleFn: (value: T, options?: GiveOptions) => void);
-    introduction(): "guest" | "patron";
-    give(value: T, options?: GiveOptions): this;
-}
-
 declare const removePatronFromPools: (patron: GuestObjectType) => void;
 declare const isPatronInPools: (patron: GuestObjectType) => boolean;
 interface PoolType<T = unknown> extends GuestObjectType<T> {
@@ -73,6 +65,7 @@ declare class PatronPool<T> implements PoolType<T> {
     remove(patron: GuestObjectType<T>): this;
     distribute(receiving: T, possiblePatron: GuestType<T>): this;
     private sendValueToGuest;
+    private guestDisposed;
 }
 
 declare class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
@@ -96,11 +89,30 @@ declare class GuestSync<T> implements GuestValueType<T> {
     value(): T;
 }
 
-declare class Patron<T> implements GuestObjectType<T> {
+declare class GuestObject<T> implements GuestObjectType<T> {
+    private baseGuest;
+    constructor(baseGuest: GuestType<T>);
+    give(value: T, options?: GiveOptions): this;
+    introduction(): "guest" | "patron";
+}
+
+interface GuestDisposableType<T = unknown> extends GuestObjectType<T> {
+    disposed(value: T | null): boolean;
+}
+declare class GuestDisposable<T> implements GuestDisposableType<T> {
+    private guest;
+    private disposeCheck;
+    constructor(guest: GuestType, disposeCheck: (value: T | null) => boolean);
+    disposed(value: T | null): boolean;
+    give(value: T, options?: GiveOptions): this;
+}
+
+declare class Patron<T> implements GuestDisposableType<T> {
     private willBePatron;
     constructor(willBePatron: GuestType<T>);
     introduction(): "patron";
     give(value: T, options?: GiveOptions): this;
+    disposed(value: T | null): boolean;
 }
 
 declare class PatronOnce<T> implements GuestObjectType<T> {
@@ -126,13 +138,6 @@ declare class SourceEmpty<T> implements SourceType<T> {
     give(value: T): this;
 }
 
-declare class GuestObject<T> implements GuestObjectType<T> {
-    private baseGuest;
-    constructor(baseGuest: GuestType<T>);
-    give(value: T, options?: GiveOptions): this;
-    introduction(): "guest" | "patron";
-}
-
 interface Prototyped<T> {
     prototype: T;
 }
@@ -146,4 +151,4 @@ declare class Factory<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, type GuestExecutorType, GuestMiddle, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

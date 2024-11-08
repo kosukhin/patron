@@ -1,3 +1,4 @@
+import { GuestDisposableType } from "../Guest/GuestDisposable";
 import { give, GuestObjectType, GuestType, GiveOptions } from "../Guest/Guest";
 
 const poolSets = new Map<PoolType, Set<GuestObjectType>>();
@@ -18,7 +19,7 @@ export const isPatronInPools = (patron: GuestObjectType) => {
     }
   });
   return inPool;
-}
+};
 
 export interface PoolType<T = unknown> extends GuestObjectType<T> {
   add(guest: GuestObjectType<T>): this;
@@ -82,13 +83,26 @@ export class PatronPool<T> implements PoolType<T> {
     guest: GuestType<T>,
     options?: GiveOptions,
   ) {
-    give(value, guest, {
-      ...options,
-      data: {
-        ...((options?.data as Record<string, unknown>) ?? {}),
-        initiator: this.initiator,
-        pool: this,
-      },
-    });
+    const isDisposed = this.guestDisposed(value, guest);
+
+    if (!isDisposed) {
+      give(value, guest, {
+        ...options,
+        data: {
+          ...((options?.data as Record<string, unknown>) ?? {}),
+          initiator: this.initiator,
+          pool: this,
+        },
+      });
+    }
+  }
+
+  private guestDisposed(value: T, guest: GuestType<T>) {
+    if ((guest as GuestDisposableType).disposed?.(value)) {
+      this.remove(guest as GuestObjectType);
+      return true;
+    }
+
+    return false;
   }
 }

@@ -1,5 +1,5 @@
+import { GuestCast } from "../Guest/GuestCast";
 import { give, GuestType } from "./../Guest/Guest";
-import { GuestMiddle } from "./../Guest/GuestMiddle";
 import { Source, SourceType } from "./Source";
 
 export class SourceEmpty<T> implements SourceType<T> {
@@ -7,7 +7,7 @@ export class SourceEmpty<T> implements SourceType<T> {
 
   public value(guest: GuestType<T>) {
     this.baseSource.value(
-      new GuestMiddle(guest as GuestType, (value) => {
+      new GuestCast(guest as GuestType, (value) => {
         if (value !== null) {
           give(value, guest);
         }

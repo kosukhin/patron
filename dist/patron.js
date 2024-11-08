@@ -88,6 +88,9 @@ class PatronPool {
     };
   }
   add(shouldBePatron) {
+    if (!shouldBePatron) {
+      throw new Error("PatronPool add method received nothing!");
+    }
     if (typeof shouldBePatron !== "function" && shouldBePatron.introduction && shouldBePatron.introduction() === "patron") {
       this.patrons.add(shouldBePatron);
     }
@@ -103,80 +106,34 @@ class PatronPool {
     return this;
   }
   sendValueToGuest(value, guest, options) {
-    give(value, guest, {
-      ...options,
-      data: {
-        ...options?.data ?? {},
-        initiator: this.initiator,
-        pool: this
-      }
-    });
+    const isDisposed = this.guestDisposed(value, guest);
+    if (!isDisposed) {
+      give(value, guest, {
+        ...options,
+        data: {
+          ...options?.data ?? {},
+          initiator: this.initiator,
+          pool: this
+        }
+      });
+    }
+  }
+  guestDisposed(value, guest) {
+    if (guest.disposed?.(value)) {
+      this.remove(guest);
+      return true;
+    }
+    return false;
   }
 }
 
 var __defProp$4 = Object.defineProperty;
 var __defNormalProp$4 = (obj, key, value) => key in obj ? __defProp$4(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$4 = (obj, key, value) => __defNormalProp$4(obj, typeof key !== "symbol" ? key + "" : key, value);
-class GuestPool {
-  constructor(initiator) {
-    __publicField$4(this, "guests", /* @__PURE__ */ new Set());
-    __publicField$4(this, "patronPool");
-    this.patronPool = new PatronPool(initiator);
-  }
-  give(value, options) {
-    this.deliverToGuests(value, options);
-    this.patronPool.give(value, options);
-    return this;
-  }
-  add(guest) {
-    if (typeof guest === "function" || !guest.introduction || guest.introduction() === "guest") {
-      this.guests.add(guest);
-    }
-    this.patronPool.add(guest);
-    return this;
-  }
-  remove(patron) {
-    this.guests.delete(patron);
-    this.patronPool.remove(patron);
-    return this;
-  }
-  distribute(receiving, possiblePatron) {
-    this.add(possiblePatron);
-    this.give(receiving);
-    return this;
-  }
-  deliverToGuests(value, options) {
-    this.guests.forEach((target) => {
-      give(value, target, options);
-    });
-    this.guests.clear();
-  }
-}
-
-class GuestMiddle {
-  constructor(baseGuest, middleFn) {
-    this.baseGuest = baseGuest;
-    this.middleFn = middleFn;
-  }
-  introduction() {
-    if (typeof this.baseGuest === "function" || !this.baseGuest.introduction) {
-      return "guest";
-    }
-    return this.baseGuest.introduction();
-  }
-  give(value, options) {
-    this.middleFn(value, options);
-    return this;
-  }
-}
-
-var __defProp$3 = Object.defineProperty;
-var __defNormalProp$3 = (obj, key, value) => key in obj ? __defProp$3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$3 = (obj, key, value) => __defNormalProp$3(obj, key + "" , value);
+var __publicField$4 = (obj, key, value) => __defNormalProp$4(obj, key + "" , value);
 class Source {
   constructor(sourceDocument) {
     this.sourceDocument = sourceDocument;
-    __publicField$3(this, "pool", new PatronPool(this));
+    __publicField$4(this, "pool", new PatronPool(this));
   }
   give(value) {
     this.sourceDocument = value;
@@ -213,6 +170,45 @@ class GuestObject {
   }
 }
 
+var __defProp$3 = Object.defineProperty;
+var __defNormalProp$3 = (obj, key, value) => key in obj ? __defProp$3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$3 = (obj, key, value) => __defNormalProp$3(obj, typeof key !== "symbol" ? key + "" : key, value);
+class GuestPool {
+  constructor(initiator) {
+    __publicField$3(this, "guests", /* @__PURE__ */ new Set());
+    __publicField$3(this, "patronPool");
+    this.patronPool = new PatronPool(initiator);
+  }
+  give(value, options) {
+    this.deliverToGuests(value, options);
+    this.patronPool.give(value, options);
+    return this;
+  }
+  add(guest) {
+    if (typeof guest === "function" || !guest.introduction || guest.introduction() === "guest") {
+      this.guests.add(guest);
+    }
+    this.patronPool.add(guest);
+    return this;
+  }
+  remove(patron) {
+    this.guests.delete(patron);
+    this.patronPool.remove(patron);
+    return this;
+  }
+  distribute(receiving, possiblePatron) {
+    this.add(possiblePatron);
+    this.give(receiving);
+    return this;
+  }
+  deliverToGuests(value, options) {
+    this.guests.forEach((target) => {
+      give(value, target, options);
+    });
+    this.guests.clear();
+  }
+}
+
 var __defProp$2 = Object.defineProperty;
 var __defNormalProp$2 = (obj, key, value) => key in obj ? __defProp$2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField$2 = (obj, key, value) => __defNormalProp$2(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -227,12 +223,9 @@ class GuestChain {
   resultArray(guest) {
     const guestObject = new GuestObject(guest);
     this.filledChainPool.add(
-      new GuestMiddle(
-        guestObject,
-        (value) => {
-          guestObject.give(Object.values(value));
-        }
-      )
+      new GuestCast(guestObject, (value) => {
+        guestObject.give(Object.values(value));
+      })
     );
     if (this.isChainFilled()) {
       this.theChain.value(
@@ -295,6 +288,20 @@ class GuestSync {
   }
 }
 
+class GuestDisposable {
+  constructor(guest, disposeCheck) {
+    this.guest = guest;
+    this.disposeCheck = disposeCheck;
+  }
+  disposed(value) {
+    return this.disposeCheck(value);
+  }
+  give(value, options) {
+    give(value, this.guest, options);
+    return this;
+  }
+}
+
 class Patron {
   constructor(willBePatron) {
     this.willBePatron = willBePatron;
@@ -305,6 +312,10 @@ class Patron {
   give(value, options) {
     give(value, this.willBePatron, options);
     return this;
+  }
+  disposed(value) {
+    const maybeDisposable = this.willBePatron;
+    return maybeDisposable?.disposed?.(value) || false;
   }
 }
 
@@ -340,7 +351,7 @@ class SourceEmpty {
   }
   value(guest) {
     this.baseSource.value(
-      new GuestMiddle(guest, (value) => {
+      new GuestCast(guest, (value) => {
         if (value !== null) {
           give(value, guest);
         }
@@ -367,5 +378,5 @@ class Factory {
   }
 }
 
-export { Factory, Guest, GuestAware, GuestCast, GuestChain, GuestMiddle, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
+export { Factory, Guest, GuestAware, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
 //# sourceMappingURL=patron.js.map

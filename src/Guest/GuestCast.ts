@@ -1,6 +1,5 @@
 import { give, GuestObjectType, GuestType, GiveOptions } from "./Guest";
 
-// TODO GuestMiddle - можно убрать т.к теперь этот класс делает то же самое и даже больше
 export class GuestCast<T> implements GuestObjectType<T> {
   public constructor(
     private sourceGuest: GuestType<unknown>,
