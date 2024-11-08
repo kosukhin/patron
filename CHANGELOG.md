@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.21.0](https://github.com/kosukhin/patron/compare/v1.20.0...v1.21.0) (2024-11-08)
+
+
+### Features
+
+* **main:** добавил проверку добавления в пул ([740e11b](https://github.com/kosukhin/patron/commit/740e11b086a34df0683ef632ade74b1440e95bef))
+
 ## [1.20.0](https://github.com/kosukhin/patron/compare/v1.19.0...v1.20.0) (2024-11-06)
 
 
