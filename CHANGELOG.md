@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.22.0](https://github.com/kosukhin/patron/compare/v1.21.0...v1.22.0) (2024-11-08)
+
+
+### Features
+
+* **main:** добавить отменяемого гостя ([2ada63d](https://github.com/kosukhin/patron/commit/2ada63d2a67bc20ac8c415b2d642dc632f22092a))
+
 ## [1.21.0](https://github.com/kosukhin/patron/compare/v1.20.0...v1.21.0) (2024-11-08)
 
 
