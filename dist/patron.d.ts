@@ -1,3 +1,5 @@
+import { PatronPool as PatronPool$1 } from 'src/Patron/PatronPool';
+
 type GuestIntroduction = "guest" | "patron";
 interface GiveOptions {
     data?: unknown;
@@ -123,11 +125,15 @@ declare class PatronOnce<T> implements GuestObjectType<T> {
     give(value: T, options?: GiveOptions): this;
 }
 
-type SourceType<T = unknown> = GuestAwareType<T> & GuestObjectType<T>;
+interface PoolAware<T = unknown> {
+    pool(): PatronPool<T>;
+}
+type SourceType<T = unknown> = GuestAwareType<T> & GuestObjectType<T> & PoolAware<T>;
 declare class Source<T> implements SourceType<T> {
     private sourceDocument;
-    private pool;
+    private thePool;
     constructor(sourceDocument: T);
+    pool(): PatronPool<unknown>;
     give(value: T): this;
     value(guest: GuestType<T>): this;
 }
@@ -136,6 +142,7 @@ declare class SourceEmpty<T> implements SourceType<T> {
     private baseSource;
     value(guest: GuestType<T>): this;
     give(value: T): this;
+    pool(): PatronPool$1<T>;
 }
 
 interface Prototyped<T> {
@@ -151,4 +158,4 @@ declare class Factory<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

@@ -2,24 +2,34 @@ import { GuestAwareType } from "../Guest/GuestAware";
 import { Guest, GuestObjectType, GuestType } from "../Guest/Guest";
 import { PatronPool } from "../Patron/PatronPool";
 
-export type SourceType<T = unknown> = GuestAwareType<T> & GuestObjectType<T>;
+export interface PoolAware<T = unknown> {
+  pool(): PatronPool<T>;
+}
+
+export type SourceType<T = unknown> = GuestAwareType<T> &
+  GuestObjectType<T> &
+  PoolAware<T>;
 
 export class Source<T> implements SourceType<T> {
-  private pool = new PatronPool(this);
+  private thePool = new PatronPool(this);
 
-  public constructor(private sourceDocument: T) {}
+  public constructor(private sourceDocument: T) { }
+
+  public pool() {
+    return this.thePool;
+  }
 
   public give(value: T): this {
     this.sourceDocument = value;
-    this.pool.give(this.sourceDocument);
+    this.thePool.give(this.sourceDocument);
     return this;
   }
 
   public value(guest: GuestType<T>): this {
     if (typeof guest === "function") {
-      this.pool.distribute(this.sourceDocument, new Guest(guest));
+      this.thePool.distribute(this.sourceDocument, new Guest(guest));
     } else {
-      this.pool.distribute(this.sourceDocument, guest);
+      this.thePool.distribute(this.sourceDocument, guest);
     }
     return this;
   }

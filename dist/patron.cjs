@@ -135,18 +135,21 @@ var __publicField$4 = (obj, key, value) => __defNormalProp$4(obj, key + "" , val
 class Source {
   constructor(sourceDocument) {
     this.sourceDocument = sourceDocument;
-    __publicField$4(this, "pool", new PatronPool(this));
+    __publicField$4(this, "thePool", new PatronPool(this));
+  }
+  pool() {
+    return this.thePool;
   }
   give(value) {
     this.sourceDocument = value;
-    this.pool.give(this.sourceDocument);
+    this.thePool.give(this.sourceDocument);
     return this;
   }
   value(guest) {
     if (typeof guest === "function") {
-      this.pool.distribute(this.sourceDocument, new Guest(guest));
+      this.thePool.distribute(this.sourceDocument, new Guest(guest));
     } else {
-      this.pool.distribute(this.sourceDocument, guest);
+      this.thePool.distribute(this.sourceDocument, guest);
     }
     return this;
   }
@@ -364,6 +367,9 @@ class SourceEmpty {
   give(value) {
     this.baseSource.give(value);
     return this;
+  }
+  pool() {
+    return this.baseSource.pool();
   }
 }
 
