@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.25.0](https://github.com/kosukhin/patron/compare/v1.24.0...v1.25.0) (2024-11-15)
+
+
+### Features
+
+* **main:** сделал прокидывание disposed метода ([c22338d](https://github.com/kosukhin/patron/commit/c22338d451a7062ffc3c7b6609003cf47d7a5cb8))
+
 ## [1.24.0](https://github.com/kosukhin/patron/compare/v1.23.0...v1.24.0) (2024-11-15)
 
 
