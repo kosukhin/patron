@@ -89,6 +89,9 @@ class PatronPool {
       return this;
     };
   }
+  size() {
+    return this.patrons.size;
+  }
   add(shouldBePatron) {
     if (!shouldBePatron) {
       throw new Error("PatronPool add method received nothing!");
@@ -205,6 +208,9 @@ class GuestPool {
     this.add(possiblePatron);
     this.give(receiving);
     return this;
+  }
+  size() {
+    return this.patronPool.size() + this.guests.size;
   }
   deliverToGuests(value, options) {
     this.guests.forEach((target) => {

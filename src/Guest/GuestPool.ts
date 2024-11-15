@@ -41,6 +41,10 @@ export class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
     return this;
   }
 
+  public size() {
+    return this.patronPool.size() + this.guests.size;
+  }
+
   private deliverToGuests(value: T, options?: GiveOptions) {
     this.guests.forEach((target) => {
       give(value, target, options);

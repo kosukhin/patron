@@ -57,12 +57,14 @@ interface PoolType<T = unknown> extends GuestObjectType<T> {
     add(guest: GuestObjectType<T>): this;
     distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
     remove(patron: GuestObjectType<T>): this;
+    size(): number;
 }
 declare class PatronPool<T> implements PoolType<T> {
     private initiator;
     private patrons;
     give: (value: T, options?: GiveOptions) => this;
     constructor(initiator: unknown);
+    size(): number;
     add(shouldBePatron: GuestType<T>): this;
     remove(patron: GuestObjectType<T>): this;
     distribute(receiving: T, possiblePatron: GuestType<T>): this;
@@ -78,6 +80,7 @@ declare class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
     add(guest: GuestType<T>): this;
     remove(patron: GuestObjectType<T>): this;
     distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
+    size(): number;
     private deliverToGuests;
 }
 

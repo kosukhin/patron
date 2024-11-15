@@ -25,6 +25,7 @@ export interface PoolType<T = unknown> extends GuestObjectType<T> {
   add(guest: GuestObjectType<T>): this;
   distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
   remove(patron: GuestObjectType<T>): this;
+  size(): number;
 }
 
 export class PatronPool<T> implements PoolType<T> {
@@ -51,6 +52,10 @@ export class PatronPool<T> implements PoolType<T> {
       queueMicrotask(currentMicroTask);
       return this;
     };
+  }
+
+  public size(): number {
+    return this.patrons.size;
   }
 
   public add(shouldBePatron: GuestType<T>) {
