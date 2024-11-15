@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.23.0](https://github.com/kosukhin/patron/compare/v1.22.0...v1.23.0) (2024-11-15)
+
+
+### Features
+
+* **main:** добавил доступ к пулу из source ([93e66ea](https://github.com/kosukhin/patron/commit/93e66ea4d0eb7fbbca0dd769b65441c097232af7))
+
 ## [1.22.0](https://github.com/kosukhin/patron/compare/v1.21.0...v1.22.0) (2024-11-08)
 
 
