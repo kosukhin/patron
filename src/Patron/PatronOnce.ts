@@ -1,11 +1,15 @@
 import { PoolType } from "./PatronPool";
-import { give, GuestObjectType, GuestType, GiveOptions } from "../Guest/Guest";
+import { give, GuestType, GiveOptions } from "../Guest/Guest";
+import {
+  GuestDisposableType,
+  MaybeDisposableType,
+} from "src/Guest/GuestDisposable";
 
 type PoolAware = {
   pool?: PoolType;
 };
 
-export class PatronOnce<T> implements GuestObjectType<T> {
+export class PatronOnce<T> implements GuestDisposableType<T> {
   private received = false;
 
   public constructor(private baseGuest: GuestType<T>) {}
@@ -23,5 +27,10 @@ export class PatronOnce<T> implements GuestObjectType<T> {
       data.pool.remove(this);
     }
     return this;
+  }
+
+  public disposed(value: T | null): boolean {
+    const maybeDisposable = this.baseGuest as MaybeDisposableType;
+    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
   }
 }

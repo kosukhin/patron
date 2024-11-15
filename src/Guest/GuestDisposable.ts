@@ -4,6 +4,8 @@ export interface GuestDisposableType<T = unknown> extends GuestObjectType<T> {
   disposed(value: T | null): boolean;
 }
 
+export type MaybeDisposableType<T = unknown> = Partial<GuestDisposableType<T>>;
+
 export class GuestDisposable<T> implements GuestDisposableType<T> {
   public constructor(
     private guest: GuestType,

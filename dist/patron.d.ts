@@ -1,3 +1,4 @@
+import { GuestDisposableType as GuestDisposableType$1 } from 'src/Guest/GuestDisposable';
 import { PatronPool as PatronPool$1 } from 'src/Patron/PatronPool';
 
 type GuestIntroduction = "guest" | "patron";
@@ -26,12 +27,13 @@ declare class GuestAware<T = unknown> implements GuestAwareType<T> {
     value(guest: GuestType<T>): GuestType<T>;
 }
 
-declare class GuestCast<T> implements GuestObjectType<T> {
+declare class GuestCast<T> implements GuestDisposableType$1<T> {
     private sourceGuest;
     private targetGuest;
     constructor(sourceGuest: GuestType<unknown>, targetGuest: GuestType<T>);
     introduction(): "guest" | "patron";
     give(value: T, options?: GiveOptions): this;
+    disposed(value: T | null): boolean;
 }
 
 interface ChainType<T = unknown> {
@@ -94,16 +96,18 @@ declare class GuestSync<T> implements GuestValueType<T> {
     value(): T;
 }
 
-declare class GuestObject<T> implements GuestObjectType<T> {
+declare class GuestObject<T> implements GuestDisposableType$1<T> {
     private baseGuest;
     constructor(baseGuest: GuestType<T>);
     give(value: T, options?: GiveOptions): this;
     introduction(): "guest" | "patron";
+    disposed(value: T | null): boolean;
 }
 
 interface GuestDisposableType<T = unknown> extends GuestObjectType<T> {
     disposed(value: T | null): boolean;
 }
+type MaybeDisposableType<T = unknown> = Partial<GuestDisposableType<T>>;
 declare class GuestDisposable<T> implements GuestDisposableType<T> {
     private guest;
     private disposeCheck;
@@ -120,12 +124,13 @@ declare class Patron<T> implements GuestDisposableType<T> {
     disposed(value: T | null): boolean;
 }
 
-declare class PatronOnce<T> implements GuestObjectType<T> {
+declare class PatronOnce<T> implements GuestDisposableType$1<T> {
     private baseGuest;
     private received;
     constructor(baseGuest: GuestType<T>);
     introduction(): "patron";
     give(value: T, options?: GiveOptions): this;
+    disposed(value: T | null): boolean;
 }
 
 interface PoolAware<T = unknown> {
@@ -161,4 +166,4 @@ declare class Factory<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

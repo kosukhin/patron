@@ -1,6 +1,10 @@
-import { Guest, GuestObjectType, GuestType, GiveOptions } from "./Guest";
+import {
+  GuestDisposableType,
+  MaybeDisposableType,
+} from "src/Guest/GuestDisposable";
+import { GiveOptions, Guest, GuestType } from "./Guest";
 
-export class GuestObject<T> implements GuestObjectType<T> {
+export class GuestObject<T> implements GuestDisposableType<T> {
   public constructor(private baseGuest: GuestType<T>) {}
 
   public give(value: T, options?: GiveOptions): this {
@@ -17,5 +21,10 @@ export class GuestObject<T> implements GuestObjectType<T> {
       return "guest";
     }
     return this.baseGuest.introduction();
+  }
+
+  public disposed(value: T | null): boolean {
+    const maybeDisposable = this.baseGuest as MaybeDisposableType;
+    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
   }
 }

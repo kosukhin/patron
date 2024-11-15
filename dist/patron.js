@@ -43,6 +43,10 @@ class GuestCast {
     give(value, this.targetGuest, options);
     return this;
   }
+  disposed(value) {
+    const maybeDisposable = this.sourceGuest;
+    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
+  }
 }
 
 var __defProp$5 = Object.defineProperty;
@@ -173,6 +177,10 @@ class GuestObject {
       return "guest";
     }
     return this.baseGuest.introduction();
+  }
+  disposed(value) {
+    const maybeDisposable = this.baseGuest;
+    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
   }
 }
 
@@ -348,6 +356,10 @@ class PatronOnce {
       data.pool.remove(this);
     }
     return this;
+  }
+  disposed(value) {
+    const maybeDisposable = this.baseGuest;
+    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
   }
 }
 
