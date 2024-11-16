@@ -166,4 +166,10 @@ declare class Factory<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+declare class FactoryDynamic<T> implements FactoryType<T> {
+    private creationFn;
+    constructor(creationFn: (...args: unknown[]) => T);
+    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
+}
+
+export { type ChainType, Factory, FactoryDynamic, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

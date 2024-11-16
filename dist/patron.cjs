@@ -404,7 +404,17 @@ class Factory {
   }
 }
 
+class FactoryDynamic {
+  constructor(creationFn) {
+    this.creationFn = creationFn;
+  }
+  create(...args) {
+    return this.creationFn(...args);
+  }
+}
+
 exports.Factory = Factory;
+exports.FactoryDynamic = FactoryDynamic;
 exports.Guest = Guest;
 exports.GuestAware = GuestAware;
 exports.GuestCast = GuestCast;
