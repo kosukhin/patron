@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.26.0](https://github.com/kosukhin/patron/compare/v1.25.0...v1.26.0) (2024-11-16)
+
+
+### Features
+
+* **main:** добавить класс FactoryDynamic ([f4e11c8](https://github.com/kosukhin/patron/commit/f4e11c8b2e61c8698949984e02eb86f9b81855cc))
+
 ## [1.25.0](https://github.com/kosukhin/patron/compare/v1.24.0...v1.25.0) (2024-11-15)
 
 
