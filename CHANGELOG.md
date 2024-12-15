@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.27.0](https://github.com/kosukhin/patron/compare/v1.26.0...v1.27.0) (2024-12-15)
+
+
+### Features
+
+* **main:** dynamic factory ([620d78e](https://github.com/kosukhin/patron/commit/620d78e17c95215fa292c06f6f8d2caa82d14475))
+* **main:** use any as default value ([f1571a0](https://github.com/kosukhin/patron/commit/f1571a0952dd339a78e207993105480516019f20))
+
 ## [1.26.0](https://github.com/kosukhin/patron/compare/v1.25.0...v1.26.0) (2024-11-16)
 
 
