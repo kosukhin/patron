@@ -6,9 +6,9 @@ import { give, GiveOptions, GuestType } from "./Guest";
 
 export class GuestCast<T> implements GuestDisposableType<T> {
   public constructor(
-    private sourceGuest: GuestType<unknown>,
+    private sourceGuest: GuestType<any>,
     private targetGuest: GuestType<T>,
-  ) {}
+  ) { }
 
   public introduction() {
     if (typeof this.sourceGuest === "function") {

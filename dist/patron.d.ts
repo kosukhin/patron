@@ -5,12 +5,12 @@ type GuestIntroduction = "guest" | "patron";
 interface GiveOptions {
     data?: unknown;
 }
-type GuestExecutorType<T = unknown> = (value: T, options?: GiveOptions) => void;
-interface GuestObjectType<T = unknown> {
+type GuestExecutorType<T = any> = (value: T, options?: GiveOptions) => void;
+interface GuestObjectType<T = any> {
     give(value: T, options?: GiveOptions): this;
     introduction?(): GuestIntroduction;
 }
-type GuestType<T = unknown> = GuestExecutorType<T> | GuestObjectType<T>;
+type GuestType<T = any> = GuestExecutorType<T> | GuestObjectType<T>;
 declare function give<T>(data: T, guest: GuestType<T>, options?: GiveOptions): void;
 declare class Guest<T> implements GuestObjectType<T> {
     private receiver;
@@ -18,10 +18,10 @@ declare class Guest<T> implements GuestObjectType<T> {
     give(value: T, options?: GiveOptions): this;
 }
 
-interface GuestAwareType<T = unknown> {
+interface GuestAwareType<T = any> {
     value(guest: GuestType<T>): unknown;
 }
-declare class GuestAware<T = unknown> implements GuestAwareType<T> {
+declare class GuestAware<T = any> implements GuestAwareType<T> {
     private guestReceiver;
     constructor(guestReceiver: (guest: GuestType<T>) => void);
     value(guest: GuestType<T>): GuestType<T>;
@@ -30,13 +30,13 @@ declare class GuestAware<T = unknown> implements GuestAwareType<T> {
 declare class GuestCast<T> implements GuestDisposableType$1<T> {
     private sourceGuest;
     private targetGuest;
-    constructor(sourceGuest: GuestType<unknown>, targetGuest: GuestType<T>);
+    constructor(sourceGuest: GuestType<any>, targetGuest: GuestType<T>);
     introduction(): "guest" | "patron";
     give(value: T, options?: GiveOptions): this;
     disposed(value: T | null): boolean;
 }
 
-interface ChainType<T = unknown> {
+interface ChainType<T = any> {
     result(guest: GuestObjectType<T>): this;
     resultArray(guest: GuestObjectType<T>): this;
     receiveKey<R>(key: string): GuestObjectType<R>;
@@ -55,7 +55,7 @@ declare class GuestChain<T> implements ChainType<T> {
 
 declare const removePatronFromPools: (patron: GuestObjectType) => void;
 declare const isPatronInPools: (patron: GuestObjectType) => boolean;
-interface PoolType<T = unknown> extends GuestObjectType<T> {
+interface PoolType<T = any> extends GuestObjectType<T> {
     add(guest: GuestObjectType<T>): this;
     distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
     remove(patron: GuestObjectType<T>): this;
@@ -86,7 +86,7 @@ declare class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
     private deliverToGuests;
 }
 
-interface GuestValueType<T = unknown> extends GuestObjectType<T> {
+interface GuestValueType<T = any> extends GuestObjectType<T> {
     value(): T;
 }
 declare class GuestSync<T> implements GuestValueType<T> {
@@ -104,10 +104,10 @@ declare class GuestObject<T> implements GuestDisposableType$1<T> {
     disposed(value: T | null): boolean;
 }
 
-interface GuestDisposableType<T = unknown> extends GuestObjectType<T> {
+interface GuestDisposableType<T = any> extends GuestObjectType<T> {
     disposed(value: T | null): boolean;
 }
-type MaybeDisposableType<T = unknown> = Partial<GuestDisposableType<T>>;
+type MaybeDisposableType<T = any> = Partial<GuestDisposableType<T>>;
 declare class GuestDisposable<T> implements GuestDisposableType<T> {
     private guest;
     private disposeCheck;
@@ -133,10 +133,10 @@ declare class PatronOnce<T> implements GuestDisposableType$1<T> {
     disposed(value: T | null): boolean;
 }
 
-interface PoolAware<T = unknown> {
+interface PoolAware<T = any> {
     pool(): PatronPool<T>;
 }
-type SourceType<T = unknown> = GuestAwareType<T> & GuestObjectType<T> & PoolAware<T>;
+type SourceType<T = any> = GuestAwareType<T> & GuestObjectType<T> & PoolAware<T>;
 declare class Source<T> implements SourceType<T> {
     private sourceDocument;
     private thePool;
