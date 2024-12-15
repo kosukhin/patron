@@ -4,7 +4,7 @@ import { Guest, GuestObjectType, GuestType } from "./Guest";
 import { GuestObject } from "./GuestObject";
 import { GuestPool } from "./GuestPool";
 
-export interface ChainType<T = unknown> {
+export interface ChainType<T = any> {
   result(guest: GuestObjectType<T>): this;
   resultArray(guest: GuestObjectType<T>): this;
   receiveKey<R>(key: string): GuestObjectType<R>;

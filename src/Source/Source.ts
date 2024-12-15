@@ -2,18 +2,18 @@ import { GuestAwareType } from "../Guest/GuestAware";
 import { Guest, GuestObjectType, GuestType } from "../Guest/Guest";
 import { PatronPool } from "../Patron/PatronPool";
 
-export interface PoolAware<T = unknown> {
+export interface PoolAware<T = any> {
   pool(): PatronPool<T>;
 }
 
-export type SourceType<T = unknown> = GuestAwareType<T> &
+export type SourceType<T = any> = GuestAwareType<T> &
   GuestObjectType<T> &
   PoolAware<T>;
 
 export class Source<T> implements SourceType<T> {
   private thePool = new PatronPool(this);
 
-  public constructor(private sourceDocument: T) {}
+  public constructor(private sourceDocument: T) { }
 
   public pool() {
     return this.thePool;

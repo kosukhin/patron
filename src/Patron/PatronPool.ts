@@ -21,7 +21,7 @@ export const isPatronInPools = (patron: GuestObjectType) => {
   return inPool;
 };
 
-export interface PoolType<T = unknown> extends GuestObjectType<T> {
+export interface PoolType<T = any> extends GuestObjectType<T> {
   add(guest: GuestObjectType<T>): this;
   distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
   remove(patron: GuestObjectType<T>): this;
