@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.28.0](https://github.com/kosukhin/patron/compare/v1.27.0...v1.28.0) (2024-12-15)
+
+
+### Features
+
+* **main:** use any for guest cast ([8e6a19c](https://github.com/kosukhin/patron/commit/8e6a19c67bbbadfc703b5c1b1a3f6fd90c252d33))
+
 ## [1.27.0](https://github.com/kosukhin/patron/compare/v1.26.0...v1.27.0) (2024-12-15)
 
 
