@@ -1,6 +1,3 @@
-import { GuestDisposableType as GuestDisposableType$1 } from 'src/Guest/GuestDisposable';
-import { PatronPool as PatronPool$1 } from 'src/Patron/PatronPool';
-
 type GuestIntroduction = "guest" | "patron";
 interface GiveOptions {
     data?: unknown;
@@ -11,7 +8,13 @@ interface GuestObjectType<T = any> {
     introduction?(): GuestIntroduction;
 }
 type GuestType<T = any> = GuestExecutorType<T> | GuestObjectType<T>;
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/give
+ */
 declare function give<T>(data: T, guest: GuestType<T>, options?: GiveOptions): void;
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest
+ */
 declare class Guest<T> implements GuestObjectType<T> {
     private receiver;
     constructor(receiver: GuestExecutorType<T>);
@@ -21,13 +24,34 @@ declare class Guest<T> implements GuestObjectType<T> {
 interface GuestAwareType<T = any> {
     value(guest: GuestType<T>): unknown;
 }
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware
+ */
 declare class GuestAware<T = any> implements GuestAwareType<T> {
     private guestReceiver;
     constructor(guestReceiver: (guest: GuestType<T>) => void);
     value(guest: GuestType<T>): GuestType<T>;
 }
 
-declare class GuestCast<T> implements GuestDisposableType$1<T> {
+interface GuestDisposableType<T = any> extends GuestObjectType<T> {
+    disposed(value: T | null): boolean;
+}
+type MaybeDisposableType<T = any> = Partial<GuestDisposableType<T>>;
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-disposable
+ */
+declare class GuestDisposable<T> implements GuestDisposableType<T> {
+    private guest;
+    private disposeCheck;
+    constructor(guest: GuestType, disposeCheck: (value: T | null) => boolean);
+    disposed(value: T | null): boolean;
+    give(value: T, options?: GiveOptions): this;
+}
+
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-cast
+ */
+declare class GuestCast<T> implements GuestDisposableType<T> {
     private sourceGuest;
     private targetGuest;
     constructor(sourceGuest: GuestType<any>, targetGuest: GuestType<T>);
@@ -41,6 +65,9 @@ interface ChainType<T = any> {
     resultArray(guest: GuestObjectType<T>): this;
     receiveKey<R>(key: string): GuestObjectType<R>;
 }
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-chain
+ */
 declare class GuestChain<T> implements ChainType<T> {
     private theChain;
     private keysKnown;
@@ -53,7 +80,13 @@ declare class GuestChain<T> implements ChainType<T> {
     private isChainFilled;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/remove-patron-from-pools
+ */
 declare const removePatronFromPools: (patron: GuestObjectType) => void;
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/is-patron-in-pools
+ */
 declare const isPatronInPools: (patron: GuestObjectType) => boolean;
 interface PoolType<T = any> extends GuestObjectType<T> {
     add(guest: GuestObjectType<T>): this;
@@ -61,6 +94,9 @@ interface PoolType<T = any> extends GuestObjectType<T> {
     remove(patron: GuestObjectType<T>): this;
     size(): number;
 }
+/**
+ * @url https://kosukhin.github.io/patron.site/#/patron/patron-pool
+ */
 declare class PatronPool<T> implements PoolType<T> {
     private initiator;
     private patrons;
@@ -74,6 +110,9 @@ declare class PatronPool<T> implements PoolType<T> {
     private guestDisposed;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-pool
+ */
 declare class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
     private guests;
     private patronPool;
@@ -89,6 +128,9 @@ declare class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
 interface GuestValueType<T = any> extends GuestObjectType<T> {
     value(): T;
 }
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-sync
+ */
 declare class GuestSync<T> implements GuestValueType<T> {
     private theValue;
     constructor(theValue: T);
@@ -96,7 +138,10 @@ declare class GuestSync<T> implements GuestValueType<T> {
     value(): T;
 }
 
-declare class GuestObject<T> implements GuestDisposableType$1<T> {
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-object
+ */
+declare class GuestObject<T> implements GuestDisposableType<T> {
     private baseGuest;
     constructor(baseGuest: GuestType<T>);
     give(value: T, options?: GiveOptions): this;
@@ -104,18 +149,9 @@ declare class GuestObject<T> implements GuestDisposableType$1<T> {
     disposed(value: T | null): boolean;
 }
 
-interface GuestDisposableType<T = any> extends GuestObjectType<T> {
-    disposed(value: T | null): boolean;
-}
-type MaybeDisposableType<T = any> = Partial<GuestDisposableType<T>>;
-declare class GuestDisposable<T> implements GuestDisposableType<T> {
-    private guest;
-    private disposeCheck;
-    constructor(guest: GuestType, disposeCheck: (value: T | null) => boolean);
-    disposed(value: T | null): boolean;
-    give(value: T, options?: GiveOptions): this;
-}
-
+/**
+ * @url https://kosukhin.github.io/patron.site/#/patron
+ */
 declare class Patron<T> implements GuestDisposableType<T> {
     private willBePatron;
     constructor(willBePatron: GuestType<T>);
@@ -124,7 +160,10 @@ declare class Patron<T> implements GuestDisposableType<T> {
     disposed(value: T | null): boolean;
 }
 
-declare class PatronOnce<T> implements GuestDisposableType$1<T> {
+/**
+ * @url https://kosukhin.github.io/patron.site/#/patron/patron-once
+ */
+declare class PatronOnce<T> implements GuestDisposableType<T> {
     private baseGuest;
     private received;
     constructor(baseGuest: GuestType<T>);
@@ -136,6 +175,9 @@ declare class PatronOnce<T> implements GuestDisposableType$1<T> {
 interface PoolAware<T = any> {
     pool(): PatronPool<T>;
 }
+/**
+ * @url https://kosukhin.github.io/patron.site/#/source
+ */
 type SourceType<T = any> = GuestAwareType<T> & GuestObjectType<T> & PoolAware<T>;
 declare class Source<T> implements SourceType<T> {
     private sourceDocument;
@@ -146,11 +188,14 @@ declare class Source<T> implements SourceType<T> {
     value(guest: GuestType<T>): this;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/source/source-empty
+ */
 declare class SourceEmpty<T> implements SourceType<T> {
     private baseSource;
     value(guest: GuestType<T>): this;
     give(value: T): this;
-    pool(): PatronPool$1<T>;
+    pool(): PatronPool<T>;
 }
 
 interface Prototyped<T> {
@@ -159,6 +204,9 @@ interface Prototyped<T> {
 interface FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/factory
+ */
 declare class Factory<T> implements FactoryType<T> {
     private constructorFn;
     private factories;
@@ -166,10 +214,13 @@ declare class Factory<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-declare class FactoryDynamic<T> implements FactoryType<T> {
-    private creationFn;
-    constructor(creationFn: (...args: unknown[]) => T);
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/module
+ */
+declare class Module<T> implements FactoryType<T> {
+    private buildingFn;
+    constructor(buildingFn: (...args: any[]) => T);
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, FactoryDynamic, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

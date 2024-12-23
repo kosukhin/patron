@@ -12,4 +12,4 @@ export * from "./Patron/PatronPool";
 export * from "./Source/Source";
 export * from "./Source/SourceEmpty";
 export * from "./Factory/Factory";
-export * from "./Factory/FactoryDynamic";
+export * from "./Factory/Module";

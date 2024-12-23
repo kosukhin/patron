@@ -404,17 +404,16 @@ class Factory {
   }
 }
 
-class FactoryDynamic {
-  constructor(creationFn) {
-    this.creationFn = creationFn;
+class Module {
+  constructor(buildingFn) {
+    this.buildingFn = buildingFn;
   }
   create(...args) {
-    return this.creationFn(...args);
+    return this.buildingFn(...args);
   }
 }
 
 exports.Factory = Factory;
-exports.FactoryDynamic = FactoryDynamic;
 exports.Guest = Guest;
 exports.GuestAware = GuestAware;
 exports.GuestCast = GuestCast;
@@ -423,6 +422,7 @@ exports.GuestDisposable = GuestDisposable;
 exports.GuestObject = GuestObject;
 exports.GuestPool = GuestPool;
 exports.GuestSync = GuestSync;
+exports.Module = Module;
 exports.Patron = Patron;
 exports.PatronOnce = PatronOnce;
 exports.PatronPool = PatronPool;

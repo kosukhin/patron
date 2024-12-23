@@ -402,14 +402,14 @@ class Factory {
   }
 }
 
-class FactoryDynamic {
-  constructor(creationFn) {
-    this.creationFn = creationFn;
+class Module {
+  constructor(buildingFn) {
+    this.buildingFn = buildingFn;
   }
   create(...args) {
-    return this.creationFn(...args);
+    return this.buildingFn(...args);
   }
 }
 
-export { Factory, FactoryDynamic, Guest, GuestAware, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
+export { Factory, Guest, GuestAware, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
 //# sourceMappingURL=patron.mjs.map
