@@ -33,6 +33,32 @@ declare class GuestAware<T = any> implements GuestAwareType<T> {
     value(guest: GuestType<T>): GuestType<T>;
 }
 
+interface Prototyped<T> {
+    prototype: T;
+}
+interface FactoryType<T> {
+    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
+}
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/factory
+ */
+declare class Factory<T> implements FactoryType<T> {
+    private constructorFn;
+    private factories;
+    constructor(constructorFn: Prototyped<T>, factories?: Record<string, unknown>);
+    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
+}
+
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-sequence
+ */
+declare class GuestAwareSequence<T, TG> implements GuestAwareType<TG[]> {
+    private baseSource;
+    private targetSourceFactory;
+    constructor(baseSource: GuestAwareType<T[]>, targetSourceFactory: FactoryType<GuestAwareType<TG>>);
+    value(guest: GuestType<TG[]>): this;
+}
+
 interface GuestDisposableType<T = any> extends GuestObjectType<T> {
     disposed(value: T | null): boolean;
 }
@@ -198,22 +224,6 @@ declare class SourceEmpty<T> implements SourceType<T> {
     pool(): PatronPool<T>;
 }
 
-interface Prototyped<T> {
-    prototype: T;
-}
-interface FactoryType<T> {
-    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
-}
-/**
- * @url https://kosukhin.github.io/patron.site/#/utils/factory
- */
-declare class Factory<T> implements FactoryType<T> {
-    private constructorFn;
-    private factories;
-    constructor(constructorFn: Prototyped<T>, factories?: Record<string, unknown>);
-    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
-}
-
 /**
  * @url https://kosukhin.github.io/patron.site/#/utils/module
  */
@@ -223,4 +233,4 @@ declare class Module<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, GuestAwareSequence, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

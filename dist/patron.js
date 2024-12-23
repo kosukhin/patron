@@ -292,6 +292,70 @@ class GuestChain {
   }
 }
 
+var __defProp$1 = Object.defineProperty;
+var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "" , value);
+class SourceEmpty {
+  constructor() {
+    __publicField$1(this, "baseSource", new Source(null));
+  }
+  value(guest) {
+    this.baseSource.value(
+      new GuestCast(guest, (value) => {
+        if (value !== null) {
+          give(value, guest);
+        }
+      })
+    );
+    return this;
+  }
+  give(value) {
+    this.baseSource.give(value);
+    return this;
+  }
+  pool() {
+    return this.baseSource.pool();
+  }
+}
+
+class GuestAwareSequence {
+  constructor(baseSource, targetSourceFactory) {
+    this.baseSource = baseSource;
+    this.targetSourceFactory = targetSourceFactory;
+  }
+  value(guest) {
+    const chain = new GuestChain();
+    const sequenceSource = new SourceEmpty();
+    const targetSource = this.targetSourceFactory.create(
+      sequenceSource
+    );
+    this.baseSource.value(
+      new GuestCast(guest, (value) => {
+        let index = 0;
+        const nextItemHandle = () => {
+          if (value[index + 1] !== void 0) {
+            index = index + 1;
+            handle();
+          } else {
+            chain.resultArray(guest);
+          }
+        };
+        function handle() {
+          sequenceSource.give(value[index]);
+          targetSource.value(chain.receiveKey("" + index));
+          targetSource.value(nextItemHandle);
+        }
+        if (value[index] !== void 0) {
+          handle();
+        } else {
+          give([], guest);
+        }
+      })
+    );
+    return this;
+  }
+}
+
 class GuestSync {
   constructor(theValue) {
     this.theValue = theValue;
@@ -336,13 +400,13 @@ class Patron {
   }
 }
 
-var __defProp$1 = Object.defineProperty;
-var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "" , value);
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
 class PatronOnce {
   constructor(baseGuest) {
     this.baseGuest = baseGuest;
-    __publicField$1(this, "received", false);
+    __publicField(this, "received", false);
   }
   introduction() {
     return "patron";
@@ -360,32 +424,6 @@ class PatronOnce {
   disposed(value) {
     const maybeDisposable = this.baseGuest;
     return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
-  }
-}
-
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
-class SourceEmpty {
-  constructor() {
-    __publicField(this, "baseSource", new Source(null));
-  }
-  value(guest) {
-    this.baseSource.value(
-      new GuestCast(guest, (value) => {
-        if (value !== null) {
-          give(value, guest);
-        }
-      })
-    );
-    return this;
-  }
-  give(value) {
-    this.baseSource.give(value);
-    return this;
-  }
-  pool() {
-    return this.baseSource.pool();
   }
 }
 
@@ -411,5 +449,5 @@ class Module {
   }
 }
 
-export { Factory, Guest, GuestAware, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
+export { Factory, Guest, GuestAware, GuestAwareSequence, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
 //# sourceMappingURL=patron.js.map
