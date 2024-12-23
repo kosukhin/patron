@@ -358,6 +358,30 @@ class GuestAwareSequence {
   }
 }
 
+class GuestAwareMap {
+  constructor(baseSource, targetSourceFactory) {
+    this.baseSource = baseSource;
+    this.targetSourceFactory = targetSourceFactory;
+  }
+  value(guest) {
+    const chain = new GuestChain();
+    this.baseSource.value(
+      new GuestCast(guest, (value) => {
+        value.forEach((val, index) => {
+          const targetSource = this.targetSourceFactory.create(
+            new GuestAware((innerGuest) => {
+              give(val, innerGuest);
+            })
+          );
+          targetSource.value(chain.receiveKey("" + index));
+        });
+      })
+    );
+    chain.resultArray(guest);
+    return this;
+  }
+}
+
 class GuestSync {
   constructor(theValue) {
     this.theValue = theValue;
@@ -454,6 +478,7 @@ class Module {
 exports.Factory = Factory;
 exports.Guest = Guest;
 exports.GuestAware = GuestAware;
+exports.GuestAwareMap = GuestAwareMap;
 exports.GuestAwareSequence = GuestAwareSequence;
 exports.GuestCast = GuestCast;
 exports.GuestChain = GuestChain;

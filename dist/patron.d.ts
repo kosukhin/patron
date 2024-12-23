@@ -59,6 +59,16 @@ declare class GuestAwareSequence<T, TG> implements GuestAwareType<TG[]> {
     value(guest: GuestType<TG[]>): this;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-map
+ */
+declare class GuestAwareMap<T, TG> implements GuestAwareType<TG[]> {
+    private baseSource;
+    private targetSourceFactory;
+    constructor(baseSource: GuestAwareType<T[]>, targetSourceFactory: FactoryType<GuestAwareType<TG>>);
+    value(guest: GuestType<TG[]>): this;
+}
+
 interface GuestDisposableType<T = any> extends GuestObjectType<T> {
     disposed(value: T | null): boolean;
 }
@@ -233,4 +243,4 @@ declare class Module<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, GuestAwareSequence, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, GuestAwareMap, GuestAwareSequence, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

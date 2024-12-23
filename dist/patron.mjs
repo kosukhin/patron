@@ -356,6 +356,30 @@ class GuestAwareSequence {
   }
 }
 
+class GuestAwareMap {
+  constructor(baseSource, targetSourceFactory) {
+    this.baseSource = baseSource;
+    this.targetSourceFactory = targetSourceFactory;
+  }
+  value(guest) {
+    const chain = new GuestChain();
+    this.baseSource.value(
+      new GuestCast(guest, (value) => {
+        value.forEach((val, index) => {
+          const targetSource = this.targetSourceFactory.create(
+            new GuestAware((innerGuest) => {
+              give(val, innerGuest);
+            })
+          );
+          targetSource.value(chain.receiveKey("" + index));
+        });
+      })
+    );
+    chain.resultArray(guest);
+    return this;
+  }
+}
+
 class GuestSync {
   constructor(theValue) {
     this.theValue = theValue;
@@ -449,5 +473,5 @@ class Module {
   }
 }
 
-export { Factory, Guest, GuestAware, GuestAwareSequence, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
+export { Factory, Guest, GuestAware, GuestAwareMap, GuestAwareSequence, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
 //# sourceMappingURL=patron.mjs.map
