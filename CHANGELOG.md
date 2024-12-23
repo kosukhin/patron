@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.29.0](https://github.com/kosukhin/patron/compare/v1.28.0...v1.29.0) (2024-12-23)
+
+
+### Features
+
+* **issue-9:** module class added ([0ffe862](https://github.com/kosukhin/patron/commit/0ffe86293a00c5559016965a3683fd10906e21f4))
+
 ## [1.28.0](https://github.com/kosukhin/patron/compare/v1.27.0...v1.28.0) (2024-12-15)
 
 
