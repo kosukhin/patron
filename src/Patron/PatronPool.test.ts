@@ -2,7 +2,7 @@ import { expect, test } from "vitest";
 import { PatronPool } from "./PatronPool";
 import { Patron } from "./Patron";
 
-test("patron pool", () => {
+test("PatronPool.test", () => {
   const pool = new PatronPool<number>(null);
   let receivedCount = 0;
 

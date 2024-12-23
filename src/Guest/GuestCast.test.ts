@@ -4,7 +4,7 @@ import { Patron } from "../Patron/Patron";
 import { give, Guest } from "./Guest";
 import { GuestCast } from "./GuestCast";
 
-test("chain guest returns 2 values after result guest", () => {
+test("GuestCast.test", () => {
   const source = new Source(1);
   let acc = 0;
   const mainGuest = new Patron(

@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import { Source } from "../Source/Source";
 
-test("guest callback", () => {
+test("Guest.test", () => {
   const one = new Source(1);
 
   one.value((value) => {
