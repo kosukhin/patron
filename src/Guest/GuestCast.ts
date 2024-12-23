@@ -1,9 +1,12 @@
 import {
   GuestDisposableType,
   MaybeDisposableType,
-} from "src/Guest/GuestDisposable";
+} from "./GuestDisposable";
 import { give, GiveOptions, GuestType } from "./Guest";
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-cast
+ */
 export class GuestCast<T> implements GuestDisposableType<T> {
   public constructor(
     private sourceGuest: GuestType<any>,

@@ -1,8 +1,11 @@
-import { PatronPool } from "src/Patron/PatronPool";
+import { PatronPool } from "../Patron/PatronPool";
 import { GuestCast } from "../Guest/GuestCast";
 import { give, GuestType } from "./../Guest/Guest";
 import { Source, SourceType } from "./Source";
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/source/source-empty
+ */
 export class SourceEmpty<T> implements SourceType<T> {
   private baseSource = new Source<T | null>(null);
 

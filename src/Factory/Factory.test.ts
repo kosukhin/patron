@@ -1,6 +1,6 @@
-import { Factory, FactoryType } from "src/Factory/Factory";
+import { Factory, FactoryType } from "./Factory";
 import { GuestType } from "../Guest/Guest";
-import { Source, SourceType } from "src/Source/Source";
+import { Source, SourceType } from "../Source/Source";
 import { expect, test } from "vitest";
 
 test("factory", () => {

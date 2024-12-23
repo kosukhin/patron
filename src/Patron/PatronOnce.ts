@@ -3,16 +3,19 @@ import { give, GuestType, GiveOptions } from "../Guest/Guest";
 import {
   GuestDisposableType,
   MaybeDisposableType,
-} from "src/Guest/GuestDisposable";
+} from "../Guest/GuestDisposable";
 
 type PoolAware = {
   pool?: PoolType;
 };
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/patron/patron-once
+ */
 export class PatronOnce<T> implements GuestDisposableType<T> {
   private received = false;
 
-  public constructor(private baseGuest: GuestType<T>) {}
+  public constructor(private baseGuest: GuestType<T>) { }
 
   public introduction() {
     return "patron" as const;

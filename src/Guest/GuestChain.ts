@@ -10,6 +10,9 @@ export interface ChainType<T = any> {
   receiveKey<R>(key: string): GuestObjectType<R>;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-chain
+ */
 export class GuestChain<T> implements ChainType<T> {
   private theChain: Source<Record<string, unknown>>;
 

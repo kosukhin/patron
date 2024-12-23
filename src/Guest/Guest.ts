@@ -16,6 +16,9 @@ export interface GuestObjectType<T = any> {
 
 export type GuestType<T = any> = GuestExecutorType<T> | GuestObjectType<T>;
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/give
+ */
 export function give<T>(data: T, guest: GuestType<T>, options?: GiveOptions) {
   if (typeof guest === "function") {
     guest(data, options);
@@ -24,6 +27,9 @@ export function give<T>(data: T, guest: GuestType<T>, options?: GiveOptions) {
   }
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest
+ */
 export class Guest<T> implements GuestObjectType<T> {
   public constructor(private receiver: GuestExecutorType<T>) { }
 

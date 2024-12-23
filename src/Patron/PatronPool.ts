@@ -3,14 +3,18 @@ import { give, GuestObjectType, GuestType, GiveOptions } from "../Guest/Guest";
 
 const poolSets = new Map<PoolType, Set<GuestObjectType>>();
 
-// remove patron from all pools
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/remove-patron-from-pools
+ */
 export const removePatronFromPools = (patron: GuestObjectType) => {
   poolSets.forEach((pool) => {
     pool.delete(patron);
   });
 };
 
-// check patron existed in any pool
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/is-patron-in-pools
+ */
 export const isPatronInPools = (patron: GuestObjectType) => {
   let inPool = false;
   poolSets.forEach((pool) => {
@@ -28,6 +32,9 @@ export interface PoolType<T = any> extends GuestObjectType<T> {
   size(): number;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/patron/patron-pool
+ */
 export class PatronPool<T> implements PoolType<T> {
   private patrons: Set<GuestObjectType<T>>;
 
