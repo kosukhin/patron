@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.32.0](https://github.com/kosukhin/patron/compare/v1.31.0...v1.32.0) (2024-12-23)
+
+
+### Features
+
+* **issue-3:** add class source dynamic ([6768f10](https://github.com/kosukhin/patron/commit/6768f1001c80fe6a8e799bf76b3b935f7728883a))
+* **issue-6:** add new race class ([fb7d7a4](https://github.com/kosukhin/patron/commit/fb7d7a42a81d6bc2d566bb3410b1695d372c9580))
+
 ## [1.31.0](https://github.com/kosukhin/patron/compare/v1.30.0...v1.31.0) (2024-12-23)
 
 
