@@ -1,7 +1,7 @@
 import { SourceEmpty } from "./SourceEmpty";
 import { expect, test } from "vitest";
 
-test("source", () => {
+test("SourceEmpty.test", () => {
   const source = new SourceEmpty<number>();
   let accumulator = 0;
 

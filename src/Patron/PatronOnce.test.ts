@@ -2,7 +2,7 @@ import { expect, test } from "vitest";
 import { PatronOnce } from "./PatronOnce";
 import { Source } from "../Source/Source";
 
-test("patron once", () => {
+test("PatronOnce.test", () => {
   const source = new Source(42);
   let calls = 0;
   const patron = new PatronOnce(() => {

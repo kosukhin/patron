@@ -3,7 +3,7 @@ import { Patron } from "../Patron/Patron";
 import { Source } from "../Source/Source";
 import { expect, test } from "vitest";
 
-test("disposable guest", () => {
+test("GuestDisposable.test", () => {
   const source = new Source(1);
 
   // Работает проверка один раз, потом патром себя удаляет

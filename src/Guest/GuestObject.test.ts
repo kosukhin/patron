@@ -2,7 +2,7 @@ import { expect, test } from "vitest";
 import { Source } from "../Source/Source";
 import { GuestObject } from "./GuestObject";
 
-test("guest object", () => {
+test("GuestObject.test", () => {
   const source = new Source(1);
   const fnGuest = (value: number) => {
     expect(value).toBe(1);

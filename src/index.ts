@@ -1,6 +1,7 @@
 export * from "./Guest/GuestAware";
 export * from "./Guest/GuestAwareSequence";
 export * from "./Guest/GuestAwareMap";
+export * from "./Guest/GuestAwareRace";
 export * from "./Guest/Guest";
 export * from "./Guest/GuestCast";
 export * from "./Guest/GuestChain";
