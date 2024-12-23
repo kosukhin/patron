@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.33.0](https://github.com/kosukhin/patron/compare/v1.32.0...v1.33.0) (2024-12-23)
+
+
+### Features
+
+* **issue-5:** guest aware active class added ([517f991](https://github.com/kosukhin/patron/commit/517f991d215031f7fa1174624b9c640a6fd5925c))
+
 ## [1.32.0](https://github.com/kosukhin/patron/compare/v1.31.0...v1.32.0) (2024-12-23)
 
 
