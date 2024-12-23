@@ -13,6 +13,7 @@ export * from "./Patron/Patron";
 export * from "./Patron/PatronOnce";
 export * from "./Patron/PatronPool";
 export * from "./Source/Source";
+export * from "./Source/SourceDynamic";
 export * from "./Source/SourceEmpty";
 export * from "./Factory/Factory";
 export * from "./Factory/Module";
