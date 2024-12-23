@@ -1,5 +1,5 @@
 interface Constructable<T> {
-  new (...args: unknown[]): T;
+  new(...args: unknown[]): T;
 }
 
 interface Prototyped<T> {
@@ -10,11 +10,14 @@ export interface FactoryType<T> {
   create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/factory
+ */
 export class Factory<T> implements FactoryType<T> {
   public constructor(
     private constructorFn: Prototyped<T>,
     private factories: Record<string, unknown> = {},
-  ) {}
+  ) { }
 
   public create<R extends unknown[], CT = null>(
     ...args: R

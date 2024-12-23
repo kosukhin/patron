@@ -4,6 +4,9 @@ export interface GuestValueType<T = any> extends GuestObjectType<T> {
   value(): T;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-sync
+ */
 export class GuestSync<T> implements GuestValueType<T> {
   public constructor(private theValue: T) { }
 

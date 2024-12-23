@@ -6,6 +6,9 @@ export interface PoolAware<T = any> {
   pool(): PatronPool<T>;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/source
+ */
 export type SourceType<T = any> = GuestAwareType<T> &
   GuestObjectType<T> &
   PoolAware<T>;
