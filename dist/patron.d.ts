@@ -69,6 +69,15 @@ declare class GuestAwareMap<T, TG> implements GuestAwareType<TG[]> {
     value(guest: GuestType<TG[]>): this;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-race
+ */
+declare class GuestAwareRace<T> implements GuestAwareType<T> {
+    private guestAwares;
+    constructor(guestAwares: GuestAwareType[]);
+    value(guest: GuestType<T>): this;
+}
+
 interface GuestDisposableType<T = any> extends GuestObjectType<T> {
     disposed(value: T | null): boolean;
 }
@@ -225,6 +234,18 @@ declare class Source<T> implements SourceType<T> {
 }
 
 /**
+ * @url https://kosukhin.github.io/patron.site/#/source-dynamic
+ */
+declare class SourceDynamic<T = unknown> implements SourceType<T> {
+    private baseGuest;
+    private baseGuestAware;
+    constructor(baseGuest: GuestType<T>, baseGuestAware: GuestAwareType<T>);
+    value(guest: GuestType<T>): this;
+    give(value: T): this;
+    pool(): PatronPool<T>;
+}
+
+/**
  * @url https://kosukhin.github.io/patron.site/#/source/source-empty
  */
 declare class SourceEmpty<T> implements SourceType<T> {
@@ -243,4 +264,4 @@ declare class Module<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, GuestAwareMap, GuestAwareSequence, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, GuestAwareMap, GuestAwareRace, GuestAwareSequence, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceDynamic, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };

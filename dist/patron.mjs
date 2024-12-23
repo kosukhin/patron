@@ -380,6 +380,26 @@ class GuestAwareMap {
   }
 }
 
+class GuestAwareRace {
+  constructor(guestAwares) {
+    this.guestAwares = guestAwares;
+  }
+  value(guest) {
+    let connectedWithGuestAware = null;
+    this.guestAwares.forEach((guestAware) => {
+      guestAware.value(
+        new GuestCast(guest, (value) => {
+          if (!connectedWithGuestAware || connectedWithGuestAware === guestAware) {
+            give(value, guest);
+            connectedWithGuestAware = guestAware;
+          }
+        })
+      );
+    });
+    return this;
+  }
+}
+
 class GuestSync {
   constructor(theValue) {
     this.theValue = theValue;
@@ -451,6 +471,24 @@ class PatronOnce {
   }
 }
 
+class SourceDynamic {
+  constructor(baseGuest, baseGuestAware) {
+    this.baseGuest = baseGuest;
+    this.baseGuestAware = baseGuestAware;
+  }
+  value(guest) {
+    this.baseGuestAware.value(guest);
+    return this;
+  }
+  give(value) {
+    give(value, this.baseGuest);
+    return this;
+  }
+  pool() {
+    throw Error("No pool in SourceDynamic");
+  }
+}
+
 class Factory {
   constructor(constructorFn, factories = {}) {
     this.constructorFn = constructorFn;
@@ -473,5 +511,5 @@ class Module {
   }
 }
 
-export { Factory, Guest, GuestAware, GuestAwareMap, GuestAwareSequence, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceEmpty, give, isPatronInPools, removePatronFromPools };
+export { Factory, Guest, GuestAware, GuestAwareMap, GuestAwareRace, GuestAwareSequence, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceDynamic, SourceEmpty, give, isPatronInPools, removePatronFromPools };
 //# sourceMappingURL=patron.mjs.map
