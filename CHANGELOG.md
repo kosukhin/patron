@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.31.0](https://github.com/kosukhin/patron/compare/v1.30.0...v1.31.0) (2024-12-23)
+
+
+### Features
+
+* **issue-7:** add class guest aware map ([4c4c9fc](https://github.com/kosukhin/patron/commit/4c4c9fce807ceafc2a1d43ab9cb7b1c2a7f57c56))
+
 ## [1.30.0](https://github.com/kosukhin/patron/compare/v1.29.0...v1.30.0) (2024-12-23)
 
 
