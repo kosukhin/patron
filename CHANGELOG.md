@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.30.0](https://github.com/kosukhin/patron/compare/v1.29.0...v1.30.0) (2024-12-23)
+
+
+### Features
+
+* **issue-8:** class GuestAwareSequence added ([6525820](https://github.com/kosukhin/patron/commit/652582014cbdc879bf5b9d9997f452c9a5c9f05c))
+* **main:** patron release ([46080fc](https://github.com/kosukhin/patron/commit/46080fcd7d79d5cd5ce37e2bdfef944131d12b73))
+
 ## [1.29.0](https://github.com/kosukhin/patron/compare/v1.28.0...v1.29.0) (2024-12-23)
 
 
