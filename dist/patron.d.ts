@@ -78,6 +78,71 @@ declare class GuestAwareRace<T> implements GuestAwareType<T> {
     value(guest: GuestType<T>): this;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/remove-patron-from-pools
+ */
+declare const removePatronFromPools: (patron: GuestObjectType) => void;
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/is-patron-in-pools
+ */
+declare const isPatronInPools: (patron: GuestObjectType) => boolean;
+interface PoolType<T = any> extends GuestObjectType<T> {
+    add(guest: GuestObjectType<T>): this;
+    distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
+    remove(patron: GuestObjectType<T>): this;
+    size(): number;
+}
+/**
+ * @url https://kosukhin.github.io/patron.site/#/patron/patron-pool
+ */
+declare class PatronPool<T> implements PoolType<T> {
+    private initiator;
+    private patrons;
+    give: (value: T, options?: GiveOptions) => this;
+    constructor(initiator: unknown);
+    size(): number;
+    add(shouldBePatron: GuestType<T>): this;
+    remove(patron: GuestObjectType<T>): this;
+    distribute(receiving: T, possiblePatron: GuestType<T>): this;
+    private sendValueToGuest;
+    private guestDisposed;
+}
+
+interface PoolAware<T = any> {
+    pool(): PatronPool<T>;
+}
+/**
+ * @url https://kosukhin.github.io/patron.site/#/source
+ */
+type SourceType<T = any> = GuestAwareType<T> & GuestObjectType<T> & PoolAware<T>;
+declare class Source<T> implements SourceType<T> {
+    private sourceDocument;
+    private thePool;
+    constructor(sourceDocument: T);
+    pool(): PatronPool<unknown>;
+    give(value: T): this;
+    value(guest: GuestType<T>): this;
+}
+
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/action-type
+ */
+interface ActionType<P = any> {
+    do(config: P): this;
+}
+interface GuestAwareAcitveType<R = unknown, T = unknown> extends GuestAwareType<T>, ActionType<R> {
+}
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-active
+ */
+declare class GuestAwareActive<R, T> implements GuestAwareAcitveType<R, T> {
+    private configExecutor;
+    private source;
+    constructor(configExecutor: (config: R, source: SourceType<T>) => void);
+    do(config: R): this;
+    value(guest: GuestType<T>): this;
+}
+
 interface GuestDisposableType<T = any> extends GuestObjectType<T> {
     disposed(value: T | null): boolean;
 }
@@ -123,36 +188,6 @@ declare class GuestChain<T> implements ChainType<T> {
     result(guest: GuestType<T>): this;
     receiveKey<R>(key: string): GuestObjectType<R>;
     private isChainFilled;
-}
-
-/**
- * @url https://kosukhin.github.io/patron.site/#/utils/remove-patron-from-pools
- */
-declare const removePatronFromPools: (patron: GuestObjectType) => void;
-/**
- * @url https://kosukhin.github.io/patron.site/#/utils/is-patron-in-pools
- */
-declare const isPatronInPools: (patron: GuestObjectType) => boolean;
-interface PoolType<T = any> extends GuestObjectType<T> {
-    add(guest: GuestObjectType<T>): this;
-    distribute(receiving: T, possiblePatron: GuestObjectType<T>): this;
-    remove(patron: GuestObjectType<T>): this;
-    size(): number;
-}
-/**
- * @url https://kosukhin.github.io/patron.site/#/patron/patron-pool
- */
-declare class PatronPool<T> implements PoolType<T> {
-    private initiator;
-    private patrons;
-    give: (value: T, options?: GiveOptions) => this;
-    constructor(initiator: unknown);
-    size(): number;
-    add(shouldBePatron: GuestType<T>): this;
-    remove(patron: GuestObjectType<T>): this;
-    distribute(receiving: T, possiblePatron: GuestType<T>): this;
-    private sendValueToGuest;
-    private guestDisposed;
 }
 
 /**
@@ -217,22 +252,6 @@ declare class PatronOnce<T> implements GuestDisposableType<T> {
     disposed(value: T | null): boolean;
 }
 
-interface PoolAware<T = any> {
-    pool(): PatronPool<T>;
-}
-/**
- * @url https://kosukhin.github.io/patron.site/#/source
- */
-type SourceType<T = any> = GuestAwareType<T> & GuestObjectType<T> & PoolAware<T>;
-declare class Source<T> implements SourceType<T> {
-    private sourceDocument;
-    private thePool;
-    constructor(sourceDocument: T);
-    pool(): PatronPool<unknown>;
-    give(value: T): this;
-    value(guest: GuestType<T>): this;
-}
-
 /**
  * @url https://kosukhin.github.io/patron.site/#/source-dynamic
  */
@@ -264,4 +283,4 @@ declare class Module<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, GuestAwareMap, GuestAwareRace, GuestAwareSequence, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceDynamic, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
+export { type ActionType, type ChainType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareAcitveType, GuestAwareActive, GuestAwareMap, GuestAwareRace, GuestAwareSequence, type GuestAwareType, GuestCast, GuestChain, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolType, Source, SourceDynamic, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools };
