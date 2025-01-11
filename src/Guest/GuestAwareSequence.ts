@@ -1,6 +1,6 @@
 import { FactoryType } from "../Factory/Factory";
 import { give } from "./Guest";
-import { GuestAwareType } from "./GuestAware";
+import { GuestAwareObjectType, GuestAwareType, value } from "./GuestAware";
 import { GuestCast } from "./GuestCast";
 import { GuestChain } from "./GuestChain";
 import { GuestType } from "./Guest";
@@ -9,7 +9,7 @@ import { SourceEmpty } from "../Source/SourceEmpty";
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-sequence
  */
-export class GuestAwareSequence<T, TG> implements GuestAwareType<TG[]> {
+export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
   public constructor(
     private baseSource: GuestAwareType<T[]>,
     private targetSourceFactory: FactoryType<GuestAwareType<TG>>
@@ -22,12 +22,13 @@ export class GuestAwareSequence<T, TG> implements GuestAwareType<TG[]> {
       sequenceSource
     )
 
-    this.baseSource.value(
-      new GuestCast(guest, (value) => {
+    value(
+      this.baseSource,
+      new GuestCast(guest, (theValue) => {
         let index = 0;
 
         const nextItemHandle = () => {
-          if (value[index + 1] !== undefined) {
+          if (theValue[index + 1] !== undefined) {
             index = index + 1;
             handle();
           } else {
@@ -36,19 +37,18 @@ export class GuestAwareSequence<T, TG> implements GuestAwareType<TG[]> {
         }
 
         function handle() {
-          sequenceSource.give(value[index]);
-          targetSource.value(chain.receiveKey('' + index));
-          targetSource.value(nextItemHandle);
+          sequenceSource.give(theValue[index]);
+          value(targetSource, chain.receiveKey('' + index));
+          value(targetSource, nextItemHandle);
         }
 
-        if (value[index] !== undefined) {
+        if (theValue[index] !== undefined) {
           handle();
         } else {
           give([], guest);
         }
       })
     );
-
     return this;
   }
 }

@@ -1,5 +1,5 @@
 import { give, GuestType } from "../Guest/Guest";
-import { GuestAwareType } from "../Guest/GuestAware";
+import { GuestAwareType, value } from "../Guest/GuestAware";
 import { PatronPool } from "../Patron/PatronPool";
 import { SourceType } from "./Source";
 
@@ -13,7 +13,7 @@ export class SourceDynamic<T = unknown> implements SourceType<T> {
   ) { }
 
   public value(guest: GuestType<T>) {
-    this.baseGuestAware.value(guest);
+    value(this.baseGuestAware, guest);
     return this;
   }
 

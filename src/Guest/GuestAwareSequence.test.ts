@@ -1,21 +1,22 @@
 import { GuestAwareSequence } from "./GuestAwareSequence";
 import { give } from "./Guest";
-import { GuestAwareType } from "./GuestAware";
+import { GuestAwareObjectType, GuestAwareType, value } from "./GuestAware";
 import { GuestCast } from "./GuestCast";
 import { GuestType } from "./Guest";
 import { expect, test } from "vitest";
 import { Source } from "../Source/Source";
 import { Factory } from "../Factory/Factory";
 
-class X2 implements GuestAwareType<number> {
+class X2 implements GuestAwareObjectType<number> {
   public constructor(private baseNumber: GuestAwareType<number>) { }
 
   public value(guest: GuestType<number>) {
-    this.baseNumber.value(
+    value(
+      this.baseNumber,
       new GuestCast(<GuestType>guest, (v) => {
         give(v * 2, guest);
       })
-    )
+    );
     return this;
   }
 }
