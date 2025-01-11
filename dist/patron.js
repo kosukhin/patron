@@ -1,9 +1,16 @@
+function value(guestAware, guest) {
+  if (typeof guestAware === "function") {
+    return guestAware(guest);
+  } else {
+    return guestAware.value(guest);
+  }
+}
 class GuestAware {
-  constructor(guestReceiver) {
-    this.guestReceiver = guestReceiver;
+  constructor(guestAware) {
+    this.guestAware = guestAware;
   }
   value(guest) {
-    this.guestReceiver(guest);
+    value(this.guestAware, guest);
     return guest;
   }
 }
@@ -329,11 +336,12 @@ class GuestAwareSequence {
     const targetSource = this.targetSourceFactory.create(
       sequenceSource
     );
-    this.baseSource.value(
-      new GuestCast(guest, (value) => {
+    value(
+      this.baseSource,
+      new GuestCast(guest, (theValue) => {
         let index = 0;
         const nextItemHandle = () => {
-          if (value[index + 1] !== void 0) {
+          if (theValue[index + 1] !== void 0) {
             index = index + 1;
             handle();
           } else {
@@ -341,11 +349,11 @@ class GuestAwareSequence {
           }
         };
         function handle() {
-          sequenceSource.give(value[index]);
-          targetSource.value(chain.receiveKey("" + index));
-          targetSource.value(nextItemHandle);
+          sequenceSource.give(theValue[index]);
+          value(targetSource, chain.receiveKey("" + index));
+          value(targetSource, nextItemHandle);
         }
-        if (value[index] !== void 0) {
+        if (theValue[index] !== void 0) {
           handle();
         } else {
           give([], guest);
@@ -363,15 +371,16 @@ class GuestAwareMap {
   }
   value(guest) {
     const chain = new GuestChain();
-    this.baseSource.value(
-      new GuestCast(guest, (value) => {
-        value.forEach((val, index) => {
+    value(
+      this.baseSource,
+      new GuestCast(guest, (theValue) => {
+        theValue.forEach((val, index) => {
           const targetSource = this.targetSourceFactory.create(
             new GuestAware((innerGuest) => {
               give(val, innerGuest);
             })
           );
-          targetSource.value(chain.receiveKey("" + index));
+          value(targetSource, chain.receiveKey("" + index));
         });
       })
     );
@@ -387,10 +396,11 @@ class GuestAwareRace {
   value(guest) {
     let connectedWithGuestAware = null;
     this.guestAwares.forEach((guestAware) => {
-      guestAware.value(
-        new GuestCast(guest, (value) => {
+      value(
+        guestAware,
+        new GuestCast(guest, (value2) => {
           if (!connectedWithGuestAware || connectedWithGuestAware === guestAware) {
-            give(value, guest);
+            give(value2, guest);
             connectedWithGuestAware = guestAware;
           }
         })
@@ -495,11 +505,11 @@ class SourceDynamic {
     this.baseGuestAware = baseGuestAware;
   }
   value(guest) {
-    this.baseGuestAware.value(guest);
+    value(this.baseGuestAware, guest);
     return this;
   }
-  give(value) {
-    give(value, this.baseGuest);
+  give(value2) {
+    give(value2, this.baseGuest);
     return this;
   }
   pool() {
@@ -529,5 +539,5 @@ class Module {
   }
 }
 
-export { Factory, Guest, GuestAware, GuestAwareActive, GuestAwareMap, GuestAwareRace, GuestAwareSequence, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceDynamic, SourceEmpty, give, isPatronInPools, removePatronFromPools };
+export { Factory, Guest, GuestAware, GuestAwareActive, GuestAwareMap, GuestAwareRace, GuestAwareSequence, GuestCast, GuestChain, GuestDisposable, GuestObject, GuestPool, GuestSync, Module, Patron, PatronOnce, PatronPool, Source, SourceDynamic, SourceEmpty, give, isPatronInPools, removePatronFromPools, value };
 //# sourceMappingURL=patron.js.map
