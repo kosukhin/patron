@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.34.0](https://github.com/kosukhin/patron/compare/v1.33.0...v1.34.0) (2025-01-11)
+
+
+### Features
+
+* **17-need-to-create-guestawaretype-with-functional-variant:** guest aware functional ([1293b93](https://github.com/kosukhin/patron/commit/1293b93113aaa3f23d08ee0170aef1b08e8b13d3))
+* **main:** release 1.33.0 ([291eb6a](https://github.com/kosukhin/patron/commit/291eb6af7d470ca9eb881aa50a0770e1a7887428))
+
 ## [1.33.0](https://github.com/kosukhin/patron/compare/v1.32.0...v1.33.0) (2024-12-23)
 
 
