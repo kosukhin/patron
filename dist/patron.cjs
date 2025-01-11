@@ -238,65 +238,65 @@ class GuestPool {
 var __defProp$3 = Object.defineProperty;
 var __defNormalProp$3 = (obj, key, value) => key in obj ? __defProp$3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField$3 = (obj, key, value) => __defNormalProp$3(obj, typeof key !== "symbol" ? key + "" : key, value);
-class GuestChain {
+class GuestAwareAll {
   constructor() {
-    __publicField$3(this, "theChain");
+    __publicField$3(this, "theAll");
     __publicField$3(this, "keysKnown", /* @__PURE__ */ new Set());
     __publicField$3(this, "keysFilled", /* @__PURE__ */ new Set());
-    __publicField$3(this, "filledChainPool", new GuestPool(this));
-    this.theChain = new Source({});
+    __publicField$3(this, "filledAllPool", new GuestPool(this));
+    this.theAll = new Source({});
   }
-  resultArray(guest) {
+  valueArray(guest) {
     const guestObject = new GuestObject(guest);
-    this.filledChainPool.add(
+    this.filledAllPool.add(
       new GuestCast(guestObject, (value) => {
         guestObject.give(Object.values(value));
       })
     );
-    if (this.isChainFilled()) {
-      this.theChain.value(
-        new Guest((chain) => {
-          this.filledChainPool.give(Object.values(chain));
+    if (this.isAllFilled()) {
+      this.theAll.value(
+        new Guest((all) => {
+          this.filledAllPool.give(Object.values(all));
         })
       );
     }
     return this;
   }
-  result(guest) {
+  value(guest) {
     const guestObject = new GuestObject(guest);
-    if (this.isChainFilled()) {
-      this.filledChainPool.add(guestObject);
-      this.theChain.value(
-        new Guest((chain) => {
-          this.filledChainPool.give(chain);
+    if (this.isAllFilled()) {
+      this.filledAllPool.add(guestObject);
+      this.theAll.value(
+        new Guest((all) => {
+          this.filledAllPool.give(all);
         })
       );
     } else {
-      this.filledChainPool.add(guestObject);
+      this.filledAllPool.add(guestObject);
     }
     return this;
   }
-  receiveKey(key) {
+  guestKey(key) {
     this.keysKnown.add(key);
     return new Guest((value) => {
       queueMicrotask(() => {
-        this.theChain.value(
-          new Guest((chain) => {
+        this.theAll.value(
+          new Guest((all) => {
             this.keysFilled.add(key);
-            const lastChain = {
-              ...chain,
+            const lastAll = {
+              ...all,
               [key]: value
             };
-            this.theChain.give(lastChain);
-            if (this.isChainFilled()) {
-              this.filledChainPool.give(lastChain);
+            this.theAll.give(lastAll);
+            if (this.isAllFilled()) {
+              this.filledAllPool.give(lastAll);
             }
           })
         );
       });
     });
   }
-  isChainFilled() {
+  isAllFilled() {
     return this.keysFilled.size > 0 && this.keysFilled.size === this.keysKnown.size;
   }
 }
@@ -333,7 +333,7 @@ class GuestAwareSequence {
     this.targetSourceFactory = targetSourceFactory;
   }
   value(guest) {
-    const chain = new GuestChain();
+    const all = new GuestAwareAll();
     const sequenceSource = new SourceEmpty();
     const targetSource = this.targetSourceFactory.create(
       sequenceSource
@@ -347,12 +347,12 @@ class GuestAwareSequence {
             index = index + 1;
             handle();
           } else {
-            chain.resultArray(guest);
+            all.valueArray(guest);
           }
         };
         function handle() {
           sequenceSource.give(theValue[index]);
-          value(targetSource, chain.receiveKey("" + index));
+          value(targetSource, all.guestKey(index.toString()));
           value(targetSource, nextItemHandle);
         }
         if (theValue[index] !== void 0) {
@@ -372,7 +372,7 @@ class GuestAwareMap {
     this.targetSourceFactory = targetSourceFactory;
   }
   value(guest) {
-    const chain = new GuestChain();
+    const all = new GuestAwareAll();
     value(
       this.baseSource,
       new GuestCast(guest, (theValue) => {
@@ -382,11 +382,11 @@ class GuestAwareMap {
               give(val, innerGuest);
             })
           );
-          value(targetSource, chain.receiveKey("" + index));
+          value(targetSource, all.guestKey(index.toString()));
         });
       })
     );
-    chain.resultArray(guest);
+    all.valueArray(guest);
     return this;
   }
 }
@@ -545,11 +545,11 @@ exports.Factory = Factory;
 exports.Guest = Guest;
 exports.GuestAware = GuestAware;
 exports.GuestAwareActive = GuestAwareActive;
+exports.GuestAwareAll = GuestAwareAll;
 exports.GuestAwareMap = GuestAwareMap;
 exports.GuestAwareRace = GuestAwareRace;
 exports.GuestAwareSequence = GuestAwareSequence;
 exports.GuestCast = GuestCast;
-exports.GuestChain = GuestChain;
 exports.GuestDisposable = GuestDisposable;
 exports.GuestObject = GuestObject;
 exports.GuestPool = GuestPool;
