@@ -1,5 +1,5 @@
-import { GuestAwareType } from "../Guest/GuestAware";
 import { Guest, GuestObjectType, GuestType } from "../Guest/Guest";
+import { GuestAwareObjectType } from "../Guest/GuestAware";
 import { PatronPool } from "../Patron/PatronPool";
 
 export interface PoolAware<T = any> {
@@ -9,7 +9,7 @@ export interface PoolAware<T = any> {
 /**
  * @url https://kosukhin.github.io/patron.site/#/source
  */
-export type SourceType<T = any> = GuestAwareType<T> &
+export type SourceType<T = any> = GuestAwareObjectType<T> &
   GuestObjectType<T> &
   PoolAware<T>;
 

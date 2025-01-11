@@ -1,7 +1,7 @@
 import { SourceType } from "../Source/Source";
 import { SourceEmpty } from "../Source/SourceEmpty";
 import { GuestType } from "./Guest";
-import { GuestAwareType } from "./GuestAware";
+import { GuestAwareObjectType } from "./GuestAware";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/utils/action-type
@@ -10,7 +10,7 @@ export interface ActionType<P = any> {
   do(config: P): this;
 }
 
-export interface GuestAwareAcitveType<R = unknown, T = unknown> extends GuestAwareType<T>, ActionType<R> {
+export interface GuestAwareAcitveType<R = unknown, T = unknown> extends GuestAwareObjectType<T>, ActionType<R> {
 }
 
 /**
