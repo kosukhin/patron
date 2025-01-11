@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.35.0](https://github.com/kosukhin/patron/compare/v1.34.0...v1.35.0) (2025-01-11)
+
+
+### Features
+
+* **16-rename-guestcast-to-guestawareall:** rename guestchain to guestawareall ([debb920](https://github.com/kosukhin/patron/commit/debb920f45c4dfe4d4db2dfd05b84a134398a64c))
+
 ## [1.34.0](https://github.com/kosukhin/patron/compare/v1.33.0...v1.34.0) (2025-01-11)
 
 
