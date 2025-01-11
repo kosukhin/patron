@@ -2,7 +2,7 @@ import { FactoryType } from "../Factory/Factory";
 import { give } from "./Guest";
 import { GuestAwareObjectType, GuestAwareType, value } from "./GuestAware";
 import { GuestCast } from "./GuestCast";
-import { GuestChain } from "./GuestChain";
+import { GuestAwareAll } from "./GuestAwareAll";
 import { GuestType } from "./Guest";
 import { GuestAware } from "./GuestAware";
 
@@ -16,7 +16,7 @@ export class GuestAwareMap<T, TG> implements GuestAwareObjectType<TG[]> {
   ) { }
 
   public value(guest: GuestType<TG[]>) {
-    const chain = new GuestChain();
+    const all = new GuestAwareAll();
     value(
       this.baseSource,
       new GuestCast(<GuestType>guest, (theValue) => {
@@ -26,11 +26,11 @@ export class GuestAwareMap<T, TG> implements GuestAwareObjectType<TG[]> {
               give(val, innerGuest);
             })
           )
-          value(targetSource, chain.receiveKey('' + index));
+          value(targetSource, all.guestKey(index.toString()));
         });
       })
     )
-    chain.resultArray(<GuestType>guest);
+    all.valueArray(<GuestType>guest);
     return this;
   }
 }

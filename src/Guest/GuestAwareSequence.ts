@@ -2,7 +2,7 @@ import { FactoryType } from "../Factory/Factory";
 import { give } from "./Guest";
 import { GuestAwareObjectType, GuestAwareType, value } from "./GuestAware";
 import { GuestCast } from "./GuestCast";
-import { GuestChain } from "./GuestChain";
+import { GuestAwareAll } from "./GuestAwareAll";
 import { GuestType } from "./Guest";
 import { SourceEmpty } from "../Source/SourceEmpty";
 
@@ -16,7 +16,7 @@ export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
   ) { }
 
   public value(guest: GuestType<TG[]>) {
-    const chain = new GuestChain<TG[]>();
+    const all = new GuestAwareAll<TG[]>();
     const sequenceSource = new SourceEmpty();
     const targetSource = this.targetSourceFactory.create(
       sequenceSource
@@ -32,13 +32,13 @@ export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
             index = index + 1;
             handle();
           } else {
-            chain.resultArray(guest);
+            all.valueArray(guest);
           }
         }
 
         function handle() {
           sequenceSource.give(theValue[index]);
-          value(targetSource, chain.receiveKey('' + index));
+          value(targetSource, all.guestKey(index.toString()));
           value(targetSource, nextItemHandle);
         }
 

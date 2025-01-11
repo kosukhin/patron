@@ -5,7 +5,7 @@ export * from "./Guest/GuestAwareRace";
 export * from "./Guest/GuestAwareActive";
 export * from "./Guest/Guest";
 export * from "./Guest/GuestCast";
-export * from "./Guest/GuestChain";
+export * from "./Guest/GuestAwareAll";
 export * from "./Guest/GuestPool";
 export * from "./Guest/GuestSync";
 export * from "./Guest/GuestObject";

@@ -1,17 +1,17 @@
 import { expect, test } from "vitest";
-import { GuestChain } from "./GuestChain";
+import { GuestAwareAll } from "./GuestAwareAll";
 import { Source } from "../Source/Source";
 import { Patron } from "../Patron/Patron";
 
-test("GuestChain._asArray.test", () => {
+test("GuestAwareAll._asArray.test", () => {
   const one = new Source(1);
   const two = new Source(2);
-  const chain = new GuestChain<[number, number]>();
+  const all = new GuestAwareAll<[number, number]>();
 
-  one.value(new Patron(chain.receiveKey("0")));
-  two.value(new Patron(chain.receiveKey("1")));
+  one.value(new Patron(all.guestKey("0")));
+  two.value(new Patron(all.guestKey("1")));
 
-  chain.resultArray(
+  all.valueArray(
     new Patron((value) => {
       expect(JSON.stringify(value)).toBe("[1,2]");
     }),
