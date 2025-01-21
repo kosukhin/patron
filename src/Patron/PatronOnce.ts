@@ -24,17 +24,16 @@ export class PatronOnce<T> implements GuestDisposableType<T> {
 
   public give(value: T, options?: GiveOptions): this {
     if (!this.received) {
+      this.received = true;
       give(value, this.baseGuest, options);
-    }
-    const data = options?.data as PoolAwareOptions;
-
-    if (data?.pool) {
-      data.pool.remove(data?.castedGuest ?? this);
     }
     return this;
   }
 
   public disposed(value: T | null): boolean {
+    if (this.received) {
+      return true;
+    }
     const maybeDisposable = this.baseGuest as MaybeDisposableType;
     return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
   }
