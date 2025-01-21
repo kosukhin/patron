@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.36.0](https://github.com/kosukhin/patron/compare/v1.35.0...v1.36.0) (2025-01-21)
+
+
+### Features
+
+* **21-seems-what-patron-once-works-wrong-with-source:** fixed patron once tests and source empty options was missed ([6e033e6](https://github.com/kosukhin/patron/commit/6e033e657e82ac7eca9d5419b606308cdfb18f8b))
+
 ## [1.35.0](https://github.com/kosukhin/patron/compare/v1.34.0...v1.35.0) (2025-01-11)
 
 
