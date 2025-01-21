@@ -11,9 +11,9 @@ export class SourceEmpty<T> implements SourceType<T> {
 
   public value(guest: GuestType<T>) {
     this.baseSource.value(
-      new GuestCast(guest as GuestType, (value) => {
+      new GuestCast(guest as GuestType, (value, options) => {
         if (value !== null) {
-          give(value, guest);
+          give(value, guest, options);
         }
       }),
     );

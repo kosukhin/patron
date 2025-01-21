@@ -3,6 +3,7 @@ import {
   MaybeDisposableType,
 } from "./GuestDisposable";
 import { give, GiveOptions, GuestType } from "./Guest";
+import { PoolAware } from "../Patron/PatronOnce";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-cast
@@ -24,7 +25,13 @@ export class GuestCast<T> implements GuestDisposableType<T> {
   }
 
   public give(value: T, options?: GiveOptions): this {
-    give(value, this.targetGuest, options);
+    give(value, this.targetGuest, {
+      ...options,
+      data: {
+        ...(options?.data ?? {}),
+        castedGuest: (options?.data as PoolAware)?.castedGuest ?? this,
+      }
+    });
     return this;
   }
 
