@@ -493,15 +493,15 @@ class PatronOnce {
   }
   give(value, options) {
     if (!this.received) {
+      this.received = true;
       give(value, this.baseGuest, options);
-    }
-    const data = options?.data;
-    if (data?.pool) {
-      data.pool.remove(data?.castedGuest ?? this);
     }
     return this;
   }
   disposed(value) {
+    if (this.received) {
+      return true;
+    }
     const maybeDisposable = this.baseGuest;
     return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
   }
