@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { Source } from "../Source/Source";
 import { PatronOnce } from "./PatronOnce";
+import { SourceEmpty } from "../Source/SourceEmpty";
 
 beforeEach(() => {
   vi.useFakeTimers({ shouldAdvanceTime: true });
@@ -15,8 +15,8 @@ const wait = (ms: number) => new Promise(resolve => {
   setTimeout(() => { resolve(1) }, ms);
 })
 
-test("PatronOnce.test", async () => {
-  const source = new Source(12);
+test("PatronOnce.sourceEmpty.test", async () => {
+  const source = new SourceEmpty();
   let calls = 0;
   const patron = new PatronOnce((v) => {
     calls += 1;
