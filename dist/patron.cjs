@@ -49,7 +49,13 @@ class GuestCast {
     return this.sourceGuest.introduction();
   }
   give(value, options) {
-    give(value, this.targetGuest, options);
+    give(value, this.targetGuest, {
+      ...options,
+      data: {
+        ...options?.data ?? {},
+        castedGuest: options?.data?.castedGuest ?? this
+      }
+    });
     return this;
   }
   disposed(value) {
@@ -310,9 +316,9 @@ class SourceEmpty {
   }
   value(guest) {
     this.baseSource.value(
-      new GuestCast(guest, (value) => {
+      new GuestCast(guest, (value, options) => {
         if (value !== null) {
-          give(value, guest);
+          give(value, guest, options);
         }
       })
     );
@@ -491,7 +497,7 @@ class PatronOnce {
     }
     const data = options?.data;
     if (data?.pool) {
-      data.pool.remove(this);
+      data.pool.remove(data?.castedGuest ?? this);
     }
     return this;
   }

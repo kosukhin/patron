@@ -5,9 +5,9 @@ import {
   MaybeDisposableType,
 } from "../Guest/GuestDisposable";
 
-export type PoolAware = {
+export type PoolAwareOptions = {
   pool?: PoolType;
-  castedGuest?: GuestObjectType
+  castedGuest?: GuestObjectType;
 };
 
 /**
@@ -26,7 +26,7 @@ export class PatronOnce<T> implements GuestDisposableType<T> {
     if (!this.received) {
       give(value, this.baseGuest, options);
     }
-    const data = options?.data as PoolAware;
+    const data = options?.data as PoolAwareOptions;
 
     if (data?.pool) {
       data.pool.remove(data?.castedGuest ?? this);
