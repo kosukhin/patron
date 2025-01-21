@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.37.0](https://github.com/kosukhin/patron/compare/v1.36.0...v1.37.0) (2025-01-21)
+
+
+### Features
+
+* **23-patron-once-ad-disposable:** patron once as disposable ([427efe5](https://github.com/kosukhin/patron/commit/427efe5ab24b337182fd5b068a6126611e626513))
+
 ## [1.36.0](https://github.com/kosukhin/patron/compare/v1.35.0...v1.36.0) (2025-01-21)
 
 
