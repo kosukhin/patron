@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.38.0](https://github.com/kosukhin/patron/compare/v1.37.0...v1.38.0) (2025-01-22)
+
+
+### Features
+
+* **25-fix-srcguestguestaware-import:** import fixed ([3a43594](https://github.com/kosukhin/patron/commit/3a43594167f738ec463d7f9b12673f6cc550a8b8))
+
 ## [1.37.0](https://github.com/kosukhin/patron/compare/v1.36.0...v1.37.0) (2025-01-21)
 
 
