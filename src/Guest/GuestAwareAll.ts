@@ -1,4 +1,4 @@
-import { GuestAwareObjectType } from "src/Guest/GuestAware";
+import { GuestAwareObjectType } from "./GuestAware";
 import { Source } from "../Source/Source";
 import { Guest, GuestObjectType, GuestType } from "./Guest";
 import { GuestCast } from "./GuestCast";
