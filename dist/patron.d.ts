@@ -1,5 +1,3 @@
-import { GuestAwareObjectType as GuestAwareObjectType$1 } from 'src/Guest/GuestAware';
-
 type GuestIntroduction = "guest" | "patron";
 interface GiveOptions {
     data?: unknown;
@@ -175,7 +173,7 @@ declare class GuestCast<T> implements GuestDisposableType<T> {
     disposed(value: T | null): boolean;
 }
 
-interface GuestAwareAllType<T = any> extends GuestAwareObjectType$1<T> {
+interface GuestAwareAllType<T = any> extends GuestAwareObjectType<T> {
     valueArray(guest: GuestObjectType<T>): this;
     guestKey<R>(key: string): GuestObjectType<R>;
 }
