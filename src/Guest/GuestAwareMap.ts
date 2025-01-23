@@ -1,6 +1,6 @@
 import { FactoryType } from "../Factory/Factory";
 import { give } from "./Guest";
-import { GuestAwareObjectType, GuestAwareType, value } from "./GuestAware";
+import { GuestAwareObjectType, GuestAwareType, isGuestAware, value } from "./GuestAware";
 import { GuestCast } from "./GuestCast";
 import { GuestAwareAll } from "./GuestAwareAll";
 import { GuestType } from "./Guest";
@@ -21,11 +21,12 @@ export class GuestAwareMap<T, TG> implements GuestAwareObjectType<TG[]> {
       this.baseSource,
       new GuestCast(<GuestType>guest, (theValue) => {
         theValue.forEach((val, index) => {
-          const targetSource = this.targetSourceFactory.create(
-            new GuestAware((innerGuest) => {
+          const valueSource = isGuestAware(val)
+            ? val
+            : new GuestAware((innerGuest) => {
               give(val, innerGuest);
-            })
-          )
+            });
+          const targetSource = this.targetSourceFactory.create(valueSource)
           value(targetSource, all.guestKey(index.toString()));
         });
       })

@@ -28,6 +28,13 @@ export function give<T>(data: T, guest: GuestType<T>, options?: GiveOptions) {
 }
 
 /**
+ * @url https://kosukhin.github.io/patron.site/#/utils/is-guest
+ */
+export function isGuest(mbGuest: any): mbGuest is GuestType {
+  return typeof mbGuest === 'function' || typeof mbGuest?.give === 'function';
+}
+
+/**
  * @url https://kosukhin.github.io/patron.site/#/guest
  */
 export class Guest<T> implements GuestObjectType<T> {

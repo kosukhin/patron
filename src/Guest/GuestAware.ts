@@ -8,12 +8,22 @@ export interface GuestAwareObjectType<T> {
 
 export type GuestAwareType<T = any> = GuestAwareExecutorType<T> | GuestAwareObjectType<T>
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/give
+ */
 export function value<T>(guestAware: GuestAwareType<T>, guest: GuestType<T>) {
   if (typeof guestAware === 'function') {
     return guestAware(guest);
   } else {
     return guestAware.value(guest);
   }
+}
+
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/is-guest-aware
+ */
+export function isGuestAware(mbGuestAware: any): mbGuestAware is GuestAwareType {
+  return typeof mbGuestAware === 'function' || typeof mbGuestAware?.value === 'function';
 }
 
 /**
