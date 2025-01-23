@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.39.0](https://github.com/kosukhin/patron/compare/v1.38.0...v1.39.0) (2025-01-23)
+
+
+### Features
+
+* **28-guestawaresuequence-and-guestawaremap-must-work-with-array-of-guestawares:** added tests ([4307227](https://github.com/kosukhin/patron/commit/4307227b7d14e3b8c99fda5296a28287a84b4cc9))
+* **28-guestawaresuequence-and-guestawaremap-must-work-with-array-of-guestawares:** guest aware for map and sequence ([67bf8ed](https://github.com/kosukhin/patron/commit/67bf8ed64d95097487d1e839348cea58cec29cfa))
+
 ## [1.38.0](https://github.com/kosukhin/patron/compare/v1.37.0...v1.38.0) (2025-01-22)
 
 
