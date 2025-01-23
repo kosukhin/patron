@@ -1,10 +1,11 @@
 import { FactoryType } from "../Factory/Factory";
 import { give } from "./Guest";
-import { GuestAwareObjectType, GuestAwareType, value } from "./GuestAware";
+import { GuestAwareObjectType, GuestAwareType, isGuestAware, value } from "./GuestAware";
 import { GuestCast } from "./GuestCast";
 import { GuestAwareAll } from "./GuestAwareAll";
 import { GuestType } from "./Guest";
 import { SourceEmpty } from "../Source/SourceEmpty";
+import { PatronOnce } from "../Patron/PatronOnce";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-sequence
@@ -37,9 +38,17 @@ export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
         }
 
         function handle() {
-          sequenceSource.give(theValue[index]);
           value(targetSource, all.guestKey(index.toString()));
-          value(targetSource, nextItemHandle);
+          const nextValue = theValue[index];
+          if (isGuestAware(nextValue)) {
+            value(nextValue, new PatronOnce((theNextValue) => {
+              sequenceSource.give(theNextValue);
+              nextItemHandle();
+            }));
+          } else {
+            sequenceSource.give(theValue[index]);
+            nextItemHandle();
+          }
         }
 
         if (theValue[index] !== undefined) {
