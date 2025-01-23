@@ -7,6 +7,9 @@ function value(guestAware, guest) {
     return guestAware.value(guest);
   }
 }
+function isGuestAware(mbGuestAware) {
+  return typeof mbGuestAware === "function" || typeof mbGuestAware?.value === "function";
+}
 class GuestAware {
   constructor(guestAware) {
     this.guestAware = guestAware;
@@ -23,6 +26,9 @@ function give(data, guest, options) {
   } else {
     guest.give(data, options);
   }
+}
+function isGuest(mbGuest) {
+  return typeof mbGuest === "function" || typeof mbGuest?.give === "function";
 }
 class Guest {
   constructor(receiver) {
@@ -333,6 +339,33 @@ class SourceEmpty {
   }
 }
 
+var __defProp$1 = Object.defineProperty;
+var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "" , value);
+class PatronOnce {
+  constructor(baseGuest) {
+    this.baseGuest = baseGuest;
+    __publicField$1(this, "received", false);
+  }
+  introduction() {
+    return "patron";
+  }
+  give(value, options) {
+    if (!this.received) {
+      this.received = true;
+      give(value, this.baseGuest, options);
+    }
+    return this;
+  }
+  disposed(value) {
+    if (this.received) {
+      return true;
+    }
+    const maybeDisposable = this.baseGuest;
+    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
+  }
+}
+
 class GuestAwareSequence {
   constructor(baseSource, targetSourceFactory) {
     this.baseSource = baseSource;
@@ -357,9 +390,17 @@ class GuestAwareSequence {
           }
         };
         function handle() {
-          sequenceSource.give(theValue[index]);
           value(targetSource, all.guestKey(index.toString()));
-          value(targetSource, nextItemHandle);
+          const nextValue = theValue[index];
+          if (isGuestAware(nextValue)) {
+            value(nextValue, new PatronOnce((theNextValue) => {
+              sequenceSource.give(theNextValue);
+              nextItemHandle();
+            }));
+          } else {
+            sequenceSource.give(theValue[index]);
+            nextItemHandle();
+          }
         }
         if (theValue[index] !== void 0) {
           handle();
@@ -383,11 +424,10 @@ class GuestAwareMap {
       this.baseSource,
       new GuestCast(guest, (theValue) => {
         theValue.forEach((val, index) => {
-          const targetSource = this.targetSourceFactory.create(
-            new GuestAware((innerGuest) => {
-              give(val, innerGuest);
-            })
-          );
+          const valueSource = isGuestAware(val) ? val : new GuestAware((innerGuest) => {
+            give(val, innerGuest);
+          });
+          const targetSource = this.targetSourceFactory.create(valueSource);
           value(targetSource, all.guestKey(index.toString()));
         });
       })
@@ -418,13 +458,13 @@ class GuestAwareRace {
   }
 }
 
-var __defProp$1 = Object.defineProperty;
-var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "" , value);
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
 class GuestAwareActive {
   constructor(configExecutor) {
     this.configExecutor = configExecutor;
-    __publicField$1(this, "source", new SourceEmpty());
+    __publicField(this, "source", new SourceEmpty());
   }
   do(config) {
     this.configExecutor(config, this.source);
@@ -477,33 +517,6 @@ class Patron {
   disposed(value) {
     const maybeDisposable = this.willBePatron;
     return maybeDisposable?.disposed?.(value) || false;
-  }
-}
-
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
-class PatronOnce {
-  constructor(baseGuest) {
-    this.baseGuest = baseGuest;
-    __publicField(this, "received", false);
-  }
-  introduction() {
-    return "patron";
-  }
-  give(value, options) {
-    if (!this.received) {
-      this.received = true;
-      give(value, this.baseGuest, options);
-    }
-    return this;
-  }
-  disposed(value) {
-    if (this.received) {
-      return true;
-    }
-    const maybeDisposable = this.baseGuest;
-    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
   }
 }
 
@@ -568,6 +581,8 @@ exports.Source = Source;
 exports.SourceDynamic = SourceDynamic;
 exports.SourceEmpty = SourceEmpty;
 exports.give = give;
+exports.isGuest = isGuest;
+exports.isGuestAware = isGuestAware;
 exports.isPatronInPools = isPatronInPools;
 exports.removePatronFromPools = removePatronFromPools;
 exports.value = value;

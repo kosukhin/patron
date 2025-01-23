@@ -13,6 +13,10 @@ type GuestType<T = any> = GuestExecutorType<T> | GuestObjectType<T>;
  */
 declare function give<T>(data: T, guest: GuestType<T>, options?: GiveOptions): void;
 /**
+ * @url https://kosukhin.github.io/patron.site/#/utils/is-guest
+ */
+declare function isGuest(mbGuest: any): mbGuest is GuestType;
+/**
  * @url https://kosukhin.github.io/patron.site/#/guest
  */
 declare class Guest<T> implements GuestObjectType<T> {
@@ -26,7 +30,14 @@ interface GuestAwareObjectType<T> {
     value: GuestAwareExecutorType<T>;
 }
 type GuestAwareType<T = any> = GuestAwareExecutorType<T> | GuestAwareObjectType<T>;
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/give
+ */
 declare function value<T>(guestAware: GuestAwareType<T>, guest: GuestType<T>): unknown;
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/is-guest-aware
+ */
+declare function isGuestAware(mbGuestAware: any): mbGuestAware is GuestAwareType;
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware
  */
@@ -289,4 +300,4 @@ declare class Module<T> implements FactoryType<T> {
     create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ActionType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareAcitveType, GuestAwareActive, GuestAwareAll, type GuestAwareAllType, type GuestAwareExecutorType, GuestAwareMap, type GuestAwareObjectType, GuestAwareRace, GuestAwareSequence, type GuestAwareType, GuestCast, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolAwareOptions, type PoolType, Source, SourceDynamic, SourceEmpty, type SourceType, give, isPatronInPools, removePatronFromPools, value };
+export { type ActionType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareAcitveType, GuestAwareActive, GuestAwareAll, type GuestAwareAllType, type GuestAwareExecutorType, GuestAwareMap, type GuestAwareObjectType, GuestAwareRace, GuestAwareSequence, type GuestAwareType, GuestCast, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolAwareOptions, type PoolType, Source, SourceDynamic, SourceEmpty, type SourceType, give, isGuest, isGuestAware, isPatronInPools, removePatronFromPools, value };
