@@ -1,6 +1,6 @@
 import { GuestAwareSequence } from "./GuestAwareSequence";
 import { give } from "./Guest";
-import { GuestAwareObjectType, GuestAwareType, value } from "./GuestAware";
+import { GuestAware, GuestAwareObjectType, GuestAwareType, value } from "./GuestAware";
 import { GuestCast } from "./GuestCast";
 import { GuestType } from "./Guest";
 import { expect, test } from "vitest";
@@ -21,8 +21,9 @@ class X2 implements GuestAwareObjectType<number> {
   }
 }
 
-test('GuestAwareSequence.test', () => {
-  const source = new Source([1, 2, 3, 9]);
+test('GuestAwareSequence.defered.test', () => {
+  const guestAwareOf = (val: number) => new GuestAware((guest) => give(val, guest));
+  const source = new Source([1, 2, 3, 9].map(guestAwareOf));
   const guestMapped = new GuestAwareSequence(
     source,
     new Factory(X2)
