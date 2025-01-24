@@ -38,15 +38,17 @@ export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
         }
 
         function handle() {
-          value(targetSource, all.guestKey(index.toString()));
+          sequenceSource.give(null);
           const nextValue = theValue[index];
           if (isGuestAware(nextValue)) {
             value(nextValue, new PatronOnce((theNextValue) => {
               sequenceSource.give(theNextValue);
+              value(targetSource, all.guestKey(index.toString()));
               nextItemHandle();
             }));
           } else {
-            sequenceSource.give(theValue[index]);
+            sequenceSource.give(nextValue);
+            value(targetSource, all.guestKey(index.toString()));
             nextItemHandle();
           }
         }

@@ -1,3 +1,4 @@
+import { wait } from './../../test-utils/wait';
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { Source } from "../Source/Source";
 import { PatronOnce } from "./PatronOnce";
@@ -10,10 +11,6 @@ afterEach(() => {
   vi.runOnlyPendingTimers();
   vi.useRealTimers();
 });
-
-const wait = (ms: number) => new Promise(resolve => {
-  setTimeout(() => { resolve(1) }, ms);
-})
 
 test("PatronOnce.test", async () => {
   const source = new Source(12);
