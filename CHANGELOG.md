@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.39.1](https://github.com/kosukhin/patron/compare/v1.39.0...v1.39.1) (2025-01-24)
+
+
+### Bug Fixes
+
+* **fix-sequence:** guest aware seq fixed ([61dd2c5](https://github.com/kosukhin/patron/commit/61dd2c5df33113a1e57e74f595589f11a7ccbcfc))
+
 ## [1.39.0](https://github.com/kosukhin/patron/compare/v1.38.0...v1.39.0) (2025-01-23)
 
 
