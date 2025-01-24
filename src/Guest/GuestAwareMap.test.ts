@@ -26,7 +26,6 @@ test('GuestAwareMap.test', () => {
     source,
     new Factory(X2)
   );
-  expect(true).toBe(true);
   guestMapped.value((v) => {
     expect(v.join()).toBe('2,4,6,18')
   });

@@ -15,7 +15,6 @@ test('GuestAwareRace.test', async () => {
     const s = new SourceEmpty();
 
     setTimeout(() => {
-      expect(true).toBe(true);
       s.give(result);
     }, delay)
 
