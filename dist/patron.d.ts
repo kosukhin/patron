@@ -47,20 +47,16 @@ declare class GuestAware<T = any> implements GuestAwareObjectType<T> {
     value(guest: GuestType<T>): GuestType<T>;
 }
 
-interface Prototyped<T> {
-    prototype: T;
-}
-interface FactoryType<T> {
-    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
-}
 /**
- * @url https://kosukhin.github.io/patron.site/#/utils/factory
+ * @url https://kosukhin.github.io/patron.site/#/utils/private
  */
-declare class Factory<T> implements FactoryType<T> {
-    private constructorFn;
-    private factories;
-    constructor(constructorFn: Prototyped<T>, factories?: Record<string, unknown>);
-    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
+interface PrivateType<T> {
+    get<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
+}
+declare class Private<T> implements PrivateType<T> {
+    private buildingFn;
+    constructor(buildingFn: (...args: any[]) => T);
+    get<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
 /**
@@ -68,8 +64,8 @@ declare class Factory<T> implements FactoryType<T> {
  */
 declare class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
     private baseSource;
-    private targetSourceFactory;
-    constructor(baseSource: GuestAwareType<T[]>, targetSourceFactory: FactoryType<GuestAwareType<TG>>);
+    private targetSource;
+    constructor(baseSource: GuestAwareType<T[]>, targetSource: PrivateType<GuestAwareType<TG>>);
     value(guest: GuestType<TG[]>): this;
 }
 
@@ -78,8 +74,8 @@ declare class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
  */
 declare class GuestAwareMap<T, TG> implements GuestAwareObjectType<TG[]> {
     private baseSource;
-    private targetSourceFactory;
-    constructor(baseSource: GuestAwareType<T[]>, targetSourceFactory: FactoryType<GuestAwareType<TG>>);
+    private targetSource;
+    constructor(baseSource: GuestAwareType<T[]>, targetSource: PrivateType<GuestAwareType<TG>>);
     value(guest: GuestType<TG[]>): this;
 }
 
@@ -291,13 +287,14 @@ declare class SourceEmpty<T> implements SourceType<T> {
     pool(): PatronPool<T>;
 }
 
-/**
- * @url https://kosukhin.github.io/patron.site/#/utils/module
- */
-declare class Module<T> implements FactoryType<T> {
-    private buildingFn;
-    constructor(buildingFn: (...args: any[]) => T);
-    create<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
+interface Prototyped<T> {
+    prototype: T;
+}
+declare class PrivateClass<T> implements PrivateType<T> {
+    private constructorFn;
+    private modules;
+    constructor(constructorFn: Prototyped<T>, modules?: Record<string, unknown>);
+    get<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ActionType, Factory, type FactoryType, type GiveOptions, Guest, GuestAware, type GuestAwareAcitveType, GuestAwareActive, GuestAwareAll, type GuestAwareAllType, type GuestAwareExecutorType, GuestAwareMap, type GuestAwareObjectType, GuestAwareRace, GuestAwareSequence, type GuestAwareType, GuestCast, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Module, Patron, PatronOnce, PatronPool, type PoolAware, type PoolAwareOptions, type PoolType, Source, SourceDynamic, SourceEmpty, type SourceType, give, isGuest, isGuestAware, isPatronInPools, removePatronFromPools, value };
+export { type ActionType, type GiveOptions, Guest, GuestAware, type GuestAwareAcitveType, GuestAwareActive, GuestAwareAll, type GuestAwareAllType, type GuestAwareExecutorType, GuestAwareMap, type GuestAwareObjectType, GuestAwareRace, GuestAwareSequence, type GuestAwareType, GuestCast, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronOnce, PatronPool, type PoolAware, type PoolAwareOptions, type PoolType, Private, PrivateClass, type PrivateType, Source, SourceDynamic, SourceEmpty, type SourceType, give, isGuest, isGuestAware, isPatronInPools, removePatronFromPools, value };
