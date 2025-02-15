@@ -1,5 +1,5 @@
 import { wait } from './../../test-utils/wait';
-import { Module } from "../Factory/Module";
+import { Private } from "../Private/Private";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { Source } from "../Source/Source";
 import { give, GuestType } from "./Guest";
@@ -20,7 +20,7 @@ function x2(baseNumber: GuestAwareType<number>) {
   return (guest: GuestType<number>) => {
     value(
       baseNumber,
-      new GuestCast(<GuestType>guest, (v) => {
+      new GuestCast(guest, (v) => {
         give(v * 2, guest);
       })
     );
@@ -33,10 +33,10 @@ test('GuestAwareMap.defered.test', async () => {
     await wait(5);
     give(val, guest);
   });
-  const source = new Source([1, 2, 3, 9].map(guestAwareOf))
+  const source = new Source([1, 2, 3, 9].map(guestAwareOf));
   const guestMapped = new GuestAwareMap(
     source,
-    new Module(x2)
+    new Private(x2)
   );
   const callFn = vi.fn();
   guestMapped.value((v) => {

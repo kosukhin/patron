@@ -1,10 +1,8 @@
-import { FactoryType } from "../Factory/Factory";
-import { give } from "./Guest";
-import { GuestAwareObjectType, GuestAwareType, isGuestAware, value } from "./GuestAware";
-import { GuestCast } from "./GuestCast";
+import { PrivateType } from "../Private/Private";
+import { give, GuestType } from "./Guest";
+import { GuestAware, GuestAwareObjectType, GuestAwareType, isGuestAware, value } from "./GuestAware";
 import { GuestAwareAll } from "./GuestAwareAll";
-import { GuestType } from "./Guest";
-import { GuestAware } from "./GuestAware";
+import { GuestCast } from "./GuestCast";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-map
@@ -12,7 +10,7 @@ import { GuestAware } from "./GuestAware";
 export class GuestAwareMap<T, TG> implements GuestAwareObjectType<TG[]> {
   public constructor(
     private baseSource: GuestAwareType<T[]>,
-    private targetSourceFactory: FactoryType<GuestAwareType<TG>>
+    private targetSource: PrivateType<GuestAwareType<TG>>
   ) { }
 
   public value(guest: GuestType<TG[]>) {
@@ -26,7 +24,7 @@ export class GuestAwareMap<T, TG> implements GuestAwareObjectType<TG[]> {
             : new GuestAware((innerGuest) => {
               give(val, innerGuest);
             });
-          const targetSource = this.targetSourceFactory.create(valueSource)
+          const targetSource = this.targetSource.get(valueSource)
           value(targetSource, all.guestKey(index.toString()));
         });
       })

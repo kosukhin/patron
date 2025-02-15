@@ -1,4 +1,4 @@
-import { Module } from "../Factory/Module";
+import { Private } from "../Private/Private";
 import { expect, test } from "vitest";
 import { Source } from "../Source/Source";
 import { give, GuestType } from "./Guest";
@@ -22,7 +22,7 @@ test('GuestAwareMap.test', () => {
   const source = new Source([1, 2, 3, 9])
   const guestMapped = new GuestAwareMap(
     source,
-    new Module(x2)
+    new Private(x2)
   );
   guestMapped.value((v) => {
     expect(v.join()).toBe('2,4,6,18')

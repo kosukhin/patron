@@ -5,7 +5,7 @@ import { GuestCast } from "./GuestCast";
 import { GuestType } from "./Guest";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { Source } from "../Source/Source";
-import { Factory } from "../Factory/Factory";
+import { PrivateClass } from "../Private/PrivateClass";
 import { wait } from "../../test-utils/wait";
 
 beforeEach(() => {
@@ -39,13 +39,13 @@ test('GuestAwareSequence.defered.test', async () => {
   });
   const source = new Source([1, 2, 3, 9].map(guestAwareOf));
 
-  const guestMapped = new GuestAwareSequence(
+  const sequence = new GuestAwareSequence(
     source,
-    new Factory(X2)
+    new PrivateClass(X2)
   );
 
   const callFn = vi.fn();
-  guestMapped.value((v) => {
+  sequence.value((v) => {
     expect(v.join()).toBe('2,4,6,18');
     callFn();
   });

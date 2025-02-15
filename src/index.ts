@@ -16,5 +16,5 @@ export * from "./Patron/PatronPool";
 export * from "./Source/Source";
 export * from "./Source/SourceDynamic";
 export * from "./Source/SourceEmpty";
-export * from "./Factory/Factory";
-export * from "./Factory/Module";
+export * from "./Private/PrivateClass";
+export * from "./Private/Private";
