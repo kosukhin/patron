@@ -1,11 +1,10 @@
-import { FactoryType } from "../Factory/Factory";
-import { give } from "./Guest";
-import { GuestAwareObjectType, GuestAwareType, isGuestAware, value } from "./GuestAware";
-import { GuestCast } from "./GuestCast";
-import { GuestAwareAll } from "./GuestAwareAll";
-import { GuestType } from "./Guest";
-import { SourceEmpty } from "../Source/SourceEmpty";
 import { PatronOnce } from "../Patron/PatronOnce";
+import { PrivateType } from "../Private/Private";
+import { SourceEmpty } from "../Source/SourceEmpty";
+import { give, GuestType } from "./Guest";
+import { GuestAwareObjectType, GuestAwareType, isGuestAware, value } from "./GuestAware";
+import { GuestAwareAll } from "./GuestAwareAll";
+import { GuestCast } from "./GuestCast";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-sequence
@@ -13,13 +12,13 @@ import { PatronOnce } from "../Patron/PatronOnce";
 export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
   public constructor(
     private baseSource: GuestAwareType<T[]>,
-    private targetSourceFactory: FactoryType<GuestAwareType<TG>>
+    private targetSource: PrivateType<GuestAwareType<TG>>
   ) { }
 
   public value(guest: GuestType<TG[]>) {
     const all = new GuestAwareAll<TG[]>();
     const sequenceSource = new SourceEmpty();
-    const targetSource = this.targetSourceFactory.create(
+    const targetSource = this.targetSource.get(
       sequenceSource
     )
 

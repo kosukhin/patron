@@ -1,11 +1,11 @@
+import { SourceEmpty } from "../Source/SourceEmpty";
 import { expect, test } from "vitest";
-import { Source } from "../Source/Source";
 import { Patron } from "../Patron/Patron";
 import { give, Guest } from "./Guest";
 import { GuestCast } from "./GuestCast";
 
 test("GuestCast.test", () => {
-  const source = new Source(1);
+  const source = new SourceEmpty();
   let acc = 0;
   const mainGuest = new Patron(
     new Guest((value: number) => {
@@ -26,6 +26,6 @@ test("GuestCast.test", () => {
   give(2, source);
 
   setTimeout(() => {
-    expect(acc).toBe(6);
+    expect(acc).toBe(4);
   });
 });
