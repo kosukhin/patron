@@ -23,7 +23,7 @@ export class GuestAwareActive<R, T> implements GuestAwareAcitveType<R, T> {
   public constructor(
     private configExecutor: (config: R, source: SourceType<T>) => void,
   ) {
-    if (!configExecutor) {
+    if (configExecutor === undefined) {
       throw new Error(
         "GuestAwareActive constructor didnt receive executor function",
       );

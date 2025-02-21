@@ -9,7 +9,7 @@ export interface GuestValueType<T = any> extends GuestObjectType<T> {
  */
 export class GuestSync<T> implements GuestValueType<T> {
   public constructor(private theValue: T) {
-    if (!theValue) {
+    if (theValue === undefined) {
       throw new Error("GuestSync didnt receive theValue argument");
     }
   }

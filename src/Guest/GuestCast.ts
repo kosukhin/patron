@@ -10,10 +10,10 @@ export class GuestCast<T> implements GuestDisposableType<T> {
     private sourceGuest: GuestType<any>,
     private targetGuest: GuestType<T>,
   ) {
-    if (!sourceGuest) {
+    if (sourceGuest === undefined) {
       throw new Error("GuestCast didnt receive sourceGuest argument");
     }
-    if (!targetGuest) {
+    if (targetGuest === undefined) {
       throw new Error("GuestCast didnt receive targetGuest argument");
     }
   }

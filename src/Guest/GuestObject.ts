@@ -6,7 +6,7 @@ import { GiveOptions, Guest, GuestType } from "./Guest";
  */
 export class GuestObject<T> implements GuestDisposableType<T> {
   public constructor(private baseGuest: GuestType<T>) {
-    if (!baseGuest) {
+    if (baseGuest === undefined) {
       throw new Error("GuestObject didnt receive baseGuest argument");
     }
   }

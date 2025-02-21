@@ -7,7 +7,7 @@ export interface PrivateType<T> {
 
 export class Private<T> implements PrivateType<T> {
   public constructor(private buildingFn: (...args: any[]) => T) {
-    if (!buildingFn) {
+    if (buildingFn === undefined) {
       throw new Error("Private didnt receive buildingFn argument");
     }
   }

@@ -17,7 +17,7 @@ export class Source<T> implements SourceType<T> {
   private thePool = new PatronPool(this);
 
   public constructor(private sourceDocument: T) {
-    if (!sourceDocument) {
+    if (sourceDocument === undefined) {
       throw new Error("Source didnt receive sourceDocument argument");
     }
   }

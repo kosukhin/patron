@@ -6,7 +6,7 @@ import { give, GiveOptions, GuestType } from "../Guest/Guest";
  */
 export class Patron<T> implements GuestDisposableType<T> {
   public constructor(private willBePatron: GuestType<T>) {
-    if (!willBePatron) {
+    if (willBePatron === undefined) {
       throw new Error("Patron didnt receive willBePatron argument");
     }
   }

@@ -17,7 +17,7 @@ export class PatronOnce<T> implements GuestDisposableType<T> {
   private received = false;
 
   public constructor(private baseGuest: GuestType<T>) {
-    if (!baseGuest) {
+    if (baseGuest === undefined) {
       throw new Error("PatronOnce didnt receive baseGuest argument");
     }
   }

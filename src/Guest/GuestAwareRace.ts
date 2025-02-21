@@ -7,7 +7,7 @@ import { GuestCast } from "./GuestCast";
  */
 export class GuestAwareRace<T> implements GuestAwareObjectType<T> {
   public constructor(private guestAwares: GuestAwareType<T>[]) {
-    if (!guestAwares) {
+    if (guestAwares === undefined) {
       throw new Error("GuestAwareRace didnt receive guestAwares argument");
     }
   }

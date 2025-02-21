@@ -14,10 +14,10 @@ export type GuestAwareType<T = any> =
  * @url https://kosukhin.github.io/patron.site/#/utils/give
  */
 export function value<T>(guestAware: GuestAwareType<T>, guest: GuestType<T>) {
-  if (!guestAware) {
+  if (guestAware === undefined) {
     throw new Error("value didnt receive guestAware argument");
   }
-  if (!guest) {
+  if (guest === undefined) {
     throw new Error("value didnt receive guest argument");
   }
   if (typeof guestAware === "function") {
@@ -33,7 +33,7 @@ export function value<T>(guestAware: GuestAwareType<T>, guest: GuestType<T>) {
 export function isGuestAware(
   mbGuestAware: any,
 ): mbGuestAware is GuestAwareType {
-  if (!mbGuestAware) {
+  if (mbGuestAware === undefined) {
     throw new Error("isGuestAware didnt receive mbGuestAware argument");
   }
   return (
@@ -47,7 +47,7 @@ export function isGuestAware(
  */
 export class GuestAware<T = any> implements GuestAwareObjectType<T> {
   public constructor(private guestAware: GuestAwareType<T>) {
-    if (!guestAware) {
+    if (guestAware === undefined) {
       throw new Error("GuestAware constructor didnt receive executor function");
     }
   }
