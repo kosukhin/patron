@@ -5,7 +5,11 @@ import { GiveOptions, Guest, GuestType } from "./Guest";
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-object
  */
 export class GuestObject<T> implements GuestDisposableType<T> {
-  public constructor(private baseGuest: GuestType<T>) {}
+  public constructor(private baseGuest: GuestType<T>) {
+    if (!baseGuest) {
+      throw new Error("GuestObject didnt receive baseGuest argument");
+    }
+  }
 
   public give(value: T, options?: GiveOptions): this {
     let guest = this.baseGuest;

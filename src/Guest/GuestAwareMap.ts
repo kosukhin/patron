@@ -17,7 +17,14 @@ export class GuestAwareMap<T, TG> implements GuestAwareObjectType<TG[]> {
   public constructor(
     private baseSource: GuestAwareType<T[]>,
     private targetSource: PrivateType<GuestAwareType<TG>>,
-  ) {}
+  ) {
+    if (!baseSource) {
+      throw new Error("GuestAwareMap didnt receive baseSource argument");
+    }
+    if (!targetSource) {
+      throw new Error("GuestAwareMap didnt receive targetSource argument");
+    }
+  }
 
   public value(guest: GuestType<TG[]>) {
     const all = new GuestAwareAll();

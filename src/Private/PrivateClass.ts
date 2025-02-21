@@ -12,7 +12,11 @@ export class PrivateClass<T> implements PrivateType<T> {
   public constructor(
     private constructorFn: Prototyped<T>,
     private modules: Record<string, unknown> = {},
-  ) {}
+  ) {
+    if (!constructorFn) {
+      throw new Error("PrivateClass didnt receive constructorFn argument");
+    }
+  }
 
   public get<R extends unknown[], CT = null>(
     ...args: R

@@ -5,7 +5,11 @@ import { give, GiveOptions, GuestType } from "../Guest/Guest";
  * @url https://kosukhin.github.io/patron.site/#/patron
  */
 export class Patron<T> implements GuestDisposableType<T> {
-  public constructor(private willBePatron: GuestType<T>) {}
+  public constructor(private willBePatron: GuestType<T>) {
+    if (!willBePatron) {
+      throw new Error("Patron didnt receive willBePatron argument");
+    }
+  }
 
   public introduction() {
     return "patron" as const;

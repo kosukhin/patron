@@ -10,7 +10,14 @@ export class SourceDynamic<T = unknown> implements SourceType<T> {
   public constructor(
     private baseGuest: GuestType<T>,
     private baseGuestAware: GuestAwareType<T>,
-  ) {}
+  ) {
+    if (!baseGuest) {
+      throw new Error("SourceDynamic didnt receive baseGuest argument");
+    }
+    if (!baseGuestAware) {
+      throw new Error("SourceDynamic didnt receive baseGuestAware argument");
+    }
+  }
 
   public value(guest: GuestType<T>) {
     value(this.baseGuestAware, guest);

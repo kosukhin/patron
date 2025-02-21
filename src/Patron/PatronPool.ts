@@ -7,6 +7,9 @@ const poolSets = new Map<PoolType, Set<GuestObjectType>>();
  * @url https://kosukhin.github.io/patron.site/#/utils/remove-patron-from-pools
  */
 export const removePatronFromPools = (patron: GuestObjectType) => {
+  if (!patron) {
+    throw new Error("removePatronFromPools didnt receive patron argument");
+  }
   poolSets.forEach((pool) => {
     pool.delete(patron);
   });
@@ -16,6 +19,9 @@ export const removePatronFromPools = (patron: GuestObjectType) => {
  * @url https://kosukhin.github.io/patron.site/#/utils/is-patron-in-pools
  */
 export const isPatronInPools = (patron: GuestObjectType) => {
+  if (!patron) {
+    throw new Error("isPatronInPools didnt receive patron argument");
+  }
   let inPool = false;
   poolSets.forEach((pool) => {
     if (!inPool) {

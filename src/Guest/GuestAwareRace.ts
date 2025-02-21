@@ -6,7 +6,11 @@ import { GuestCast } from "./GuestCast";
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-race
  */
 export class GuestAwareRace<T> implements GuestAwareObjectType<T> {
-  public constructor(private guestAwares: GuestAwareType<T>[]) {}
+  public constructor(private guestAwares: GuestAwareType<T>[]) {
+    if (!guestAwares) {
+      throw new Error("GuestAwareRace didnt receive guestAwares argument");
+    }
+  }
 
   public value(guest: GuestType<T>): this {
     let connectedWithGuestAware: GuestAwareType | null = null;

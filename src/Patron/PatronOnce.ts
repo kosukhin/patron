@@ -16,7 +16,11 @@ export type PoolAwareOptions = {
 export class PatronOnce<T> implements GuestDisposableType<T> {
   private received = false;
 
-  public constructor(private baseGuest: GuestType<T>) {}
+  public constructor(private baseGuest: GuestType<T>) {
+    if (!baseGuest) {
+      throw new Error("PatronOnce didnt receive baseGuest argument");
+    }
+  }
 
   public introduction() {
     return "patron" as const;
