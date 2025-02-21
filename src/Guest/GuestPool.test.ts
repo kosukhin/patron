@@ -1,8 +1,18 @@
-import { expect, test } from "vitest";
+import { expect, test, vi, beforeEach, afterEach } from "vitest";
 import { GuestPool } from "./GuestPool";
 import { Patron } from "../Patron/Patron";
+import { wait } from "test-utils/wait";
 
-test("GuestPool.test", () => {
+beforeEach(() => {
+  vi.useFakeTimers({ shouldAdvanceTime: true });
+});
+
+afterEach(() => {
+  vi.runOnlyPendingTimers();
+  vi.useRealTimers();
+});
+
+test("GuestPool.test", async () => {
   const pool = new GuestPool<number>(null);
   let receivedCount = 0;
 
@@ -28,7 +38,10 @@ test("GuestPool.test", () => {
     pool.give(2);
   });
 
+  await wait(50);
+
   setTimeout(() => {
+    pool.give(2);
     expect(receivedCount).toBe(10);
   }, 10);
 });
