@@ -10,7 +10,7 @@ export class SourceDynamic<T = unknown> implements SourceType<T> {
   public constructor(
     private baseGuest: GuestType<T>,
     private baseGuestAware: GuestAwareType<T>,
-  ) { }
+  ) {}
 
   public value(guest: GuestType<T>) {
     value(this.baseGuestAware, guest);
@@ -23,6 +23,6 @@ export class SourceDynamic<T = unknown> implements SourceType<T> {
   }
 
   public pool(): PatronPool<T> {
-    throw Error('No pool in SourceDynamic');
+    throw Error("No pool in SourceDynamic");
   }
 }

@@ -16,7 +16,7 @@ export type SourceType<T = any> = GuestAwareObjectType<T> &
 export class Source<T> implements SourceType<T> {
   private thePool = new PatronPool(this);
 
-  public constructor(private sourceDocument: T) { }
+  public constructor(private sourceDocument: T) {}
 
   public pool() {
     return this.thePool;

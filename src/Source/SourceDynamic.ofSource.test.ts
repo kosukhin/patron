@@ -1,8 +1,8 @@
-import { SourceDynamic } from './SourceDynamic';
-import { Source } from './Source';
-import { expect, test } from 'vitest';
+import { SourceDynamic } from "./SourceDynamic";
+import { Source } from "./Source";
+import { expect, test } from "vitest";
 
-test('SourceDynamic.ofSource.test', () => {
+test("SourceDynamic.ofSource.test", () => {
   const source = new Source(1);
   const sourceDynamic = new SourceDynamic(source, source);
 

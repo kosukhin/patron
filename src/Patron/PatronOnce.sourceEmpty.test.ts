@@ -11,14 +11,17 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-const wait = (ms: number) => new Promise(resolve => {
-  setTimeout(() => { resolve(1) }, ms);
-})
+const wait = (ms: number) =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(1);
+    }, ms);
+  });
 
 test("PatronOnce.sourceEmpty.test", async () => {
   const source = new SourceEmpty();
   let calls = 0;
-  const patron = new PatronOnce((v) => {
+  const patron = new PatronOnce(() => {
     calls += 1;
   });
   source.value(patron);

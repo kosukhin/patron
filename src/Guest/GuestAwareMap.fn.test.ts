@@ -12,19 +12,16 @@ function x2(baseNumber: GuestAwareType<number>) {
       baseNumber,
       new GuestCast(<GuestType>guest, (v) => {
         give(v * 2, guest);
-      })
+      }),
     );
     return guest;
   };
 }
 
-test('GuestAwareMap.test', () => {
-  const source = new Source([1, 2, 3, 9])
-  const guestMapped = new GuestAwareMap(
-    source,
-    new Private(x2)
-  );
+test("GuestAwareMap.test", () => {
+  const source = new Source([1, 2, 3, 9]);
+  const guestMapped = new GuestAwareMap(source, new Private(x2));
   guestMapped.value((v) => {
-    expect(v.join()).toBe('2,4,6,18')
+    expect(v.join()).toBe("2,4,6,18");
   });
 });

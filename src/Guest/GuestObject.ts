@@ -1,14 +1,11 @@
-import {
-  GuestDisposableType,
-  MaybeDisposableType,
-} from "./GuestDisposable";
+import { GuestDisposableType, MaybeDisposableType } from "./GuestDisposable";
 import { GiveOptions, Guest, GuestType } from "./Guest";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-object
  */
 export class GuestObject<T> implements GuestDisposableType<T> {
-  public constructor(private baseGuest: GuestType<T>) { }
+  public constructor(private baseGuest: GuestType<T>) {}
 
   public give(value: T, options?: GiveOptions): this {
     let guest = this.baseGuest;

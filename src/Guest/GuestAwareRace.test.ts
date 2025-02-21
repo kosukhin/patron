@@ -1,4 +1,4 @@
-import { GuestAwareRace } from './GuestAwareRace';
+import { GuestAwareRace } from "./GuestAwareRace";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { SourceEmpty } from "../Source/SourceEmpty";
 
@@ -10,16 +10,16 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-test('GuestAwareRace.test', async () => {
+test("GuestAwareRace.test", async () => {
   const sBuild = (result: number, delay: number) => {
     const s = new SourceEmpty();
 
     setTimeout(() => {
       s.give(result);
-    }, delay)
+    }, delay);
 
     return s;
-  }
+  };
 
   const s2 = sBuild(2, 100);
   const s1 = sBuild(1, 200);
@@ -28,9 +28,9 @@ test('GuestAwareRace.test', async () => {
 
   await vi.advanceTimersByTime(201);
 
-  sAny.value(v => {
+  sAny.value((v) => {
     expect(v).toBe(1);
-  })
+  });
 
   setTimeout(() => {
     s1.give(3);
@@ -39,8 +39,8 @@ test('GuestAwareRace.test', async () => {
 
   await vi.advanceTimersByTime(301);
 
-  sAny.value(v => {
+  sAny.value((v) => {
     // ignores second value
     expect(v).toBe(3);
-  })
+  });
 });

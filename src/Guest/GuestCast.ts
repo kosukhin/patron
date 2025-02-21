@@ -1,7 +1,4 @@
-import {
-  GuestDisposableType,
-  MaybeDisposableType,
-} from "./GuestDisposable";
+import { GuestDisposableType, MaybeDisposableType } from "./GuestDisposable";
 import { give, GiveOptions, GuestType } from "./Guest";
 import { PoolAwareOptions } from "../Patron/PatronOnce";
 
@@ -12,7 +9,7 @@ export class GuestCast<T> implements GuestDisposableType<T> {
   public constructor(
     private sourceGuest: GuestType<any>,
     private targetGuest: GuestType<T>,
-  ) { }
+  ) {}
 
   public introduction() {
     if (typeof this.sourceGuest === "function") {
@@ -30,7 +27,7 @@ export class GuestCast<T> implements GuestDisposableType<T> {
       data: {
         ...(options?.data ?? {}),
         castedGuest: (options?.data as PoolAwareOptions)?.castedGuest ?? this,
-      }
+      },
     });
     return this;
   }

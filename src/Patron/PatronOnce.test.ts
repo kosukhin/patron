@@ -1,4 +1,4 @@
-import { wait } from './../../test-utils/wait';
+import { wait } from "./../../test-utils/wait";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { Source } from "../Source/Source";
 import { PatronOnce } from "./PatronOnce";
@@ -15,7 +15,7 @@ afterEach(() => {
 test("PatronOnce.test", async () => {
   const source = new Source(12);
   let calls = 0;
-  const patron = new PatronOnce((v) => {
+  const patron = new PatronOnce(() => {
     calls += 1;
   });
   source.value(patron);

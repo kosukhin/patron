@@ -2,7 +2,12 @@ import { PatronOnce } from "../Patron/PatronOnce";
 import { PrivateType } from "../Private/Private";
 import { SourceEmpty } from "../Source/SourceEmpty";
 import { give, GuestType } from "./Guest";
-import { GuestAwareObjectType, GuestAwareType, isGuestAware, value } from "./GuestAware";
+import {
+  GuestAwareObjectType,
+  GuestAwareType,
+  isGuestAware,
+  value,
+} from "./GuestAware";
 import { GuestAwareAll } from "./GuestAwareAll";
 import { GuestCast } from "./GuestCast";
 
@@ -12,15 +17,13 @@ import { GuestCast } from "./GuestCast";
 export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
   public constructor(
     private baseSource: GuestAwareType<T[]>,
-    private targetSource: PrivateType<GuestAwareType<TG>>
-  ) { }
+    private targetSource: PrivateType<GuestAwareType<TG>>,
+  ) {}
 
   public value(guest: GuestType<TG[]>) {
     const all = new GuestAwareAll<TG[]>();
     const sequenceSource = new SourceEmpty();
-    const targetSource = this.targetSource.get(
-      sequenceSource
-    )
+    const targetSource = this.targetSource.get(sequenceSource);
 
     value(
       this.baseSource,
@@ -34,17 +37,20 @@ export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
           } else {
             all.valueArray(guest);
           }
-        }
+        };
 
         function handle() {
           sequenceSource.give(null);
           const nextValue = theValue[index];
           if (isGuestAware(nextValue)) {
-            value(nextValue, new PatronOnce((theNextValue) => {
-              sequenceSource.give(theNextValue);
-              value(targetSource, all.guestKey(index.toString()));
-              nextItemHandle();
-            }));
+            value(
+              nextValue,
+              new PatronOnce((theNextValue) => {
+                sequenceSource.give(theNextValue);
+                value(targetSource, all.guestKey(index.toString()));
+                nextItemHandle();
+              }),
+            );
           } else {
             sequenceSource.give(nextValue);
             value(targetSource, all.guestKey(index.toString()));
@@ -57,7 +63,7 @@ export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
         } else {
           give([], guest);
         }
-      })
+      }),
     );
     return this;
   }

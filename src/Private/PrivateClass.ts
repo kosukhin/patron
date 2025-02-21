@@ -1,7 +1,7 @@
 import { PrivateType } from "./Private";
 
 interface Constructable<T> {
-  new(...args: unknown[]): T;
+  new (...args: unknown[]): T;
 }
 
 interface Prototyped<T> {
@@ -12,7 +12,7 @@ export class PrivateClass<T> implements PrivateType<T> {
   public constructor(
     private constructorFn: Prototyped<T>,
     private modules: Record<string, unknown> = {},
-  ) { }
+  ) {}
 
   public get<R extends unknown[], CT = null>(
     ...args: R

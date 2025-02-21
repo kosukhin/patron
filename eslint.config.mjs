@@ -16,12 +16,6 @@ const compat = new FlatCompat({
 
 export default [
   {
-    rules: {
-      "@typescript-eslint/no-explicit-any": 0,
-      "prettier.bracketSpacing": false,
-    },
-  },
-  {
     ignores: ["**/node_modules", "**/dist"],
   },
   ...compat.extends(
@@ -30,10 +24,15 @@ export default [
     "plugin:@typescript-eslint/recommended",
   ),
   {
+    rules: {
+      "@typescript-eslint/no-explicit-any": ["off"],
+      "prettier.bracketSpacing": ["off"],
+    },
+  },
+  {
     plugins: {
       "@typescript-eslint": typescriptEslint,
     },
-
     languageOptions: {
       parser: tsParser,
     },

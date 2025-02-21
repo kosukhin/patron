@@ -23,7 +23,7 @@ class TestClass {
 test("PrivateClass.modules.test", () => {
   const main = new PrivateClass(Source);
   const testSource = new PrivateClass(TestClass, {
-     main,
+    main,
   });
 
   const source = testSource.get(42);

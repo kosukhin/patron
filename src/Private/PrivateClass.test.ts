@@ -1,8 +1,6 @@
-import { PrivateClass } from "./PrivateClass";
-import { GuestType } from "../Guest/Guest";
-import { Source, SourceType } from "../Source/Source";
 import { expect, test } from "vitest";
-import { PrivateType } from "./Private";
+import { Source } from "../Source/Source";
+import { PrivateClass } from "./PrivateClass";
 
 test("PrivateClass.test", () => {
   const sourcePrivate = new PrivateClass(Source);

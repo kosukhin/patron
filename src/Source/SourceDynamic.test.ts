@@ -1,9 +1,9 @@
 import { SourceDynamic } from "./SourceDynamic";
-import { expect, test } from 'vitest';
+import { expect, test } from "vitest";
 import { give, Guest } from "../Guest/Guest";
 import { GuestAware } from "../Guest/GuestAware";
 
-test('SourceDynamic', () => {
+test("SourceDynamic", () => {
   let theValue = 1;
   const sourceDynamic = new SourceDynamic(
     new Guest((value: number) => {

@@ -10,8 +10,9 @@ export interface ActionType<P = any> {
   do(config: P): this;
 }
 
-export interface GuestAwareAcitveType<R = unknown, T = unknown> extends GuestAwareObjectType<T>, ActionType<R> {
-}
+export interface GuestAwareAcitveType<R = unknown, T = unknown>
+  extends GuestAwareObjectType<T>,
+    ActionType<R> {}
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-active
@@ -19,7 +20,9 @@ export interface GuestAwareAcitveType<R = unknown, T = unknown> extends GuestAwa
 export class GuestAwareActive<R, T> implements GuestAwareAcitveType<R, T> {
   private source = new SourceEmpty<T>();
 
-  public constructor(private configExecutor: (config: R, source: SourceType<T>) => void) { }
+  public constructor(
+    private configExecutor: (config: R, source: SourceType<T>) => void,
+  ) {}
 
   public do(config: R): this {
     this.configExecutor(config, this.source);
