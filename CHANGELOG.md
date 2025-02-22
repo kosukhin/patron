@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.41.0](https://github.com/kosukhin/patron/compare/v1.40.0...v1.41.0) (2025-02-22)
+
+
+### Features
+
+* **issue-27:** assertions in constructors ([c8eeff4](https://github.com/kosukhin/patron/commit/c8eeff4e7737e07fe0b792d6304807a38b56d443))
+
+
+### Bug Fixes
+
+* **issue-27:** every constructor checks undefiend ([396e78b](https://github.com/kosukhin/patron/commit/396e78bb0451340e31cbff7d26eea062f476aea2))
+
 ## [1.40.0](https://github.com/kosukhin/patron/compare/v1.39.1...v1.40.0) (2025-02-15)
 
 
