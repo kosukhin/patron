@@ -1,4 +1,10 @@
 function value(guestAware, guest) {
+  if (guestAware === void 0) {
+    throw new Error("value didnt receive guestAware argument");
+  }
+  if (guest === void 0) {
+    throw new Error("value didnt receive guest argument");
+  }
   if (typeof guestAware === "function") {
     return guestAware(guest);
   } else {
@@ -6,11 +12,17 @@ function value(guestAware, guest) {
   }
 }
 function isGuestAware(mbGuestAware) {
+  if (mbGuestAware === void 0) {
+    throw new Error("isGuestAware didnt receive mbGuestAware argument");
+  }
   return typeof mbGuestAware === "function" || typeof mbGuestAware?.value === "function";
 }
 class GuestAware {
   constructor(guestAware) {
     this.guestAware = guestAware;
+    if (guestAware === void 0) {
+      throw new Error("GuestAware constructor didnt receive executor function");
+    }
   }
   value(guest) {
     value(this.guestAware, guest);
@@ -19,6 +31,12 @@ class GuestAware {
 }
 
 function give(data, guest, options) {
+  if (data === void 0) {
+    throw new Error("give didnt receive data argument");
+  }
+  if (guest === void 0) {
+    throw new Error("give didnt receive guest argument");
+  }
   if (typeof guest === "function") {
     guest(data, options);
   } else {
@@ -26,11 +44,17 @@ function give(data, guest, options) {
   }
 }
 function isGuest(mbGuest) {
+  if (mbGuest === void 0) {
+    throw new Error("isGuest didnt receive mbGuest argument");
+  }
   return typeof mbGuest === "function" || typeof mbGuest?.give === "function";
 }
 class Guest {
   constructor(receiver) {
     this.receiver = receiver;
+    if (!receiver) {
+      throw new Error("reseiver function was not passed to Guest constructor");
+    }
   }
   give(value, options) {
     this.receiver(value, options);
@@ -45,6 +69,9 @@ class PatronOnce {
   constructor(baseGuest) {
     this.baseGuest = baseGuest;
     __publicField$6(this, "received", false);
+    if (baseGuest === void 0) {
+      throw new Error("PatronOnce didnt receive baseGuest argument");
+    }
   }
   introduction() {
     return "patron";
@@ -69,6 +96,12 @@ class GuestCast {
   constructor(sourceGuest, targetGuest) {
     this.sourceGuest = sourceGuest;
     this.targetGuest = targetGuest;
+    if (sourceGuest === void 0) {
+      throw new Error("GuestCast didnt receive sourceGuest argument");
+    }
+    if (targetGuest === void 0) {
+      throw new Error("GuestCast didnt receive targetGuest argument");
+    }
   }
   introduction() {
     if (typeof this.sourceGuest === "function") {
@@ -100,11 +133,17 @@ var __defNormalProp$5 = (obj, key, value) => key in obj ? __defProp$5(obj, key, 
 var __publicField$5 = (obj, key, value) => __defNormalProp$5(obj, typeof key !== "symbol" ? key + "" : key, value);
 const poolSets = /* @__PURE__ */ new Map();
 const removePatronFromPools = (patron) => {
+  if (patron === void 0) {
+    throw new Error("removePatronFromPools didnt receive patron argument");
+  }
   poolSets.forEach((pool) => {
     pool.delete(patron);
   });
 };
 const isPatronInPools = (patron) => {
+  if (patron === void 0) {
+    throw new Error("isPatronInPools didnt receive patron argument");
+  }
   let inPool = false;
   poolSets.forEach((pool) => {
     if (!inPool) {
@@ -187,6 +226,9 @@ class Source {
   constructor(sourceDocument) {
     this.sourceDocument = sourceDocument;
     __publicField$4(this, "thePool", new PatronPool(this));
+    if (sourceDocument === void 0) {
+      throw new Error("Source didnt receive sourceDocument argument");
+    }
   }
   pool() {
     return this.thePool;
@@ -235,6 +277,9 @@ class SourceEmpty {
 class GuestObject {
   constructor(baseGuest) {
     this.baseGuest = baseGuest;
+    if (baseGuest === void 0) {
+      throw new Error("GuestObject didnt receive baseGuest argument");
+    }
   }
   give(value, options) {
     let guest = this.baseGuest;
@@ -368,13 +413,17 @@ class GuestAwareSequence {
   constructor(baseSource, targetSource) {
     this.baseSource = baseSource;
     this.targetSource = targetSource;
+    if (baseSource === void 0) {
+      throw new Error("GuestAwareSequence didnt receive baseSource argument");
+    }
+    if (targetSource === void 0) {
+      throw new Error("GuestAwareSequence didnt receive targetSource argument");
+    }
   }
   value(guest) {
     const all = new GuestAwareAll();
     const sequenceSource = new SourceEmpty();
-    const targetSource = this.targetSource.get(
-      sequenceSource
-    );
+    const targetSource = this.targetSource.get(sequenceSource);
     value(
       this.baseSource,
       new GuestCast(guest, (theValue) => {
@@ -391,11 +440,14 @@ class GuestAwareSequence {
           sequenceSource.give(null);
           const nextValue = theValue[index];
           if (isGuestAware(nextValue)) {
-            value(nextValue, new PatronOnce((theNextValue) => {
-              sequenceSource.give(theNextValue);
-              value(targetSource, all.guestKey(index.toString()));
-              nextItemHandle();
-            }));
+            value(
+              nextValue,
+              new PatronOnce((theNextValue) => {
+                sequenceSource.give(theNextValue);
+                value(targetSource, all.guestKey(index.toString()));
+                nextItemHandle();
+              })
+            );
           } else {
             sequenceSource.give(nextValue);
             value(targetSource, all.guestKey(index.toString()));
@@ -417,6 +469,12 @@ class GuestAwareMap {
   constructor(baseSource, targetSource) {
     this.baseSource = baseSource;
     this.targetSource = targetSource;
+    if (baseSource === void 0) {
+      throw new Error("GuestAwareMap didnt receive baseSource argument");
+    }
+    if (targetSource === void 0) {
+      throw new Error("GuestAwareMap didnt receive targetSource argument");
+    }
   }
   value(guest) {
     const all = new GuestAwareAll();
@@ -440,6 +498,9 @@ class GuestAwareMap {
 class GuestAwareRace {
   constructor(guestAwares) {
     this.guestAwares = guestAwares;
+    if (guestAwares === void 0) {
+      throw new Error("GuestAwareRace didnt receive guestAwares argument");
+    }
   }
   value(guest) {
     let connectedWithGuestAware = null;
@@ -465,6 +526,11 @@ class GuestAwareActive {
   constructor(configExecutor) {
     this.configExecutor = configExecutor;
     __publicField(this, "source", new SourceEmpty());
+    if (configExecutor === void 0) {
+      throw new Error(
+        "GuestAwareActive constructor didnt receive executor function"
+      );
+    }
   }
   do(config) {
     this.configExecutor(config, this.source);
@@ -479,6 +545,9 @@ class GuestAwareActive {
 class GuestSync {
   constructor(theValue) {
     this.theValue = theValue;
+    if (theValue === void 0) {
+      throw new Error("GuestSync didnt receive theValue argument");
+    }
   }
   give(value) {
     this.theValue = value;
@@ -493,6 +562,12 @@ class GuestDisposable {
   constructor(guest, disposeCheck) {
     this.guest = guest;
     this.disposeCheck = disposeCheck;
+    if (guest === void 0) {
+      throw new Error("GuestDisposable didnt receive guest argument");
+    }
+    if (disposeCheck === void 0) {
+      throw new Error("GuestDisposable didnt receive disposeCheck argument");
+    }
   }
   disposed(value) {
     return this.disposeCheck(value);
@@ -506,6 +581,9 @@ class GuestDisposable {
 class Patron {
   constructor(willBePatron) {
     this.willBePatron = willBePatron;
+    if (willBePatron === void 0) {
+      throw new Error("Patron didnt receive willBePatron argument");
+    }
   }
   introduction() {
     return "patron";
@@ -524,6 +602,12 @@ class SourceDynamic {
   constructor(baseGuest, baseGuestAware) {
     this.baseGuest = baseGuest;
     this.baseGuestAware = baseGuestAware;
+    if (baseGuest === void 0) {
+      throw new Error("SourceDynamic didnt receive baseGuest argument");
+    }
+    if (baseGuestAware === void 0) {
+      throw new Error("SourceDynamic didnt receive baseGuestAware argument");
+    }
   }
   value(guest) {
     value(this.baseGuestAware, guest);
@@ -542,6 +626,9 @@ class PrivateClass {
   constructor(constructorFn, modules = {}) {
     this.constructorFn = constructorFn;
     this.modules = modules;
+    if (constructorFn === void 0) {
+      throw new Error("PrivateClass didnt receive constructorFn argument");
+    }
   }
   get(...args) {
     return new this.constructorFn(
@@ -554,6 +641,9 @@ class PrivateClass {
 class Private {
   constructor(buildingFn) {
     this.buildingFn = buildingFn;
+    if (buildingFn === void 0) {
+      throw new Error("Private didnt receive buildingFn argument");
+    }
   }
   get(...args) {
     return this.buildingFn(...args);
