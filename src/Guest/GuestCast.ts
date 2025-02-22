@@ -9,7 +9,14 @@ export class GuestCast<T> implements GuestDisposableType<T> {
   public constructor(
     private sourceGuest: GuestType<any>,
     private targetGuest: GuestType<T>,
-  ) {}
+  ) {
+    if (sourceGuest === undefined) {
+      throw new Error("GuestCast didnt receive sourceGuest argument");
+    }
+    if (targetGuest === undefined) {
+      throw new Error("GuestCast didnt receive targetGuest argument");
+    }
+  }
 
   public introduction() {
     if (typeof this.sourceGuest === "function") {

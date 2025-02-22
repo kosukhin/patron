@@ -8,7 +8,11 @@ export interface GuestValueType<T = any> extends GuestObjectType<T> {
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-sync
  */
 export class GuestSync<T> implements GuestValueType<T> {
-  public constructor(private theValue: T) {}
+  public constructor(private theValue: T) {
+    if (theValue === undefined) {
+      throw new Error("GuestSync didnt receive theValue argument");
+    }
+  }
 
   public give(value: T): this {
     this.theValue = value;

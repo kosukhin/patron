@@ -13,7 +13,14 @@ export class GuestDisposable<T> implements GuestDisposableType<T> {
   public constructor(
     private guest: GuestType,
     private disposeCheck: (value: T | null) => boolean,
-  ) {}
+  ) {
+    if (guest === undefined) {
+      throw new Error("GuestDisposable didnt receive guest argument");
+    }
+    if (disposeCheck === undefined) {
+      throw new Error("GuestDisposable didnt receive disposeCheck argument");
+    }
+  }
 
   public disposed(value: T | null): boolean {
     return this.disposeCheck(value);

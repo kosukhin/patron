@@ -18,7 +18,14 @@ export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
   public constructor(
     private baseSource: GuestAwareType<T[]>,
     private targetSource: PrivateType<GuestAwareType<TG>>,
-  ) {}
+  ) {
+    if (baseSource === undefined) {
+      throw new Error("GuestAwareSequence didnt receive baseSource argument");
+    }
+    if (targetSource === undefined) {
+      throw new Error("GuestAwareSequence didnt receive targetSource argument");
+    }
+  }
 
   public value(guest: GuestType<TG[]>) {
     const all = new GuestAwareAll<TG[]>();
