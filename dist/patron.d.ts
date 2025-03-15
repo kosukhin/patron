@@ -2,7 +2,7 @@ type GuestIntroduction = "guest" | "patron";
 interface GiveOptions {
     data?: unknown;
 }
-type GuestExecutorType<T = any> = (value: T, options?: GiveOptions) => void;
+type GuestExecutorType<T = any, This = void> = (value: T, options?: GiveOptions) => This;
 interface GuestObjectType<T = any> {
     give(value: T, options?: GiveOptions): this;
     introduction?(): GuestIntroduction;
