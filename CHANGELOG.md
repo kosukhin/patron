@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.42.0](https://github.com/kosukhin/patron/compare/v1.41.0...v1.42.0) (2025-03-15)
+
+
+### Features
+
+* **issue-37:** this parameter added to GuestExecutorType ([decab1a](https://github.com/kosukhin/patron/commit/decab1af17a1797104c15b47414f5ec079f04505))
+
 ## [1.41.0](https://github.com/kosukhin/patron/compare/v1.40.0...v1.41.0) (2025-02-22)
 
 
