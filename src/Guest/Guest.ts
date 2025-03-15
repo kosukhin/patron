@@ -4,10 +4,10 @@ export interface GiveOptions {
   data?: unknown;
 }
 
-export type GuestExecutorType<T = any> = (
+export type GuestExecutorType<T = any, This = void> = (
   value: T,
   options?: GiveOptions,
-) => void;
+) => This;
 
 export interface GuestObjectType<T = any> {
   give(value: T, options?: GiveOptions): this;
