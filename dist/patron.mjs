@@ -347,12 +347,13 @@ var __defProp$1 = Object.defineProperty;
 var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, typeof key !== "symbol" ? key + "" : key, value);
 class GuestAwareAll {
-  constructor() {
+  constructor(initialKnownKeys = []) {
     __publicField$1(this, "theAll");
-    __publicField$1(this, "keysKnown", /* @__PURE__ */ new Set());
+    __publicField$1(this, "keysKnown");
     __publicField$1(this, "keysFilled", /* @__PURE__ */ new Set());
     __publicField$1(this, "filledAllPool", new GuestPool(this));
     this.theAll = new Source({});
+    this.keysKnown = new Set(initialKnownKeys);
   }
   valueArray(guest) {
     const guestObject = new GuestObject(guest);
@@ -387,21 +388,19 @@ class GuestAwareAll {
   guestKey(key) {
     this.keysKnown.add(key);
     return new Guest((value) => {
-      queueMicrotask(() => {
-        this.theAll.value(
-          new Guest((all) => {
-            this.keysFilled.add(key);
-            const lastAll = {
-              ...all,
-              [key]: value
-            };
-            this.theAll.give(lastAll);
-            if (this.isAllFilled()) {
-              this.filledAllPool.give(lastAll);
-            }
-          })
-        );
-      });
+      this.theAll.value(
+        new Guest((all) => {
+          this.keysFilled.add(key);
+          const lastAll = {
+            ...all,
+            [key]: value
+          };
+          this.theAll.give(lastAll);
+          if (this.isAllFilled()) {
+            this.filledAllPool.give(lastAll);
+          }
+        })
+      );
     });
   }
   isAllFilled() {

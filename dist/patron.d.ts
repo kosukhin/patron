@@ -192,7 +192,7 @@ declare class GuestAwareAll<T> implements GuestAwareAllType<T> {
     private keysKnown;
     private keysFilled;
     private filledAllPool;
-    constructor();
+    constructor(initialKnownKeys?: string[]);
     valueArray(guest: GuestType<T>): this;
     value(guest: GuestType<T>): this;
     guestKey<R>(key: string): GuestObjectType<R>;
