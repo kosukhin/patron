@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.44.1](https://github.com/kosukhin/patron/compare/v1.44.0...v1.44.1) (2025-03-22)
+
 ## [1.44.0](https://github.com/kosukhin/patron/compare/v1.43.0...v1.44.0) (2025-03-22)
 
 
