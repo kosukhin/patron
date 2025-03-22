@@ -16,14 +16,15 @@ export interface GuestAwareAllType<T = any> extends GuestAwareObjectType<T> {
 export class GuestAwareAll<T> implements GuestAwareAllType<T> {
   private theAll: Source<Record<string, unknown>>;
 
-  private keysKnown = new Set();
+  private keysKnown: Set<string>;
 
   private keysFilled = new Set();
 
   private filledAllPool = new GuestPool(this);
 
-  public constructor() {
+  public constructor(initialKnownKeys: string[] = []) {
     this.theAll = new Source<Record<string, unknown>>({});
+    this.keysKnown = new Set(initialKnownKeys);
   }
 
   public valueArray(guest: GuestType<T>) {
@@ -61,22 +62,19 @@ export class GuestAwareAll<T> implements GuestAwareAllType<T> {
   public guestKey<R>(key: string): GuestObjectType<R> {
     this.keysKnown.add(key);
     return new Guest((value) => {
-      // Обернул в очередь чтобы можно было синхронно наполнить очередь известных ключей
-      queueMicrotask(() => {
-        this.theAll.value(
-          new Guest((all: Record<string, unknown>) => {
-            this.keysFilled.add(key);
-            const lastAll = {
-              ...all,
-              [key]: value,
-            };
-            this.theAll.give(lastAll);
-            if (this.isAllFilled()) {
-              this.filledAllPool.give(lastAll);
-            }
-          }),
-        );
-      });
+      this.theAll.value(
+        new Guest((all: Record<string, unknown>) => {
+          this.keysFilled.add(key);
+          const lastAll = {
+            ...all,
+            [key]: value,
+          };
+          this.theAll.give(lastAll);
+          if (this.isAllFilled()) {
+            this.filledAllPool.give(lastAll);
+          }
+        }),
+      );
     });
   }
 
