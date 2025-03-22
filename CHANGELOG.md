@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.44.0](https://github.com/kosukhin/patron/compare/v1.43.0...v1.44.0) (2025-03-22)
+
+
+### Features
+
+* **36-issue:** sourceOnce added ([b2c0178](https://github.com/kosukhin/patron/commit/b2c017881876ec059acd58b1c750b44a6f2f617f))
+
 ## [1.43.0](https://github.com/kosukhin/patron/compare/v1.42.1...v1.43.0) (2025-03-22)
 
 
