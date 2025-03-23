@@ -1,15 +1,10 @@
-import { GuestAwareSequence } from "./GuestAwareSequence";
-import { give } from "./Guest";
-import {
-  GuestAware,
-  GuestAwareObjectType,
-  GuestAwareType,
-  value,
-} from "./GuestAware";
-import { GuestCast } from "./GuestCast";
-import { GuestType } from "./Guest";
+import { SourceSequence } from "./SourceSequence";
+import { give } from "../Guest/Guest";
+import { Source, SourceObjectType, SourceType, value } from "./Source";
+import { GuestCast } from "../Guest/GuestCast";
+import { GuestType } from "../Guest/Guest";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { Source } from "../Source/Source";
+import { SourceWithPool } from "./SourceWithPool";
 import { PrivateClass } from "../Private/PrivateClass";
 import { wait } from "../../test-utils/wait";
 
@@ -22,8 +17,8 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-class X2 implements GuestAwareObjectType<number> {
-  public constructor(private baseNumber: GuestAwareType<number>) {}
+class X2 implements SourceObjectType<number> {
+  public constructor(private baseNumber: SourceType<number>) {}
 
   public value(guest: GuestType<number>) {
     value(
@@ -36,16 +31,16 @@ class X2 implements GuestAwareObjectType<number> {
   }
 }
 
-test("GuestAwareSequence.defered.test", async () => {
-  const guestAwareOf = (val: number) =>
-    new GuestAware((guest) => {
+test("SourceSequence.defered.test", async () => {
+  const sourceOf = (val: number) =>
+    new Source((guest) => {
       setTimeout(() => {
         give(val, guest);
       }, 10);
     });
-  const source = new Source([1, 2, 3, 9].map(guestAwareOf));
+  const source = new SourceWithPool([1, 2, 3, 9].map(sourceOf));
 
-  const sequence = new GuestAwareSequence(source, new PrivateClass(X2));
+  const sequence = new SourceSequence(source, new PrivateClass(X2));
 
   const callFn = vi.fn();
   sequence.value((v) => {

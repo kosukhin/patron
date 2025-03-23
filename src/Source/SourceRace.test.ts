@@ -1,6 +1,6 @@
-import { GuestAwareRace } from "./GuestAwareRace";
+import { SourceWithPool } from "../Source/SourceWithPool";
+import { SourceRace } from "./SourceRace";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { SourceEmpty } from "../Source/SourceEmpty";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -10,9 +10,9 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-test("GuestAwareRace.test", async () => {
+test("SourceRace.test", async () => {
   const sBuild = (result: number, delay: number) => {
-    const s = new SourceEmpty();
+    const s = new SourceWithPool();
 
     setTimeout(() => {
       s.give(result);
@@ -24,7 +24,7 @@ test("GuestAwareRace.test", async () => {
   const s2 = sBuild(2, 100);
   const s1 = sBuild(1, 200);
 
-  const sAny = new GuestAwareRace([s1, s2]);
+  const sAny = new SourceRace([s1, s2]);
 
   await vi.advanceTimersByTime(201);
 

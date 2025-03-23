@@ -1,20 +1,20 @@
-import { GuestAwareObjectType } from "./GuestAware";
-import { Source } from "../Source/Source";
-import { Guest, GuestObjectType, GuestType } from "./Guest";
-import { GuestCast } from "./GuestCast";
-import { GuestObject } from "./GuestObject";
-import { GuestPool } from "./GuestPool";
+import { SourceObjectType } from "./Source";
+import { SourceWithPool } from "./SourceWithPool";
+import { Guest, GuestObjectType, GuestType } from "../Guest/Guest";
+import { GuestCast } from "../Guest/GuestCast";
+import { GuestObject } from "../Guest/GuestObject";
+import { GuestPool } from "../Guest/GuestPool";
 
-export interface GuestAwareAllType<T = any> extends GuestAwareObjectType<T> {
+export interface SourceAllType<T = any> extends SourceObjectType<T> {
   valueArray(guest: GuestObjectType<T>): this;
   guestKey<R>(key: string): GuestObjectType<R>;
 }
 
 /**
- * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-all
+ * @url https://kosukhin.github.io/patron.site/#/guest/source-all
  */
-export class GuestAwareAll<T> implements GuestAwareAllType<T> {
-  private theAll: Source<Record<string, unknown>>;
+export class SourceAll<T> implements SourceAllType<T> {
+  private theAll: SourceWithPool<Record<string, unknown>>;
 
   private keysKnown: Set<string>;
 
@@ -23,7 +23,7 @@ export class GuestAwareAll<T> implements GuestAwareAllType<T> {
   private filledAllPool = new GuestPool(this);
 
   public constructor(initialKnownKeys: string[] = []) {
-    this.theAll = new Source<Record<string, unknown>>({});
+    this.theAll = new SourceWithPool<Record<string, unknown>>({});
     this.keysKnown = new Set(initialKnownKeys);
   }
 

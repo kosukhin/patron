@@ -1,12 +1,12 @@
 import { expect, test } from "vitest";
-import { GuestAwareAll } from "./GuestAwareAll";
-import { Source } from "../Source/Source";
+import { SourceAll } from "./SourceAll";
+import { SourceWithPool } from "./SourceWithPool";
 import { Patron } from "../Patron/Patron";
 
-test("GuestAwareAll._asArray.test", () => {
-  const one = new Source(1);
-  const two = new Source(2);
-  const all = new GuestAwareAll<[number, number]>();
+test("SourceAll._asArray.test", () => {
+  const one = new SourceWithPool(1);
+  const two = new SourceWithPool(2);
+  const all = new SourceAll<[number, number]>();
 
   one.value(new Patron(all.guestKey("0")));
   two.value(new Patron(all.guestKey("1")));

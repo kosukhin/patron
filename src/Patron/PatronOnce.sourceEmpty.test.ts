@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { PatronOnce } from "./PatronOnce";
-import { SourceEmpty } from "../Source/SourceEmpty";
+import { SourceWithPool } from "../Source/SourceWithPool";
 
 beforeEach(() => {
   vi.useFakeTimers({ shouldAdvanceTime: true });
@@ -19,7 +19,7 @@ const wait = (ms: number) =>
   });
 
 test("PatronOnce.sourceEmpty.test", async () => {
-  const source = new SourceEmpty();
+  const source = new SourceWithPool();
   let calls = 0;
   const patron = new PatronOnce(() => {
     calls += 1;

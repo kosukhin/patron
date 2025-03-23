@@ -1,10 +1,10 @@
 import { GuestDisposable } from "./GuestDisposable";
 import { Patron } from "../Patron/Patron";
-import { Source } from "../Source/Source";
+import { SourceWithPool } from "../Source/SourceWithPool";
 import { expect, test } from "vitest";
 
 test("GuestDisposable.test", () => {
-  const source = new Source(1);
+  const source = new SourceWithPool(1);
 
   // Работает проверка один раз, потом патром себя удаляет
   source.value(

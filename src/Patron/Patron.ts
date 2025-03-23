@@ -1,5 +1,5 @@
+import { give, GuestType } from "../Guest/Guest";
 import { GuestDisposableType } from "../Guest/GuestDisposable";
-import { give, GiveOptions, GuestType } from "../Guest/Guest";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/patron
@@ -15,8 +15,8 @@ export class Patron<T> implements GuestDisposableType<T> {
     return "patron" as const;
   }
 
-  public give(value: T, options?: GiveOptions): this {
-    give(value, this.willBePatron, options);
+  public give(value: T): this {
+    give(value, this.willBePatron);
     return this;
   }
 
@@ -25,3 +25,11 @@ export class Patron<T> implements GuestDisposableType<T> {
     return maybeDisposable?.disposed?.(value) || false;
   }
 }
+
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/is-patron
+ */
+export const isPatron = (guest: GuestType): guest is Patron<unknown> =>
+  typeof guest === "object" &&
+  guest !== null &&
+  guest?.introduction?.() === "patron";

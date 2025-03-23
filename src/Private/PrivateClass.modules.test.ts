@@ -1,15 +1,15 @@
 import { PrivateClass } from "./PrivateClass";
 import { GuestType } from "../Guest/Guest";
-import { Source, SourceType } from "../Source/Source";
+import { SourceWithPool, SourceWithPoolType } from "../Source/SourceWithPool";
 import { expect, test } from "vitest";
 import { PrivateType } from "./Private";
 
 class TestClass {
-  private source: SourceType;
+  private source: SourceWithPoolType;
 
   public constructor(
     baseNum: number,
-    modules: { main: PrivateType<SourceType> },
+    modules: { main: PrivateType<SourceWithPoolType> },
   ) {
     this.source = modules.main.get(baseNum + 55);
   }
@@ -21,7 +21,7 @@ class TestClass {
 }
 
 test("PrivateClass.modules.test", () => {
-  const main = new PrivateClass(Source);
+  const main = new PrivateClass(SourceWithPool);
   const testSource = new PrivateClass(TestClass, {
     main,
   });

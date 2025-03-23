@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
-import { Source } from "../Source/Source";
+import { SourceWithPool } from "../Source/SourceWithPool";
 import { GuestObject } from "./GuestObject";
 
 test("GuestObject.test", () => {
-  const source = new Source(1);
+  const source = new SourceWithPool(1);
   const fnGuest = (value: number) => {
     expect(value).toBe(1);
   };

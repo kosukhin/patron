@@ -1,21 +1,16 @@
-import { PatronPool } from "../Patron/PatronPool";
 import { GuestType } from "../Guest/Guest";
-import { value } from "../Guest/GuestAware";
-import { SourceType } from "../Source/Source";
-import { SourceEmpty } from "../Source/SourceEmpty";
+import { PatronPool } from "../Patron/PatronPool";
+import { value } from "./Source";
+import { SourceWithPool, SourceWithPoolType } from "./SourceWithPool";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/source/source-once
  */
-export class SourceOnce<T> implements SourceType<T> {
-  private source = new SourceEmpty<T>();
-  private isFilled = false;
+export class SourceOnce<T> implements SourceWithPoolType<T> {
+  private source: SourceWithPool<T>;
 
   public constructor(initialValue?: T) {
-    if (initialValue !== undefined) {
-      this.isFilled = true;
-      this.source.give(initialValue);
-    }
+    this.source = new SourceWithPool(initialValue);
   }
 
   public value(guest: GuestType<T>) {
@@ -24,8 +19,7 @@ export class SourceOnce<T> implements SourceType<T> {
   }
 
   public give(value: T): this {
-    if (!this.isFilled) {
-      this.isFilled = true;
+    if (!this.source.filled()) {
       this.source.give(value);
     }
     return this;

@@ -1,5 +1,5 @@
+import { Guest, GuestType } from "./Guest";
 import { GuestDisposableType, MaybeDisposableType } from "./GuestDisposable";
-import { GiveOptions, Guest, GuestType } from "./Guest";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-object
@@ -11,12 +11,12 @@ export class GuestObject<T> implements GuestDisposableType<T> {
     }
   }
 
-  public give(value: T, options?: GiveOptions): this {
+  public give(value: T): this {
     let guest = this.baseGuest;
     if (typeof guest === "function") {
       guest = new Guest(guest);
     }
-    guest.give(value, options);
+    guest.give(value);
     return this;
   }
 

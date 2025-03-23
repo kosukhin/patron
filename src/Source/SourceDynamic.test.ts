@@ -1,7 +1,7 @@
 import { SourceDynamic } from "./SourceDynamic";
 import { expect, test } from "vitest";
 import { give, Guest } from "../Guest/Guest";
-import { GuestAware } from "../Guest/GuestAware";
+import { Source } from "./Source";
 
 test("SourceDynamic", () => {
   let theValue = 1;
@@ -9,7 +9,7 @@ test("SourceDynamic", () => {
     new Guest((value: number) => {
       theValue = value;
     }),
-    new GuestAware((guest) => {
+    new Source((guest) => {
       give(theValue, guest);
     }),
   );

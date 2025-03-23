@@ -1,7 +1,20 @@
+import { give, GuestObjectType, GuestType } from "../Guest/Guest";
 import { GuestDisposableType } from "../Guest/GuestDisposable";
-import { give, GuestObjectType, GuestType, GiveOptions } from "../Guest/Guest";
 
 const poolSets = new Map<PoolType, Set<GuestObjectType>>();
+
+/**
+ * @url https://kosukhin.github.io/patron.site/#/utils/patron-pools
+ */
+export const patronPools = (patron: GuestObjectType) => {
+  const pools: PoolType[] = [];
+  poolSets.forEach((pool, poolInstance) => {
+    if (pool.has(patron)) {
+      pools.push(poolInstance);
+    }
+  });
+  return pools;
+};
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/utils/remove-patron-from-pools
@@ -44,25 +57,18 @@ export interface PoolType<T = any> extends GuestObjectType<T> {
 export class PatronPool<T> implements PoolType<T> {
   private patrons: Set<GuestObjectType<T>>;
 
-  public give: (value: T, options?: GiveOptions) => this;
+  public give: (value: T) => this;
 
   public constructor(private initiator: unknown) {
     this.patrons = new Set<GuestObjectType<T>>();
     poolSets.set(this, this.patrons);
-    let lastMicrotask: (() => void) | null = null;
-    const doReceive = (value: T, options?: GiveOptions) => {
+    const doReceive = (value: T) => {
       this.patrons.forEach((target) => {
-        this.sendValueToGuest(value, target, options);
+        this.sendValueToGuest(value, target);
       });
     };
-    this.give = (value: T, options?: GiveOptions) => {
-      const currentMicroTask = () => {
-        if (currentMicroTask === lastMicrotask) {
-          doReceive(value, options);
-        }
-      };
-      lastMicrotask = currentMicroTask;
-      queueMicrotask(currentMicroTask);
+    this.give = (value: T) => {
+      doReceive(value);
       return this;
     };
   }
@@ -92,26 +98,15 @@ export class PatronPool<T> implements PoolType<T> {
 
   public distribute(receiving: T, possiblePatron: GuestType<T>): this {
     this.add(possiblePatron);
-    this.sendValueToGuest(receiving, possiblePatron, {});
+    this.sendValueToGuest(receiving, possiblePatron);
     return this;
   }
 
-  private sendValueToGuest(
-    value: T,
-    guest: GuestType<T>,
-    options?: GiveOptions,
-  ) {
+  private sendValueToGuest(value: T, guest: GuestType<T>) {
     const isDisposed = this.guestDisposed(value, guest);
 
     if (!isDisposed) {
-      give(value, guest, {
-        ...options,
-        data: {
-          ...((options?.data as Record<string, unknown>) ?? {}),
-          initiator: this.initiator,
-          pool: this,
-        },
-      });
+      give(value, guest);
     }
   }
 

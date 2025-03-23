@@ -1,10 +1,13 @@
 import { expect, test } from "vitest";
 import { Source } from "./Source";
+import { give } from "../Guest/Guest";
 
 test("Source.test", () => {
-  const source = new Source(42);
+  const aware = new Source((guest) => {
+    give(111, guest);
+  });
 
-  source.value((value) => {
-    expect(value).toBe(42);
+  aware.value((value) => {
+    expect(value).toBe(111);
   });
 });

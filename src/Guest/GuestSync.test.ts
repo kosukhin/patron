@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
 import { GuestSync } from "./GuestSync";
-import { Source } from "../Source/Source";
+import { SourceWithPool } from "../Source/SourceWithPool";
 
 test("GuestSync.test", () => {
-  const source = new Source(123);
+  const source = new SourceWithPool(123);
   const syncGuest = new GuestSync(111);
   syncGuest.give(222);
   expect(syncGuest.value()).toBe(222);

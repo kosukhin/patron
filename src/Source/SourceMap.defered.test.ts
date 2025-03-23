@@ -1,11 +1,11 @@
-import { wait } from "./../../test-utils/wait";
+import { wait } from "../../test-utils/wait";
 import { Private } from "../Private/Private";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { Source } from "../Source/Source";
-import { give, GuestType } from "./Guest";
-import { GuestAware, GuestAwareType, value } from "./GuestAware";
-import { GuestAwareMap } from "./GuestAwareMap";
-import { GuestCast } from "./GuestCast";
+import { SourceWithPool } from "./SourceWithPool";
+import { give, GuestType } from "../Guest/Guest";
+import { Source, SourceType, value } from "./Source";
+import { SourceMap } from "./SourceMap";
+import { GuestCast } from "../Guest/GuestCast";
 
 beforeEach(() => {
   vi.useFakeTimers({ shouldAdvanceTime: true });
@@ -16,7 +16,7 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-function x2(baseNumber: GuestAwareType<number>) {
+function x2(baseNumber: SourceType<number>) {
   return (guest: GuestType<number>) => {
     value(
       baseNumber,
@@ -28,14 +28,14 @@ function x2(baseNumber: GuestAwareType<number>) {
   };
 }
 
-test("GuestAwareMap.defered.test", async () => {
-  const guestAwareOf = (val: number) =>
-    new GuestAware(async (guest) => {
+test("SourceMap.defered.test", async () => {
+  const sourceOf = (val: number) =>
+    new Source(async (guest) => {
       await wait(5);
       give(val, guest);
     });
-  const source = new Source([1, 2, 3, 9].map(guestAwareOf));
-  const guestMapped = new GuestAwareMap(source, new Private(x2));
+  const source = new SourceWithPool([1, 2, 3, 9].map(sourceOf));
+  const guestMapped = new SourceMap(source, new Private(x2));
   const callFn = vi.fn();
   guestMapped.value((v) => {
     expect(v.join()).toBe("2,4,6,18");

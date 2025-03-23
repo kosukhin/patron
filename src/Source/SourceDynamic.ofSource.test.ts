@@ -1,9 +1,9 @@
 import { SourceDynamic } from "./SourceDynamic";
-import { Source } from "./Source";
+import { SourceWithPool } from "./SourceWithPool";
 import { expect, test } from "vitest";
 
 test("SourceDynamic.ofSource.test", () => {
-  const source = new Source(1);
+  const source = new SourceWithPool(1);
   const sourceDynamic = new SourceDynamic(source, source);
 
   sourceDynamic.value((value) => {
