@@ -1,36 +1,4 @@
-function value(guestAware, guest) {
-  if (guestAware === void 0) {
-    throw new Error("value didnt receive guestAware argument");
-  }
-  if (guest === void 0) {
-    throw new Error("value didnt receive guest argument");
-  }
-  if (typeof guestAware === "function") {
-    return guestAware(guest);
-  } else {
-    return guestAware.value(guest);
-  }
-}
-function isGuestAware(mbGuestAware) {
-  if (mbGuestAware === void 0) {
-    throw new Error("isGuestAware didnt receive mbGuestAware argument");
-  }
-  return typeof mbGuestAware === "function" || typeof mbGuestAware?.value === "function";
-}
-class GuestAware {
-  constructor(guestAware) {
-    this.guestAware = guestAware;
-    if (guestAware === void 0) {
-      throw new Error("GuestAware constructor didnt receive executor function");
-    }
-  }
-  value(guest) {
-    value(this.guestAware, guest);
-    return guest;
-  }
-}
-
-function give(data, guest, options) {
+function give(data, guest) {
   if (data === void 0) {
     throw new Error("give didnt receive data argument");
   }
@@ -38,9 +6,9 @@ function give(data, guest, options) {
     throw new Error("give didnt receive guest argument");
   }
   if (typeof guest === "function") {
-    guest(data, options);
+    guest(data);
   } else {
-    guest.give(data, options);
+    guest.give(data);
   }
 }
 function isGuest(mbGuest) {
@@ -56,39 +24,9 @@ class Guest {
       throw new Error("reseiver function was not passed to Guest constructor");
     }
   }
-  give(value, options) {
-    this.receiver(value, options);
+  give(value) {
+    this.receiver(value);
     return this;
-  }
-}
-
-var __defProp$6 = Object.defineProperty;
-var __defNormalProp$6 = (obj, key, value) => key in obj ? __defProp$6(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$6 = (obj, key, value) => __defNormalProp$6(obj, key + "" , value);
-class PatronOnce {
-  constructor(baseGuest) {
-    this.baseGuest = baseGuest;
-    __publicField$6(this, "received", false);
-    if (baseGuest === void 0) {
-      throw new Error("PatronOnce didnt receive baseGuest argument");
-    }
-  }
-  introduction() {
-    return "patron";
-  }
-  give(value, options) {
-    if (!this.received) {
-      this.received = true;
-      give(value, this.baseGuest, options);
-    }
-    return this;
-  }
-  disposed(value) {
-    if (this.received) {
-      return true;
-    }
-    const maybeDisposable = this.baseGuest;
-    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
   }
 }
 
@@ -112,14 +50,8 @@ class GuestCast {
     }
     return this.sourceGuest.introduction();
   }
-  give(value, options) {
-    give(value, this.targetGuest, {
-      ...options,
-      data: {
-        ...options?.data ?? {},
-        castedGuest: options?.data?.castedGuest ?? this
-      }
-    });
+  give(value) {
+    give(value, this.targetGuest);
     return this;
   }
   disposed(value) {
@@ -128,10 +60,19 @@ class GuestCast {
   }
 }
 
-var __defProp$5 = Object.defineProperty;
-var __defNormalProp$5 = (obj, key, value) => key in obj ? __defProp$5(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$5 = (obj, key, value) => __defNormalProp$5(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __defProp$6 = Object.defineProperty;
+var __defNormalProp$6 = (obj, key, value) => key in obj ? __defProp$6(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$6 = (obj, key, value) => __defNormalProp$6(obj, typeof key !== "symbol" ? key + "" : key, value);
 const poolSets = /* @__PURE__ */ new Map();
+const patronPools = (patron) => {
+  const pools = [];
+  poolSets.forEach((pool, poolInstance) => {
+    if (pool.has(patron)) {
+      pools.push(poolInstance);
+    }
+  });
+  return pools;
+};
 const removePatronFromPools = (patron) => {
   if (patron === void 0) {
     throw new Error("removePatronFromPools didnt receive patron argument");
@@ -155,24 +96,17 @@ const isPatronInPools = (patron) => {
 class PatronPool {
   constructor(initiator) {
     this.initiator = initiator;
-    __publicField$5(this, "patrons");
-    __publicField$5(this, "give");
+    __publicField$6(this, "patrons");
+    __publicField$6(this, "give");
     this.patrons = /* @__PURE__ */ new Set();
     poolSets.set(this, this.patrons);
-    let lastMicrotask = null;
-    const doReceive = (value, options) => {
+    const doReceive = (value) => {
       this.patrons.forEach((target) => {
-        this.sendValueToGuest(value, target, options);
+        this.sendValueToGuest(value, target);
       });
     };
-    this.give = (value, options) => {
-      const currentMicroTask = () => {
-        if (currentMicroTask === lastMicrotask) {
-          doReceive(value, options);
-        }
-      };
-      lastMicrotask = currentMicroTask;
-      queueMicrotask(currentMicroTask);
+    this.give = (value) => {
+      doReceive(value);
       return this;
     };
   }
@@ -194,20 +128,13 @@ class PatronPool {
   }
   distribute(receiving, possiblePatron) {
     this.add(possiblePatron);
-    this.sendValueToGuest(receiving, possiblePatron, {});
+    this.sendValueToGuest(receiving, possiblePatron);
     return this;
   }
-  sendValueToGuest(value, guest, options) {
+  sendValueToGuest(value, guest) {
     const isDisposed = this.guestDisposed(value, guest);
     if (!isDisposed) {
-      give(value, guest, {
-        ...options,
-        data: {
-          ...options?.data ?? {},
-          initiator: this.initiator,
-          pool: this
-        }
-      });
+      give(value, guest);
     }
   }
   guestDisposed(value, guest) {
@@ -219,100 +146,18 @@ class PatronPool {
   }
 }
 
-var __defProp$4 = Object.defineProperty;
-var __defNormalProp$4 = (obj, key, value) => key in obj ? __defProp$4(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$4 = (obj, key, value) => __defNormalProp$4(obj, key + "" , value);
-class Source {
-  constructor(sourceDocument) {
-    this.sourceDocument = sourceDocument;
-    __publicField$4(this, "thePool", new PatronPool(this));
-    if (sourceDocument === void 0) {
-      throw new Error("Source didnt receive sourceDocument argument");
-    }
-  }
-  pool() {
-    return this.thePool;
-  }
-  give(value) {
-    this.sourceDocument = value;
-    this.thePool.give(this.sourceDocument);
-    return this;
-  }
-  value(guest) {
-    if (typeof guest === "function") {
-      this.thePool.distribute(this.sourceDocument, new Guest(guest));
-    } else {
-      this.thePool.distribute(this.sourceDocument, guest);
-    }
-    return this;
-  }
-}
-
-var __defProp$3 = Object.defineProperty;
-var __defNormalProp$3 = (obj, key, value) => key in obj ? __defProp$3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$3 = (obj, key, value) => __defNormalProp$3(obj, key + "" , value);
-class SourceEmpty {
-  constructor() {
-    __publicField$3(this, "baseSource", new Source(null));
-  }
-  value(guest) {
-    this.baseSource.value(
-      new GuestCast(guest, (value, options) => {
-        if (value !== null) {
-          give(value, guest, options);
-        }
-      })
-    );
-    return this;
-  }
-  give(value) {
-    this.baseSource.give(value);
-    return this;
-  }
-  pool() {
-    return this.baseSource.pool();
-  }
-}
-
-class GuestObject {
-  constructor(baseGuest) {
-    this.baseGuest = baseGuest;
-    if (baseGuest === void 0) {
-      throw new Error("GuestObject didnt receive baseGuest argument");
-    }
-  }
-  give(value, options) {
-    let guest = this.baseGuest;
-    if (typeof guest === "function") {
-      guest = new Guest(guest);
-    }
-    guest.give(value, options);
-    return this;
-  }
-  introduction() {
-    if (typeof this.baseGuest === "function" || !this.baseGuest.introduction) {
-      return "guest";
-    }
-    return this.baseGuest.introduction();
-  }
-  disposed(value) {
-    const maybeDisposable = this.baseGuest;
-    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
-  }
-}
-
-var __defProp$2 = Object.defineProperty;
-var __defNormalProp$2 = (obj, key, value) => key in obj ? __defProp$2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$2 = (obj, key, value) => __defNormalProp$2(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __defProp$5 = Object.defineProperty;
+var __defNormalProp$5 = (obj, key, value) => key in obj ? __defProp$5(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$5 = (obj, key, value) => __defNormalProp$5(obj, typeof key !== "symbol" ? key + "" : key, value);
 class GuestPool {
   constructor(initiator) {
-    __publicField$2(this, "guests", /* @__PURE__ */ new Set());
-    __publicField$2(this, "patronPool");
+    __publicField$5(this, "guests", /* @__PURE__ */ new Set());
+    __publicField$5(this, "patronPool");
     this.patronPool = new PatronPool(initiator);
   }
-  give(value, options) {
-    this.deliverToGuests(value, options);
-    this.patronPool.give(value, options);
+  give(value) {
+    this.deliverToGuests(value);
+    this.patronPool.give(value);
     return this;
   }
   add(guest) {
@@ -335,24 +180,189 @@ class GuestPool {
   size() {
     return this.patronPool.size() + this.guests.size;
   }
-  deliverToGuests(value, options) {
+  deliverToGuests(value) {
     this.guests.forEach((target) => {
-      give(value, target, options);
+      give(value, target);
     });
     this.guests.clear();
   }
 }
 
-var __defProp$1 = Object.defineProperty;
-var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, typeof key !== "symbol" ? key + "" : key, value);
-class GuestAwareAll {
+class GuestSync {
+  constructor(theValue) {
+    this.theValue = theValue;
+    if (theValue === void 0) {
+      throw new Error("GuestSync didnt receive theValue argument");
+    }
+  }
+  give(value) {
+    this.theValue = value;
+    return this;
+  }
+  value() {
+    return this.theValue;
+  }
+}
+
+class GuestObject {
+  constructor(baseGuest) {
+    this.baseGuest = baseGuest;
+    if (baseGuest === void 0) {
+      throw new Error("GuestObject didnt receive baseGuest argument");
+    }
+  }
+  give(value) {
+    let guest = this.baseGuest;
+    if (typeof guest === "function") {
+      guest = new Guest(guest);
+    }
+    guest.give(value);
+    return this;
+  }
+  introduction() {
+    if (typeof this.baseGuest === "function" || !this.baseGuest.introduction) {
+      return "guest";
+    }
+    return this.baseGuest.introduction();
+  }
+  disposed(value) {
+    const maybeDisposable = this.baseGuest;
+    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
+  }
+}
+
+class GuestDisposable {
+  constructor(guest, disposeCheck) {
+    this.guest = guest;
+    this.disposeCheck = disposeCheck;
+    if (guest === void 0) {
+      throw new Error("GuestDisposable didnt receive guest argument");
+    }
+    if (disposeCheck === void 0) {
+      throw new Error("GuestDisposable didnt receive disposeCheck argument");
+    }
+  }
+  disposed(value) {
+    return this.disposeCheck(value);
+  }
+  give(value) {
+    give(value, this.guest);
+    return this;
+  }
+}
+
+class GuestApplied {
+  constructor(baseGuest, applier) {
+    this.baseGuest = baseGuest;
+    this.applier = applier;
+  }
+  give(value) {
+    give(this.applier(value), this.baseGuest);
+    return this;
+  }
+}
+
+class Patron {
+  constructor(willBePatron) {
+    this.willBePatron = willBePatron;
+    if (willBePatron === void 0) {
+      throw new Error("Patron didnt receive willBePatron argument");
+    }
+  }
+  introduction() {
+    return "patron";
+  }
+  give(value) {
+    give(value, this.willBePatron);
+    return this;
+  }
+  disposed(value) {
+    const maybeDisposable = this.willBePatron;
+    return maybeDisposable?.disposed?.(value) || false;
+  }
+}
+const isPatron = (guest) => typeof guest === "object" && guest !== null && guest?.introduction?.() === "patron";
+
+var __defProp$4 = Object.defineProperty;
+var __defNormalProp$4 = (obj, key, value) => key in obj ? __defProp$4(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$4 = (obj, key, value) => __defNormalProp$4(obj, key + "" , value);
+class PatronOnce {
+  constructor(baseGuest) {
+    this.baseGuest = baseGuest;
+    __publicField$4(this, "received", false);
+    if (baseGuest === void 0) {
+      throw new Error("PatronOnce didnt receive baseGuest argument");
+    }
+  }
+  introduction() {
+    return "patron";
+  }
+  give(value) {
+    if (!this.received) {
+      this.received = true;
+      give(value, this.baseGuest);
+    }
+    return this;
+  }
+  disposed(value) {
+    if (this.received) {
+      return true;
+    }
+    const maybeDisposable = this.baseGuest;
+    return maybeDisposable.disposed ? maybeDisposable.disposed(value) : false;
+  }
+}
+
+var __defProp$3 = Object.defineProperty;
+var __defNormalProp$3 = (obj, key, value) => key in obj ? __defProp$3(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$3 = (obj, key, value) => __defNormalProp$3(obj, typeof key !== "symbol" ? key + "" : key, value);
+class SourceWithPool {
+  constructor(sourceDocument) {
+    this.sourceDocument = sourceDocument;
+    __publicField$3(this, "thePool", new PatronPool(this));
+    __publicField$3(this, "theEmptyPool", new PatronPool(this));
+    __publicField$3(this, "isEmpty");
+    this.isEmpty = sourceDocument === void 0;
+  }
+  pool() {
+    return this.thePool;
+  }
+  give(value) {
+    this.isEmpty = false;
+    this.sourceDocument = value;
+    this.thePool.give(this.sourceDocument);
+    this.theEmptyPool.give(this.sourceDocument);
+    return this;
+  }
+  value(guest) {
+    if (this.isEmpty) {
+      if (isPatron(guest)) {
+        this.theEmptyPool.add(guest);
+      }
+      return this;
+    }
+    if (typeof guest === "function") {
+      this.thePool.distribute(this.sourceDocument, new Guest(guest));
+    } else {
+      this.thePool.distribute(this.sourceDocument, guest);
+    }
+    return this;
+  }
+  filled() {
+    return !this.isEmpty;
+  }
+}
+
+var __defProp$2 = Object.defineProperty;
+var __defNormalProp$2 = (obj, key, value) => key in obj ? __defProp$2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$2 = (obj, key, value) => __defNormalProp$2(obj, typeof key !== "symbol" ? key + "" : key, value);
+class SourceAll {
   constructor(initialKnownKeys = []) {
-    __publicField$1(this, "theAll");
-    __publicField$1(this, "keysKnown");
-    __publicField$1(this, "keysFilled", /* @__PURE__ */ new Set());
-    __publicField$1(this, "filledAllPool", new GuestPool(this));
-    this.theAll = new Source({});
+    __publicField$2(this, "theAll");
+    __publicField$2(this, "keysKnown");
+    __publicField$2(this, "keysFilled", /* @__PURE__ */ new Set());
+    __publicField$2(this, "filledAllPool", new GuestPool(this));
+    this.theAll = new SourceWithPool({});
     this.keysKnown = new Set(initialKnownKeys);
   }
   valueArray(guest) {
@@ -408,20 +418,53 @@ class GuestAwareAll {
   }
 }
 
-class GuestAwareSequence {
+function value(source, guest) {
+  if (source === void 0) {
+    throw new Error("value didnt receive source argument");
+  }
+  if (guest === void 0) {
+    throw new Error("value didnt receive guest argument");
+  }
+  if (typeof source === "function") {
+    return source(guest);
+  } else {
+    return source.value(guest);
+  }
+}
+function isSource(mbSource) {
+  if (mbSource === void 0) {
+    throw new Error("isSource didnt receive mbSource argument");
+  }
+  return typeof mbSource === "function" || typeof mbSource?.value === "function";
+}
+class Source {
+  constructor(source) {
+    this.source = source;
+    if (source === void 0) {
+      throw new Error("Source constructor didnt receive executor function");
+    }
+  }
+  value(guest) {
+    value(this.source, guest);
+    return guest;
+  }
+}
+const sourceOf = (value2) => new Source((g) => give(value2, g));
+
+class SourceSequence {
   constructor(baseSource, targetSource) {
     this.baseSource = baseSource;
     this.targetSource = targetSource;
     if (baseSource === void 0) {
-      throw new Error("GuestAwareSequence didnt receive baseSource argument");
+      throw new Error("SourceSequence didnt receive baseSource argument");
     }
     if (targetSource === void 0) {
-      throw new Error("GuestAwareSequence didnt receive targetSource argument");
+      throw new Error("SourceSequence didnt receive targetSource argument");
     }
   }
   value(guest) {
-    const all = new GuestAwareAll();
-    const sequenceSource = new SourceEmpty();
+    const all = new SourceAll();
+    const sequenceSource = new SourceWithPool();
     const targetSource = this.targetSource.get(sequenceSource);
     value(
       this.baseSource,
@@ -438,7 +481,7 @@ class GuestAwareSequence {
         function handle() {
           sequenceSource.give(null);
           const nextValue = theValue[index];
-          if (isGuestAware(nextValue)) {
+          if (isSource(nextValue)) {
             value(
               nextValue,
               new PatronOnce((theNextValue) => {
@@ -464,24 +507,24 @@ class GuestAwareSequence {
   }
 }
 
-class GuestAwareMap {
+class SourceMap {
   constructor(baseSource, targetSource) {
     this.baseSource = baseSource;
     this.targetSource = targetSource;
     if (baseSource === void 0) {
-      throw new Error("GuestAwareMap didnt receive baseSource argument");
+      throw new Error("SourceMap didnt receive baseSource argument");
     }
     if (targetSource === void 0) {
-      throw new Error("GuestAwareMap didnt receive targetSource argument");
+      throw new Error("SourceMap didnt receive targetSource argument");
     }
   }
   value(guest) {
-    const all = new GuestAwareAll();
+    const all = new SourceAll();
     value(
       this.baseSource,
       new GuestCast(guest, (theValue) => {
         theValue.forEach((val, index) => {
-          const valueSource = isGuestAware(val) ? val : new GuestAware((innerGuest) => {
+          const valueSource = isSource(val) ? val : new Source((innerGuest) => {
             give(val, innerGuest);
           });
           const targetSource = this.targetSource.get(valueSource);
@@ -494,22 +537,22 @@ class GuestAwareMap {
   }
 }
 
-class GuestAwareRace {
-  constructor(guestAwares) {
-    this.guestAwares = guestAwares;
-    if (guestAwares === void 0) {
-      throw new Error("GuestAwareRace didnt receive guestAwares argument");
+class SourceRace {
+  constructor(sources) {
+    this.sources = sources;
+    if (sources === void 0) {
+      throw new Error("SourceRace didnt receive sources argument");
     }
   }
   value(guest) {
-    let connectedWithGuestAware = null;
-    this.guestAwares.forEach((guestAware) => {
+    let connectedWithSource = null;
+    this.sources.forEach((source) => {
       value(
-        guestAware,
+        source,
         new GuestCast(guest, (value2) => {
-          if (!connectedWithGuestAware || connectedWithGuestAware === guestAware) {
+          if (!connectedWithSource || connectedWithSource === source) {
             give(value2, guest);
-            connectedWithGuestAware = guestAware;
+            connectedWithSource = source;
           }
         })
       );
@@ -518,16 +561,16 @@ class GuestAwareRace {
   }
 }
 
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => __defNormalProp(obj, key + "" , value);
-class GuestAwareActive {
+var __defProp$1 = Object.defineProperty;
+var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$1 = (obj, key, value) => __defNormalProp$1(obj, key + "" , value);
+class SourceActive {
   constructor(configExecutor) {
     this.configExecutor = configExecutor;
-    __publicField(this, "source", new SourceEmpty());
+    __publicField$1(this, "source", new SourceWithPool());
     if (configExecutor === void 0) {
       throw new Error(
-        "GuestAwareActive constructor didnt receive executor function"
+        "SourceActive constructor didnt receive executor function"
       );
     }
   }
@@ -541,75 +584,19 @@ class GuestAwareActive {
   }
 }
 
-class GuestSync {
-  constructor(theValue) {
-    this.theValue = theValue;
-    if (theValue === void 0) {
-      throw new Error("GuestSync didnt receive theValue argument");
-    }
-  }
-  give(value) {
-    this.theValue = value;
-    return this;
-  }
-  value() {
-    return this.theValue;
-  }
-}
-
-class GuestDisposable {
-  constructor(guest, disposeCheck) {
-    this.guest = guest;
-    this.disposeCheck = disposeCheck;
-    if (guest === void 0) {
-      throw new Error("GuestDisposable didnt receive guest argument");
-    }
-    if (disposeCheck === void 0) {
-      throw new Error("GuestDisposable didnt receive disposeCheck argument");
-    }
-  }
-  disposed(value) {
-    return this.disposeCheck(value);
-  }
-  give(value, options) {
-    give(value, this.guest, options);
-    return this;
-  }
-}
-
-class Patron {
-  constructor(willBePatron) {
-    this.willBePatron = willBePatron;
-    if (willBePatron === void 0) {
-      throw new Error("Patron didnt receive willBePatron argument");
-    }
-  }
-  introduction() {
-    return "patron";
-  }
-  give(value, options) {
-    give(value, this.willBePatron, options);
-    return this;
-  }
-  disposed(value) {
-    const maybeDisposable = this.willBePatron;
-    return maybeDisposable?.disposed?.(value) || false;
-  }
-}
-
 class SourceDynamic {
-  constructor(baseGuest, baseGuestAware) {
+  constructor(baseGuest, baseSource) {
     this.baseGuest = baseGuest;
-    this.baseGuestAware = baseGuestAware;
+    this.baseSource = baseSource;
     if (baseGuest === void 0) {
       throw new Error("SourceDynamic didnt receive baseGuest argument");
     }
-    if (baseGuestAware === void 0) {
-      throw new Error("SourceDynamic didnt receive baseGuestAware argument");
+    if (baseSource === void 0) {
+      throw new Error("SourceDynamic didnt receive baseSource argument");
     }
   }
   value(guest) {
-    value(this.baseGuestAware, guest);
+    value(this.baseSource, guest);
     return this;
   }
   give(value2) {
@@ -618,6 +605,34 @@ class SourceDynamic {
   }
   pool() {
     throw Error("No pool in SourceDynamic");
+  }
+}
+
+class SourceApplied {
+  constructor(baseSource, applier) {
+    this.baseSource = baseSource;
+    this.applier = applier;
+  }
+  value(g) {
+    value(
+      this.baseSource,
+      new GuestCast(g, (v) => {
+        give(this.applier(v), g);
+      })
+    );
+    return this;
+  }
+}
+
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value2) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value: value2 }) : obj[key] = value2;
+var __publicField = (obj, key, value2) => __defNormalProp(obj, key + "" , value2);
+class SourceExecutorApplied {
+  constructor(source, applier) {
+    __publicField(this, "value");
+    this.value = applier((g) => {
+      value(source, g);
+    });
   }
 }
 
@@ -649,5 +664,5 @@ class Private {
   }
 }
 
-export { Guest, GuestAware, GuestAwareActive, GuestAwareAll, GuestAwareMap, GuestAwareRace, GuestAwareSequence, GuestCast, GuestDisposable, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Private, PrivateClass, Source, SourceDynamic, SourceEmpty, give, isGuest, isGuestAware, isPatronInPools, removePatronFromPools, value };
+export { Guest, GuestApplied, GuestCast, GuestDisposable, GuestObject, GuestPool, GuestSync, Patron, PatronOnce, PatronPool, Private, PrivateClass, Source, SourceActive, SourceAll, SourceApplied, SourceDynamic, SourceExecutorApplied, SourceMap, SourceRace, SourceSequence, SourceWithPool, give, isGuest, isPatron, isPatronInPools, isSource, patronPools, removePatronFromPools, sourceOf, value };
 //# sourceMappingURL=patron.js.map
