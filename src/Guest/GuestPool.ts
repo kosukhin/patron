@@ -1,6 +1,5 @@
-import { PatronPool } from "../Patron/PatronPool";
-import { PoolType } from "../Patron/PatronPool";
-import { give, GuestObjectType, GuestType, GiveOptions } from "./Guest";
+import { PatronPool, PoolType } from "../Patron/PatronPool";
+import { give, GuestObjectType, GuestType } from "./Guest";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/guest/guest-pool
@@ -14,9 +13,9 @@ export class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
     this.patronPool = new PatronPool(initiator);
   }
 
-  public give(value: T, options?: GiveOptions): this {
-    this.deliverToGuests(value, options);
-    this.patronPool.give(value, options);
+  public give(value: T): this {
+    this.deliverToGuests(value);
+    this.patronPool.give(value);
     return this;
   }
 
@@ -48,9 +47,9 @@ export class GuestPool<T> implements GuestObjectType<T>, PoolType<T> {
     return this.patronPool.size() + this.guests.size;
   }
 
-  private deliverToGuests(value: T, options?: GiveOptions) {
+  private deliverToGuests(value: T) {
     this.guests.forEach((target) => {
-      give(value, target, options);
+      give(value, target);
     });
     this.guests.clear();
   }

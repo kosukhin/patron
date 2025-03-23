@@ -1,35 +1,30 @@
+import { SourceWithPool } from "../Source/SourceWithPool";
+import { give, GuestType } from "../Guest/Guest";
+import { GuestCast } from "../Guest/GuestCast";
 import { PatronOnce } from "../Patron/PatronOnce";
 import { PrivateType } from "../Private/Private";
-import { SourceEmpty } from "../Source/SourceEmpty";
-import { give, GuestType } from "./Guest";
-import {
-  GuestAwareObjectType,
-  GuestAwareType,
-  isGuestAware,
-  value,
-} from "./GuestAware";
-import { GuestAwareAll } from "./GuestAwareAll";
-import { GuestCast } from "./GuestCast";
+import { isSource, SourceObjectType, SourceType, value } from "./Source";
+import { SourceAll } from "./SourceAll";
 
 /**
- * @url https://kosukhin.github.io/patron.site/#/guest/guest-aware-sequence
+ * @url https://kosukhin.github.io/patron.site/#/guest/source-sequence
  */
-export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
+export class SourceSequence<T, TG> implements SourceObjectType<TG[]> {
   public constructor(
-    private baseSource: GuestAwareType<T[]>,
-    private targetSource: PrivateType<GuestAwareType<TG>>,
+    private baseSource: SourceType<T[]>,
+    private targetSource: PrivateType<SourceType<TG>>,
   ) {
     if (baseSource === undefined) {
-      throw new Error("GuestAwareSequence didnt receive baseSource argument");
+      throw new Error("SourceSequence didnt receive baseSource argument");
     }
     if (targetSource === undefined) {
-      throw new Error("GuestAwareSequence didnt receive targetSource argument");
+      throw new Error("SourceSequence didnt receive targetSource argument");
     }
   }
 
   public value(guest: GuestType<TG[]>) {
-    const all = new GuestAwareAll<TG[]>();
-    const sequenceSource = new SourceEmpty();
+    const all = new SourceAll<TG[]>();
+    const sequenceSource = new SourceWithPool();
     const targetSource = this.targetSource.get(sequenceSource);
 
     value(
@@ -49,7 +44,7 @@ export class GuestAwareSequence<T, TG> implements GuestAwareObjectType<TG[]> {
         function handle() {
           sequenceSource.give(null);
           const nextValue = theValue[index];
-          if (isGuestAware(nextValue)) {
+          if (isSource(nextValue)) {
             value(
               nextValue,
               new PatronOnce((theNextValue) => {

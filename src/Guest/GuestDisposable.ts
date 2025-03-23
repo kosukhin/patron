@@ -1,4 +1,4 @@
-import { give, GiveOptions, GuestObjectType, GuestType } from "./Guest";
+import { give, GuestObjectType, GuestType } from "./Guest";
 
 export interface GuestDisposableType<T = any> extends GuestObjectType<T> {
   disposed(value: T | null): boolean;
@@ -26,8 +26,8 @@ export class GuestDisposable<T> implements GuestDisposableType<T> {
     return this.disposeCheck(value);
   }
 
-  public give(value: T, options?: GiveOptions): this {
-    give(value, this.guest, options);
+  public give(value: T): this {
+    give(value, this.guest);
     return this;
   }
 }

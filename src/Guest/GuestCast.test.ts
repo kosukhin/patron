@@ -1,17 +1,18 @@
-import { SourceEmpty } from "../Source/SourceEmpty";
 import { expect, test } from "vitest";
 import { Patron } from "../Patron/Patron";
 import { give, Guest } from "./Guest";
 import { GuestCast } from "./GuestCast";
+import { SourceWithPool } from "../Source/SourceWithPool";
 
 test("GuestCast.test", () => {
-  const source = new SourceEmpty();
+  const source = new SourceWithPool();
   let acc = 0;
   const mainGuest = new Patron(
     new Guest((value: number) => {
       acc += value;
     }),
   );
+
   // Становится патроном тоже, тк наследует это сойство от mainGuest
   const secondGuest = new GuestCast(
     mainGuest,
@@ -25,7 +26,5 @@ test("GuestCast.test", () => {
 
   give(2, source);
 
-  setTimeout(() => {
-    expect(acc).toBe(4);
-  });
+  expect(acc).toBe(4);
 });

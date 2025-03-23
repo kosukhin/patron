@@ -1,10 +1,14 @@
-import { expect, test } from "vitest";
+import { expect, test, vitest } from "vitest";
 import { Source } from "./Source";
+import { give } from "../Guest/Guest";
 
 test("Source.test", () => {
-  const source = new Source(42);
-
-  source.value((value) => {
-    expect(value).toBe(42);
+  const aware = new Source((guest) => {
+    give(111, guest);
   });
+
+  const guest = vitest.fn();
+  aware.value(guest);
+
+  expect(guest).toBeCalledWith(111);
 });

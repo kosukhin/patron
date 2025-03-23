@@ -1,26 +1,26 @@
 import { give, GuestType } from "../Guest/Guest";
-import { GuestAwareType, value } from "../Guest/GuestAware";
+import { SourceType, value } from "./Source";
 import { PatronPool } from "../Patron/PatronPool";
-import { SourceType } from "./Source";
+import { SourceWithPoolType } from "./SourceWithPool";
 
 /**
  * @url https://kosukhin.github.io/patron.site/#/source-dynamic
  */
-export class SourceDynamic<T = unknown> implements SourceType<T> {
+export class SourceDynamic<T = unknown> implements SourceWithPoolType<T> {
   public constructor(
     private baseGuest: GuestType<T>,
-    private baseGuestAware: GuestAwareType<T>,
+    private baseSource: SourceType<T>,
   ) {
     if (baseGuest === undefined) {
       throw new Error("SourceDynamic didnt receive baseGuest argument");
     }
-    if (baseGuestAware === undefined) {
-      throw new Error("SourceDynamic didnt receive baseGuestAware argument");
+    if (baseSource === undefined) {
+      throw new Error("SourceDynamic didnt receive baseSource argument");
     }
   }
 
   public value(guest: GuestType<T>) {
-    value(this.baseGuestAware, guest);
+    value(this.baseSource, guest);
     return this;
   }
 

@@ -1,12 +1,13 @@
-import { expect, test } from "vitest";
-import { Source } from "../Source/Source";
+import { expect, test, vitest } from "vitest";
+import { SourceWithPool } from "../Source/SourceWithPool";
 import { PrivateClass } from "./PrivateClass";
 
 test("PrivateClass.test", () => {
-  const sourcePrivate = new PrivateClass(Source);
+  const sourcePrivate = new PrivateClass(SourceWithPool);
   const source = sourcePrivate.get(42);
 
-  source.value((value) => {
-    expect(value).toBe(42);
-  });
+  const guest = vitest.fn();
+  source.value(guest);
+
+  expect(guest).toBeCalledWith(42);
 });
