@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.45.0](https://github.com/kosukhin/patron/compare/v1.44.1...v1.45.0) (2025-03-23)
+
+
+### Features
+
+* **40-issue:** guest aware to source ([c2d672c](https://github.com/kosukhin/patron/commit/c2d672c549bfdd63b25eafabbcffcddea3fba5db))
+* **40-issue:** more stable tests ([3a3cf55](https://github.com/kosukhin/patron/commit/3a3cf55ae9355582e6cda659e129a0f5b7665630))
+
 ### [1.44.1](https://github.com/kosukhin/patron/compare/v1.44.0...v1.44.1) (2025-03-22)
 
 ## [1.44.0](https://github.com/kosukhin/patron/compare/v1.43.0...v1.44.0) (2025-03-22)
