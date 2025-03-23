@@ -8,10 +8,9 @@ test("Patron.test", () => {
   const patron = new Patron(() => {
     patronCalledTimes += 1;
   });
+
   one.value(patron);
   one.give(2);
 
-  queueMicrotask(() => {
-    expect(patronCalledTimes).toBe(2);
-  });
+  expect(patronCalledTimes).toBe(2);
 });

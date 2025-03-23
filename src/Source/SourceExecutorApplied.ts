@@ -5,6 +5,9 @@ import {
   value,
 } from "../Source/Source";
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/source/source-executor-applied
+ */
 export class SourceExecutorApplied<T> implements SourceObjectType<T> {
   public value: SourceExecutorType<T>;
 

@@ -1,7 +1,7 @@
 import { PrivateClass } from "./PrivateClass";
 import { GuestType } from "../Guest/Guest";
 import { SourceWithPool, SourceWithPoolType } from "../Source/SourceWithPool";
-import { expect, test } from "vitest";
+import { expect, test, vitest } from "vitest";
 import { PrivateType } from "./Private";
 
 class TestClass {
@@ -27,7 +27,10 @@ test("PrivateClass.modules.test", () => {
   });
 
   const source = testSource.get(42);
-  source.value((value) => {
-    expect(value).toBe(97);
-  });
+
+  const guest = vitest.fn();
+  source.value(guest);
+
+  expect(guest).toBeCalled();
+  expect(guest).toBeCalledWith(97);
 });

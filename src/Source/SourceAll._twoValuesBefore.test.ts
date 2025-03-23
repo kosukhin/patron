@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test, vitest } from "vitest";
 import { SourceWithPool } from "./SourceWithPool";
 import { SourceAll } from "./SourceAll";
 
@@ -10,7 +10,10 @@ test("SourceAll._twoValuesBefore.test", () => {
   one.value(all.guestKey("one"));
   two.value(all.guestKey("two"));
 
+  const g = vitest.fn();
   all.value((value) => {
-    expect(Object.values(value).join()).toBe("1,2");
+    g(Object.values(value).join());
   });
+
+  expect(g).toBeCalledWith("1,2");
 });

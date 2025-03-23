@@ -3,7 +3,7 @@ import { give } from "../Guest/Guest";
 import { SourceObjectType, SourceType, value } from "./Source";
 import { GuestCast } from "../Guest/GuestCast";
 import { GuestType } from "../Guest/Guest";
-import { expect, test } from "vitest";
+import { expect, test, vitest } from "vitest";
 import { SourceWithPool } from "./SourceWithPool";
 import { PrivateClass } from "../Private/PrivateClass";
 
@@ -24,7 +24,7 @@ class X2 implements SourceObjectType<number> {
 test("SourceSequence.test", () => {
   const source = new SourceWithPool([1, 2, 3, 9]);
   const guestMapped = new SourceSequence(source, new PrivateClass(X2));
-  guestMapped.value((v) => {
-    expect(v.join()).toBe("2,4,6,18");
-  });
+  const g = vitest.fn();
+  guestMapped.value(g);
+  expect(g).toBeCalledWith([2, 4, 6, 18]);
 });

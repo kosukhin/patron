@@ -1,5 +1,8 @@
 import { give, GuestObjectType, GuestType } from "../Guest/Guest";
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-applied
+ */
 export class GuestApplied<T, R> implements GuestObjectType<T> {
   public constructor(
     private baseGuest: GuestType<R>,

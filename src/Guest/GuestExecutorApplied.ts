@@ -5,6 +5,9 @@ import {
   GuestType,
 } from "../Guest/Guest";
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-executor-applied
+ */
 export class GuestExecutorApplied<T> implements GuestObjectType<T> {
   public give: GuestExecutorType<T, this>;
 

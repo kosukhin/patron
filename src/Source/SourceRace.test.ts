@@ -1,6 +1,6 @@
 import { SourceWithPool } from "../Source/SourceWithPool";
 import { SourceRace } from "./SourceRace";
-import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, expect, test, vi, vitest } from "vitest";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -28,9 +28,9 @@ test("SourceRace.test", async () => {
 
   await vi.advanceTimersByTime(201);
 
-  sAny.value((v) => {
-    expect(v).toBe(1);
-  });
+  const g1 = vitest.fn();
+  sAny.value(g1);
+  expect(g1).toBeCalledWith(1);
 
   setTimeout(() => {
     s1.give(3);
@@ -39,8 +39,8 @@ test("SourceRace.test", async () => {
 
   await vi.advanceTimersByTime(301);
 
-  sAny.value((v) => {
-    // ignores second value
-    expect(v).toBe(3);
-  });
+  const g2 = vitest.fn();
+  sAny.value(g2);
+  // ignores second value
+  expect(g2).toBeCalledWith(3);
 });

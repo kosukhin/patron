@@ -14,8 +14,9 @@ test("PatronPool.test", () => {
   pool.add(
     new Patron((value) => {
       receivedCount += value;
-      expect(receivedCount).toBe(4);
     }),
   );
   pool.give(2);
+
+  expect(receivedCount).toBe(4);
 });

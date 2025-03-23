@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test, vitest } from "vitest";
 import { SourceAll } from "./SourceAll";
 import { SourceWithPool } from "./SourceWithPool";
 import { Patron } from "../Patron/Patron";
@@ -14,9 +14,12 @@ test("SourceAll._withPatron.test", () => {
   one.give(3);
   one.give(4);
 
+  const g = vitest.fn();
   all.value(
     new Patron((value: Record<string, unknown>) => {
-      expect(Object.values(value).length).toBe(2);
+      g(Object.values(value).length);
     }),
   );
+
+  expect(g).toBeCalledWith(2);
 });

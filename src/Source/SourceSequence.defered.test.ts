@@ -44,10 +44,10 @@ test("SourceSequence.defered.test", async () => {
 
   const callFn = vi.fn();
   sequence.value((v) => {
-    expect(v.join()).toBe("2,4,6,18");
-    callFn();
+    callFn(v.join());
   });
 
   await wait(51);
   expect(callFn).toBeCalled();
+  expect(callFn).toBeCalledWith("2,4,6,18");
 });

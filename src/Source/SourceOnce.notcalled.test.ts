@@ -1,4 +1,4 @@
-import { expect, test, vi } from "vitest";
+import { expect, test, vi, vitest } from "vitest";
 import { SourceOnce } from "./SourceOnce";
 
 test("SourceOnce.notcalled.test", () => {
@@ -7,7 +7,7 @@ test("SourceOnce.notcalled.test", () => {
   source.value(guestNotCalled);
   expect(guestNotCalled).not.toHaveBeenCalled();
   source.give(111);
-  source.value((v) => {
-    expect(v).toBe(111);
-  });
+  const g = vitest.fn();
+  source.value(g);
+  expect(g).toBeCalledWith(111);
 });

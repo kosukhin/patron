@@ -38,9 +38,9 @@ test("SourceMap.defered.test", async () => {
   const guestMapped = new SourceMap(source, new Private(x2));
   const callFn = vi.fn();
   guestMapped.value((v) => {
-    expect(v.join()).toBe("2,4,6,18");
-    callFn();
+    callFn(v.join());
   });
   await wait(50);
   expect(callFn).toBeCalled();
+  expect(callFn).toBeCalledWith("2,4,6,18");
 });
