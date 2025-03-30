@@ -46,21 +46,22 @@
 </p>
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
-<pre class="mb-4"><code class="language-js">import {
-    Source,
-    PatronOnce,
-} from 'patron-oop';
+<pre class="mb-4"><code class="language-js">import { SourceWithPool, PatronOnce } from "patron-oop";
 
-const source = new Source('один раз');
-source.value(new PatronOnce((value) => {
-    document.querySelector('.patron-once-result').textContent = `Результат ${value}`;
-}));
+const source = new SourceWithPool("один раз");
+source.value(
+  new PatronOnce((value) => {
+    document.querySelector(
+      ".patron-once-result"
+    ).textContent = `Результат ${value}`;
+  })
+);
 
 setTimeout(() => {
-    source.give('два раза');
+  source.give("два раза");
 });
 setTimeout(() => {
-    source.give('три раза');
+  source.give("три раза");
 });
 </code></pre>
 
@@ -69,9 +70,9 @@ setTimeout(() => {
   <span class="patron-once-result">Нет результата!</span>
 </div>
 <script type="module">
-  import { Source, PatronOnce } from "patron-oop";
+  import { SourceWithPool, PatronOnce } from "patron-oop";
 
-  const source = new Source("один раз");
+  const source = new SourceWithPool("один раз");
   source.value(
     new PatronOnce((value) => {
       document.querySelector(

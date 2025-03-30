@@ -9,6 +9,8 @@ export * from "./Guest/GuestExecutorApplied";
 export * from "./Patron/Patron";
 export * from "./Patron/PatronOnce";
 export * from "./Patron/PatronPool";
+export * from "./Patron/PatronApplied";
+export * from "./Patron/PatronExecutorApplied";
 export * from "./Source/SourceAll";
 export * from "./Source/Source";
 export * from "./Source/SourceSequence";

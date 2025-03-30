@@ -167,6 +167,26 @@ declare class PatronOnce<T> implements GuestDisposableType<T> {
     disposed(value: T | null): boolean;
 }
 
+/**
+ * @url https://kosukhin.github.io/patron.site/#/patron/patron-applied
+ */
+declare class PatronApplied<T, R> implements GuestObjectType<T> {
+    private guestApplied;
+    constructor(baseGuest: GuestType<R>, applier: (value: T) => R);
+    give(value: T): this;
+    introduction(): "guest" | "patron";
+}
+
+/**
+ * @url https://kosukhin.github.io/patron.site/#/patron/patron-executor-applied
+ */
+declare class PatronExecutorApplied<T> implements GuestObjectType<T> {
+    private guestApplied;
+    constructor(baseGuest: GuestType<T>, applier: (executor: GuestExecutorType) => GuestExecutorType);
+    give(value: T): this;
+    introduction(): "guest" | "patron";
+}
+
 type SourceExecutorType<T> = (guest: GuestType<T>) => unknown;
 interface SourceObjectType<T> {
     value: SourceExecutorType<T>;
@@ -331,4 +351,4 @@ declare class PrivateClass<T> implements PrivateType<T> {
     get<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ActionType, Guest, GuestApplied, GuestCast, GuestDisposable, type GuestDisposableType, GuestExecutorApplied, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronOnce, PatronPool, type PoolAwareType, type PoolType, Private, PrivateClass, type PrivateType, Source, type SourceAcitveType, SourceActive, SourceAll, type SourceAllType, SourceApplied, SourceDynamic, SourceExecutorApplied, type SourceExecutorType, SourceMap, type SourceObjectType, SourceRace, SourceSequence, type SourceType, SourceWithPool, type SourceWithPoolType, give, isGuest, isPatron, isPatronInPools, isSource, patronPools, removePatronFromPools, sourceOf, value };
+export { type ActionType, Guest, GuestApplied, GuestCast, GuestDisposable, type GuestDisposableType, GuestExecutorApplied, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronApplied, PatronExecutorApplied, PatronOnce, PatronPool, type PoolAwareType, type PoolType, Private, PrivateClass, type PrivateType, Source, type SourceAcitveType, SourceActive, SourceAll, type SourceAllType, SourceApplied, SourceDynamic, SourceExecutorApplied, type SourceExecutorType, SourceMap, type SourceObjectType, SourceRace, SourceSequence, type SourceType, SourceWithPool, type SourceWithPoolType, give, isGuest, isPatron, isPatronInPools, isSource, patronPools, removePatronFromPools, sourceOf, value };
