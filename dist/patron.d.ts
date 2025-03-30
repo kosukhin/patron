@@ -133,6 +133,14 @@ declare class GuestApplied<T, R> implements GuestObjectType<T> {
 }
 
 /**
+ * @url https://kosukhin.github.io/patron.site/#/guest/guest-executor-applied
+ */
+declare class GuestExecutorApplied<T> implements GuestObjectType<T> {
+    give: GuestExecutorType<T, this>;
+    constructor(baseGuest: GuestType<T>, applier: (executor: GuestExecutorType) => GuestExecutorType);
+}
+
+/**
  * @url https://kosukhin.github.io/patron.site/#/patron
  */
 declare class Patron<T> implements GuestDisposableType<T> {
@@ -323,4 +331,4 @@ declare class PrivateClass<T> implements PrivateType<T> {
     get<R extends unknown[], CT = null>(...args: R): CT extends null ? T : CT;
 }
 
-export { type ActionType, Guest, GuestApplied, GuestCast, GuestDisposable, type GuestDisposableType, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronOnce, PatronPool, type PoolAwareType, type PoolType, Private, PrivateClass, type PrivateType, Source, type SourceAcitveType, SourceActive, SourceAll, type SourceAllType, SourceApplied, SourceDynamic, SourceExecutorApplied, type SourceExecutorType, SourceMap, type SourceObjectType, SourceRace, SourceSequence, type SourceType, SourceWithPool, type SourceWithPoolType, give, isGuest, isPatron, isPatronInPools, isSource, patronPools, removePatronFromPools, sourceOf, value };
+export { type ActionType, Guest, GuestApplied, GuestCast, GuestDisposable, type GuestDisposableType, GuestExecutorApplied, type GuestExecutorType, GuestObject, type GuestObjectType, GuestPool, GuestSync, type GuestType, type GuestValueType, type MaybeDisposableType, Patron, PatronOnce, PatronPool, type PoolAwareType, type PoolType, Private, PrivateClass, type PrivateType, Source, type SourceAcitveType, SourceActive, SourceAll, type SourceAllType, SourceApplied, SourceDynamic, SourceExecutorApplied, type SourceExecutorType, SourceMap, type SourceObjectType, SourceRace, SourceSequence, type SourceType, SourceWithPool, type SourceWithPoolType, give, isGuest, isPatron, isPatronInPools, isSource, patronPools, removePatronFromPools, sourceOf, value };

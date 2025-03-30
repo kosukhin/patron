@@ -12,3 +12,54 @@
   />
   GuestExecutorApplied на GitHub
 </a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Иногда нам нужно контроллировать не значение, которое приходит гостю, а процесс передачи значения, например если мы хотим применить к гостю функцию debounce или функцию throttle, чтобы снизить количество срабатываний логики гостя.
+</p>
+
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4 w-full"
+><code class="language-js">import { Guest, GuestExecutorApplied, sourceOf } from "patron-oop";
+
+  const guest = new Guest((value) => {
+    document.querySelector(
+      ".guest-result"
+    ).textContent = `value is ${value}`;
+  });
+
+  sourceOf(40).value(
+    new GuestExecutorApplied(guest, (guestFn) => {
+      return v => {
+        setTimeout(() => {
+          guestFn(v);
+        }, 5000)
+      }
+    })
+  );
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Результат через 5 сек...</span>
+</div>
+<script type="module">
+  import { Guest, GuestExecutorApplied, sourceOf } from "patron-oop";
+
+  const guest = new Guest((value) => {
+    document.querySelector(
+      ".guest-result"
+    ).textContent = `value is ${value}`;
+  });
+
+  sourceOf(40).value(
+    new GuestExecutorApplied(guest, (guestFn) => {
+      return v => {
+        setTimeout(() => {
+          guestFn(v);
+        }, 5000)
+      }
+    })
+  );
+</script>

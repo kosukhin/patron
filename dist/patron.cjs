@@ -62,9 +62,9 @@ class GuestCast {
   }
 }
 
-var __defProp$6 = Object.defineProperty;
-var __defNormalProp$6 = (obj, key, value) => key in obj ? __defProp$6(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$6 = (obj, key, value) => __defNormalProp$6(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __defProp$7 = Object.defineProperty;
+var __defNormalProp$7 = (obj, key, value) => key in obj ? __defProp$7(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$7 = (obj, key, value) => __defNormalProp$7(obj, typeof key !== "symbol" ? key + "" : key, value);
 const poolSets = /* @__PURE__ */ new Map();
 const patronPools = (patron) => {
   const pools = [];
@@ -98,8 +98,8 @@ const isPatronInPools = (patron) => {
 class PatronPool {
   constructor(initiator) {
     this.initiator = initiator;
-    __publicField$6(this, "patrons");
-    __publicField$6(this, "give");
+    __publicField$7(this, "patrons");
+    __publicField$7(this, "give");
     this.patrons = /* @__PURE__ */ new Set();
     poolSets.set(this, this.patrons);
     const doReceive = (value) => {
@@ -148,13 +148,13 @@ class PatronPool {
   }
 }
 
-var __defProp$5 = Object.defineProperty;
-var __defNormalProp$5 = (obj, key, value) => key in obj ? __defProp$5(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField$5 = (obj, key, value) => __defNormalProp$5(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __defProp$6 = Object.defineProperty;
+var __defNormalProp$6 = (obj, key, value) => key in obj ? __defProp$6(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$6 = (obj, key, value) => __defNormalProp$6(obj, typeof key !== "symbol" ? key + "" : key, value);
 class GuestPool {
   constructor(initiator) {
-    __publicField$5(this, "guests", /* @__PURE__ */ new Set());
-    __publicField$5(this, "patronPool");
+    __publicField$6(this, "guests", /* @__PURE__ */ new Set());
+    __publicField$6(this, "patronPool");
     this.patronPool = new PatronPool(initiator);
   }
   give(value) {
@@ -261,6 +261,16 @@ class GuestApplied {
   give(value) {
     give(this.applier(value), this.baseGuest);
     return this;
+  }
+}
+
+var __defProp$5 = Object.defineProperty;
+var __defNormalProp$5 = (obj, key, value) => key in obj ? __defProp$5(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField$5 = (obj, key, value) => __defNormalProp$5(obj, key + "" , value);
+class GuestExecutorApplied {
+  constructor(baseGuest, applier) {
+    __publicField$5(this, "give");
+    this.give = applier((v) => give(v, baseGuest));
   }
 }
 
@@ -670,6 +680,7 @@ exports.Guest = Guest;
 exports.GuestApplied = GuestApplied;
 exports.GuestCast = GuestCast;
 exports.GuestDisposable = GuestDisposable;
+exports.GuestExecutorApplied = GuestExecutorApplied;
 exports.GuestObject = GuestObject;
 exports.GuestPool = GuestPool;
 exports.GuestSync = GuestSync;

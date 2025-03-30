@@ -5,6 +5,7 @@ export * from "./Guest/GuestSync";
 export * from "./Guest/GuestObject";
 export * from "./Guest/GuestDisposable";
 export * from "./Guest/GuestApplied";
+export * from "./Guest/GuestExecutorApplied";
 export * from "./Patron/Patron";
 export * from "./Patron/PatronOnce";
 export * from "./Patron/PatronPool";
