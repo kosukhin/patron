@@ -1,0 +1,147 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс GuestDisposable</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Guest/GuestDisposable.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  GuestDisposable на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Предназначен для динамического создания
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-guest"
+    >
+      гостя
+    </a>
+  </span>
+  с функциональностью его удаления из
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/patron/patron-pool"
+    >
+      пула патронов
+    </a>
+  </span>
+  , на случай, если гость станет
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-patron"
+    >
+      патроном
+    </a>
+  </span>
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Полезно в случаях, когда гость сделал свою работу и должен быть удален из пула
+  патронов, но в случае если гость стал патрном. У класса Patron есть метод
+  disposed, который берется от гостя. В логике PatronPool после каждой передачи
+  значения патрону идет проверка не нужно ли удалить этот патрон из пула вызовом
+  метода disposed
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Вместо класса GuestDisposable можно использовать функцию
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/utils/remove-patron-from-pools"
+    >
+      removePatronFromPools
+    </a>
+  </span>
+  - для того чтобы удалить патрон из всех пулов. либо функцию
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/utils/is-patron-in-pools"
+    >
+      isPatronInPools
+    </a>
+  </span>
+  - проверяет есть ли патрон в каком-либо пуле
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import { SourceWithPool, Patron, GuestDisposable } from "patron-oop";
+
+  const source = new SourceWithPool("Один");
+
+  source.value(
+    new Patron(
+      new GuestDisposable(
+        (value) => {
+          document.querySelector(".guest-result").textContent = value;
+        },
+        (value) => {
+          return value !== "Один";
+        }
+      )
+    )
+  );
+
+  setTimeout(() => {
+    source.give("Два");
+  });
+
+  setTimeout(() => {
+    source.give("Три");
+  }, 100);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Нет значения</span>
+</div>
+<script type="module">
+  import { SourceWithPool, Patron, GuestDisposable } from "patron-oop";
+
+  const source = new SourceWithPool("Один");
+
+  source.value(
+    new Patron(
+      new GuestDisposable(
+        (value) => {
+          document.querySelector(".guest-result").textContent = value;
+        },
+        (value) => {
+          return value !== "Один";
+        }
+      )
+    )
+  );
+
+  setTimeout(() => {
+    source.give("Два");
+  });
+
+  setTimeout(() => {
+    source.give("Три");
+  }, 100);
+</script>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/source"
+    >Source</a
+  >
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/patron"
+    >Patron</a
+  >
+</p>

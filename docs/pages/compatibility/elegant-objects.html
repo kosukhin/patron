@@ -1,0 +1,373 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Elegant Objects</h1>
+
+<img
+  src="./assets/img/eo_big.png"
+  width="150"
+  height="170"
+  class="float-left m-3"
+/>
+
+<p class="text-gray-600 text-lg mb-4">
+  Работы по библиотеке Patron вдохновлены двумя книгами:
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="https://www.elegantobjects.org/"
+    target="_blank"
+  >
+    Elegant Objects
+  </a>
+  и
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="https://www.amazon.com/Object-Thinking-Developer-Reference-David/dp/0735619654"
+    target="_blank"
+  >
+    Object Thinking
+  </a>
+</p>
+
+<div class="clear-both"></div>
+
+<p class="text-gray-600 text-lg mb-4">
+  В этом разделе сделаем пример кода по расчету простой арифметической формулы с
+  возможностью изменять переменные и одна из переменных будет таймером.
+</p>
+
+<p>&nbsp;</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">
+  Результат 1. Вычисление на лету
+</p>
+<div class="example mb-4">
+  <span class="guest-result">
+    (
+    <input
+      type="number"
+      class="input-1"
+      style="
+        width: 60px;
+        background: rgba(255, 255, 255, 0.3);
+        border: solid 1px #eee;
+        color: #000;
+      "
+    />
+    +
+    <span class="eo-counter">?</span>
+    ) *
+    <input
+      type="number"
+      class="input-2"
+      style="
+        width: 60px;
+        background: rgba(255, 255, 255, 0.3);
+        border: solid 1px #eee;
+        color: #000;
+      "
+    />
+    = <span class="eo-result">??</span>
+  </span>
+  <div class="mt-4">
+    <button
+      onclick="window.numberTimer.stop()"
+      class="stop inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-black mt-4 md:mt-0"
+    >
+      Остановить
+    </button>
+    <button
+      onclick="window.numberTimer.start()"
+      class="begin inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-black mt-4 md:mt-0"
+    >
+      Запустить
+    </button>
+    <button
+      onclick="window.numberTimer.reset()"
+      class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-black mt-4 md:mt-0"
+    >
+      Сбросить
+    </button>
+  </div>
+</div>
+
+<script type="module">
+  import {
+    Guest,
+    Source,
+    Patron,
+    SourceAll,
+    GuestCast,
+    GuestDisposable,
+  } from "patron-oop";
+  import { Text, Input } from "patron-components";
+
+  class NumberFromTimer {
+    timerHead = null;
+
+    constructor() {
+      this.source = new Source(1);
+      this.isStoppedSource = new Source(false);
+    }
+
+    number(guest) {
+      this.source.value(guest);
+    }
+
+    start() {
+      this.isStoppedSource.give(false);
+      if (this.timerHead) {
+        return;
+      }
+      const repeat = () => {
+        this.source.value((value) => {
+          this.timerHead = setTimeout(() => {
+            this.source.give(value + 1);
+            repeat();
+            if (!this.source.pool().size()) {
+              this.stop();
+            }
+          }, 1000);
+        });
+      };
+      repeat();
+    }
+
+    stop() {
+      this.isStoppedSource.give(true);
+      clearTimeout(this.timerHead);
+      this.timerHead = null;
+    }
+
+    reset() {
+      this.stop();
+      this.source.give(1);
+      this.start();
+    }
+
+    isStopped(guest) {
+      this.isStoppedSource.value(guest);
+    }
+  }
+
+  class NumberFromInput {
+    constructor(selector) {
+      this.source = new Source(1);
+      this.input = new Input(this.source, selector);
+    }
+
+    number(guest) {
+      this.source.value(
+        new GuestCast(guest, (value) => {
+          guest.give(+value);
+        })
+      );
+    }
+  }
+
+  class Addition {
+    constructor(num1, num2) {
+      this.num1 = num1;
+      this.num2 = num2;
+    }
+
+    number(guest) {
+      const all = new SourceAll();
+      this.num1.number(new GuestCast(guest, all.guestKey("n1")));
+      this.num2.number(new GuestCast(guest, all.guestKey("n2")));
+      all.value(
+        new GuestCast(guest, ({ n1, n2 }) => {
+          guest.give(n1 + n2);
+        })
+      );
+    }
+  }
+
+  class Multiplication {
+    constructor(num1, num2) {
+      this.num1 = num1;
+      this.num2 = num2;
+    }
+
+    number(guest) {
+      const all = new SourceAll();
+      this.num1.number(new GuestCast(guest, all.guestKey("n1")));
+      this.num2.number(new GuestCast(guest, all.guestKey("n2")));
+      all.value(
+        new GuestCast(guest, ({ n1, n2 }) => {
+          guest.give(n1 * n2);
+        })
+      );
+    }
+  }
+
+  const disposeIfNoSelector = (selector) => () =>
+    !document.querySelector(selector);
+
+  window.numberTimer = new NumberFromTimer();
+  const numberInput1 = new NumberFromInput(".input-1");
+  const numberInput2 = new NumberFromInput(".input-2");
+  const result = new Multiplication(
+    new Addition(numberInput1, numberTimer),
+    numberInput2
+  );
+  numberTimer.start();
+  numberTimer.number(
+    new Patron(
+      new GuestDisposable(
+        new Text(".eo-counter"),
+        disposeIfNoSelector(".eo-counter")
+      )
+    )
+  );
+  numberTimer.isStopped(
+    new Patron((isStopped) => {
+      document
+        .querySelector(".stop")
+        .classList[isStopped ? "add" : "remove"]("opacity-20");
+      document
+        .querySelector(".begin")
+        .classList[!isStopped ? "add" : "remove"]("opacity-20");
+    })
+  );
+  result.number(
+    new Patron(
+      new GuestDisposable(
+        new Text(".eo-result"),
+        disposeIfNoSelector(".eo-result")
+      )
+    )
+  );
+</script>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Листинг 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+  Guest,
+  Source,
+  Patron,
+  SourceAll,
+  GuestCast,
+  GuestDisposable,
+} from "patron-oop";
+import { Text, Input } from "patron-components";
+
+// Переместил клиентский код наверх,
+// чтобы не крутить до самой интересной части.
+window.numberTimer = new NumberFromTimer();
+const numberInput1 = new NumberFromInput(".input-1");
+const numberInput2 = new NumberFromInput(".input-2");
+const result = new Multiplication(
+  new Addition(numberInput1, numberTimer),
+  numberInput2
+);
+numberTimer.start();
+numberTimer.number(
+  new Patron(
+    new GuestDisposable(
+      new Text(".eo-counter"),
+      disposeIfNoSelector(".eo-counter")
+    )
+  )
+);
+result.number(
+  new Patron(
+    new GuestDisposable(
+      new Text(".eo-result"),
+      disposeIfNoSelector(".eo-result")
+    )
+  )
+);
+
+class NumberFromTimer {
+  timerHead = null;
+
+  constructor() {
+    this.source = new Source(1);
+  }
+
+  number(guest) {
+    this.source.value(guest);
+  }
+
+  start() {
+    if (this.timerHead) {
+      return;
+    }
+    const repeat = () => {
+      this.source.value((value) => {
+        this.timerHead = setTimeout(() => {
+          this.source.give(value + 1);
+          repeat();
+          if (!this.source.pool().size()) {
+            this.stop();
+          }
+        }, 1000);
+      });
+    };
+    repeat();
+  }
+
+  stop() {
+    clearTimeout(this.timerHead);
+    this.timerHead = null;
+  }
+
+  reset() {
+    this.stop();
+    this.source.give(1);
+    this.start();
+  }
+}
+
+class NumberFromInput {
+  constructor(selector) {
+    this.source = new Source(1);
+    this.input = new Input(this.source, selector);
+  }
+
+  number(guest) {
+    this.source.value(
+      new GuestCast(guest, (value) => {
+        guest.give(+value);
+      })
+    );
+  }
+}
+
+class Addition {
+  constructor(num1, num2) {
+    this.num1 = num1;
+    this.num2 = num2;
+  }
+
+  number(guest) {
+    const all = new SourceAll();
+    this.num1.number(new GuestCast(guest, all.guestKey("n1")));
+    this.num2.number(new GuestCast(guest, all.guestKey("n2")));
+    all.value(
+      new GuestCast(guest, ({ n1, n2 }) => {
+        guest.give(n1 + n2);
+      })
+    );
+  }
+}
+
+class Multiplication {
+  constructor(num1, num2) {
+    this.num1 = num1;
+    this.num2 = num2;
+  }
+
+  number(guest) {
+    const all = new SourceAll();
+    this.num1.number(new GuestCast(guest, all.guestKey("n1")));
+    this.num2.number(new GuestCast(guest, all.guestKey("n2")));
+    all.value(
+      new GuestCast(guest, ({ n1, n2 }) => {
+        guest.give(n1 * n2);
+      })
+    );
+  }
+}
+
+const disposeIfNoSelector = (selector) => () =>
+  !document.querySelector(selector);
+
+</code></pre>

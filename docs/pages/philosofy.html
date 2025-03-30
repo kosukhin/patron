@@ -1,0 +1,210 @@
+<section class="text-gray-600 body-font">
+  <div class="mx-auto flex py-1 items-center justify-center flex-col">
+    <div class="lg:w-2/3 w-full">
+      <h1 class="pb-3 text-xl font-semibold text-gray-600">
+        Tell don't ask + trust
+      </h1>
+      <img
+        class="float-left m-3 my-0"
+        src="./assets/img/philosofy/tell.jpg"
+        width="150"
+        height="200"
+      />
+      <p class="text-gray-600 text-lg mb-4">
+        Идея проекта зародилась из принципа
+        <a
+          class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+          href="https://toolshed.com/articles/1998-07-01-TellDontAsk.html"
+          target="_blank"
+          >Tell don't ask</a
+        >. Оригинальная версия принципа говорит о том, что мы не должны
+        принимать решение какой метод объекта вызывать на основе данных от этого
+        объекта, а должны просто сказать объекту, что он должен сделать
+      </p>
+      <p class="text-gray-600 text-lg mb-4">
+        Этот принцип натолкнул на размышления о том, как на самом деле объекты в
+        программе общаются друг с другом. Когда объект А вызывает метод объекта
+        B и ожидает результат, который будет возвращен методом объекта B через
+        return, такая организация кода заставляет объект B отвечать даже в те
+        моменты, когда у объекта B нет какого-то хорошего, значащего результата
+      </p>
+      <p class="text-gray-600 text-lg mb-4">
+        Такая ситуация при использовании return заставляет объекты подобные B
+        возвращать не полные результаты или вообще не возвращать результаты.
+        Например, если объект B работает асинхронно, обращаясь к серверу, то
+        объект B не может вернуть значение в условиях JS. Объект B может вернуть
+        только Promise - обещание того что значение будет когда-то позже, но
+        проблема в том, что сам объект B больше не отвечает за этот результат,
+        результат может вернуться, а может и не вернуться, даже если мы
+        обработаем ошибку с помощью catch мы все равно обязаны что-то отвечать
+        ожидающему объекту, что - то не значащее, что нужно будет перепроверять,
+        а следовательно доверие к объекту B пропадет, каждый его ответ нужно
+        проверять
+      </p>
+      <p class="text-gray-600 text-lg mb-4">
+        Также возможна ситуация, что у объекта B просто нет ответа и нам
+        приходится возвращать null, а null переносит ответственность на объект
+        который общается с объектом B. И получается что с объектом B уже
+        общаться не приятно, потому что он не может гарантировать результат, его
+        все время нужно перепроверять, никто ему не доверяет
+      </p>
+      <div class="clear-both"></div>
+      <h2 class="pb-3 text-xl font-semibold text-gray-600">Responsible</h2>
+      <img
+        class="float-left m-3 my-0"
+        src="./assets/img/philosofy/responsible.jpg"
+        width="150"
+        height="200"
+      />
+      <p class="text-gray-600 text-lg mb-4">
+        Всё что описано выше под заголовком <b>Tell don't ask</b> говорит нам о
+        том, что хороший объект должен уметь отвечать за те результаты, которые
+        другие объекты ожидают от него получить. И чтобы реализация этой
+        ответственности за результат стала возможной - объект у которого
+        результат есть должен видеть того, кому этот результат нужен, чтобы
+        полностью контролировать отдачу результата своему
+        <span class="dynamic-navigation">
+          <a
+            class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+            href="/terminology/visitor"
+          >
+            посетителю
+          </a>
+        </span>
+        Вокруг этой ключевой идеи и построена вся библиотека. Посетители объекта
+        делятся на
+        <span class="dynamic-navigation">
+          <a
+            class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+            href="/terminology/the-guest"
+          >
+            гостей
+          </a>
+        </span>
+        - те кому сообщить значение нужно один раз и забыть о нем пока он сам не
+        вернется если захочет и
+
+        <span class="dynamic-navigation">
+          <a
+            class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+            href="/terminology/the-patron"
+          >
+            патроны
+          </a>
+        </span>
+        - те кому нужно постоянно сообщать о новых значениях, пока они сами не
+        решат удалиться из
+        <span class="dynamic-navigation">
+          <a
+            class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+            href="/patron/patron-pool"
+          >
+            пула патронов
+          </a>
+        </span>
+      </p>
+      <div class="clear-both"></div>
+      <h2 class="pb-3 text-xl font-semibold text-gray-600">Result</h2>
+      <img
+        class="float-left m-3 my-0"
+        src="./assets/img/philosofy/result.jpg"
+        width="150"
+        height="200"
+      />
+      <p class="text-gray-600 text-lg mb-4">
+        Из того что написано под заголовком <b>Responsible</b> можно сделать
+        вывод что использование Библиотеки Patron накладывает на вас ограничение
+        - не использовать return, а вместо этого возвращать данные посетителю
+        вызывая его метод give, либо пользуясь отдельной функцией
+        <span class="dynamic-navigation">
+          <a
+            class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+            href="/utils/give"
+          >
+            give
+          </a>
+        </span>
+      </p>
+      <p class="text-gray-600 text-lg mb-4">
+        Но в этом разделе(Result) хотелось бы отметить еще одну важную
+        философскую основу, на которую идет опора при разработке на библиотеке
+        Patron. Классы(статический код class) которые мы создаем считаются
+        результатом который нам нужен по нашей логике, позже при создании
+        объекта из класса мы получаем частично примененную версию класса тот же
+        класс с привязанными данными к нему и позже, чтобы получить конкретный
+        результат вычисления в виде данных нам нужно вызвать метод объекта.
+        Последовательность описанная в предыдущем предложении противоположна
+        процедурной последовательности выполнения - сначала вычисление потом
+        результат. Программируя в ООП стиле мы имеем результаты раньше чем
+        происходит вычисление. Наши классы и есть представления нужных нам
+        результатов. Эта идея считается ключевой для понимания принципа
+        разработки последующего кода. Мы создаем большой результат, потом
+        создаем результаты поменьше нужные большому, и так далее пока не опишем
+        наше приложение. Пирамида результатов строится сверху вниз от самого
+        важного для нашей бизнес логики к менее важному и более конкретному
+        (конкретность тут в смысле относящийся к вычислению на компьютере)
+      </p>
+      <div class="clear-both"></div>
+      <h2 class="pb-3 text-xl font-semibold text-gray-600">
+        Посетитель + Наблюдатель
+      </h2>
+      <img
+        class="float-left m-3 my-0"
+        src="./assets/img/philosofy/observable.jpg"
+        width="150"
+        height="200"
+      />
+      <p class="text-gray-600 text-lg mb-4">
+        Можно сказать, что библиотека Patron построена на основе(или
+        вдохновлена) двух паттернов(или двумя паттернами) ООП: Наблюдатель и
+        Посетитель. Объекты имеющие данные не отдают их неизвестно кому
+        (оператором return), а вместо этого ждут посетителя и отдают данные
+        вежливому посетителю который пришел и
+        <span class="dynamic-navigation">
+          <a
+            class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+            href="/terminology/introduction"
+          >
+            представился
+          </a>
+        </span>
+        Посетитель может представиться патроном, что для объекта источника
+        данных будет значить что в случае если у этого объекта будут новые
+        данные, то патрону будет интересно об этих данных узнать. Общение между
+        объектами происходит уважительно, никто никого не использует и не
+        принуждает давать ответы. Если источнику данных нечего сказать, то он
+        может просто молчать и не давать бесполезные ответы
+      </p>
+      <div class="clear-both"></div>
+      <h2 class="pb-3 text-xl font-semibold text-gray-600">
+        Потребители и Источники
+      </h2>
+      <p class="text-gray-600 text-lg mb-4">
+        Библиотека выделяет две основные категории классов. Первая - потребители
+        это классы или функции совместимые с интерфейсом
+        <a
+          class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+          href="https://github.com/kosukhin/patron/blob/main/src/Guest/Guest.ts#L17"
+        >
+          GuestType
+        </a>
+        , этой категории нужны данные. Вторая источники - эта категория имеет
+        данные и может отдать их потребителю, источники совместимы с интерфейсом
+        <a
+          class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+          href="https://github.com/kosukhin/patron/blob/main/src/Source/Source.ts#L3-L5"
+        >
+          SourceType
+        </a>
+      </p>
+      <p class="text-gray-600 text-lg mb-4">
+        Хороший пример разделения на потребители и источники это классы для
+        описания <b>REST</b>, например запросы с методом <b>GET</b> это
+        источники данных, потому что могут отдать данные после получения ответа
+        от сервера, а запросы с методами <b>PUT</b>, <b>POST</b>,
+        <b>DELETE</b> это потребители, потому что могут совершить действие после
+        получения данных.
+      </p>
+    </div>
+  </div>
+</section>

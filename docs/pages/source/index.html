@@ -1,0 +1,167 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс Source</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/Source.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  Source на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Предназначен для создания объектов, которые будут
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-source"
+    >
+      источниками данных
+    </a>
+  </span>
+  , логика этих объектов основана на переданной функции-колбэке
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Полезно в случаях, когда нужно создать новый объект с уникальным поведением по
+  генерации данных без создания для этого отдельного класса
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+  Source,
+    give
+} from 'patron-oop';
+
+const timestamp = new Source((guest) => {
+    give(Date.now(), guest);
+});
+timestamp.value((timestamp) => {
+    console.log('timestamp is', timestamp);
+});
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Result here</span>
+</div>
+<script type="module">
+  import { Source, give } from "patron-oop";
+
+  const timestamp = new Source((guest) => {
+    give(Date.now(), guest);
+  });
+  timestamp.value((timestamp) => {
+    document.querySelector(
+      ".guest-result"
+    ).textContent = `timestamp is ${timestamp}`;
+  });
+</script>
+
+<p class="text-gray-600 text-lg mb-4">
+  Источником данных может быть не только объект, но и функция вида
+  <em>(guest) => guest('value')</em>. Напрямую можно обратиться к такому
+  источнику через функцию
+  <link-reloadable
+    target-blank
+    href="https://github.com/kosukhin/patron/blob/main/src/Source/Source.ts#L11"
+  >
+    value
+  </link-reloadable>
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 2.</p>
+<pre class="mb-4"><code class="language-js">import {
+  give,
+  value
+} from "patron-oop";
+
+const helloSource = (guest) => {
+  setTimeout(() => {
+    give("Hello world", guest);
+  }, 1000);
+};
+
+value(helloSource, (greeting) => {
+  document.querySelector(
+    ".guest-result-2"
+  ).textContent = `greeting is "${greeting}"`;
+});
+</code></pre>
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 2.</p>
+<div class="example mb-4">
+  <span class="guest-result-2">Result here</span>
+</div>
+<script type="module">
+  import { give, value } from "patron-oop";
+
+  const helloSource = (guest) => {
+    setTimeout(() => {
+      give("Hello world", guest);
+    }, 1000);
+  };
+
+  value(helloSource, (greeting) => {
+    document.querySelector(
+      ".guest-result-2"
+    ).textContent = `greeting is "${greeting}"`;
+  });
+</script>
+
+<p class="text-gray-600 text-lg mb-4">
+  Или можно передать источник-функцию в виде зависимости объектам, которые
+  ожидают интерфейс SourceType, в примере ниже используется комбинация
+  <link-dynamic href="/source/source-all">SourceAll</link-dynamic>
+  и источников-фукнций
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 3.</p>
+<pre class="mb-4"><code class="language-js">import {
+  SourceAll,
+  give,
+  value
+} from "patron-oop";
+
+const all = new SourceAll();
+value(give.bind(null, 1), all.guestKey("one"));
+value(give.bind(null, 2), all.guestKey("two"));
+
+all.value(({ one, two }) => {
+  document.querySelector(".guest-result-3").textContent = `one + two = "${
+    one + two
+  }"`;
+});
+</code></pre>
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 3.</p>
+<div class="example mb-4">
+  <span class="guest-result-3">Result here</span>
+</div>
+<script type="module">
+  import { SourceAll, give, value } from "patron-oop";
+
+  const all = new SourceAll();
+  value(give.bind(null, 1), all.guestKey("one"));
+  value(give.bind(null, 2), all.guestKey("two"));
+
+  all.value(({ one, two }) => {
+    document.querySelector(".guest-result-3").textContent = `one + two = "${
+      one + two
+    }"`;
+  });
+</script>
+
+<p class="text-gray-600 text-lg mb-4">
+  Интересный факт, что с помощью частичного применения(bind) можно превратить
+  функцию <b>give</b> в <b>источник данных</b>, передав только первый аргумент
+</p>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <link-dynamic href="/utils/give">give</link-dynamic>
+  <link-dynamic href="/utils/value">value</link-dynamic>
+</p>

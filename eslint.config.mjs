@@ -27,6 +27,12 @@ export default [
     rules: {
       "@typescript-eslint/no-explicit-any": ["off"],
       "prettier.bracketSpacing": ["off"],
+      "@typescript-eslint/explicit-member-accessibility": [
+        "error",
+        {
+          accessibility: "explicit",
+        },
+      ],
     },
   },
   {

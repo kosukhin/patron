@@ -1,0 +1,171 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс SourceRace</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Guest/SourceRace.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  SourceRace на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Это
+  <link-dynamic href="/terminology/the-source">источник данных</link-dynamic>
+  предназначенный для получения данных только от первого ответившего источника.
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Это поведение может быть очень полезным, чтобы избавиться от условий в
+  приложении. Благодаря классу SourceRace каждый источник данных может сам
+  решить должен ли он вообще отдавать какую-либо информацию или можно
+  промолчать.
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Для примера сделаем программу, которая будет умножать на 2 четные числа и на 3
+  нечетные
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+  SourceMap,
+  SourceRace,
+  Source,
+  SourceWithPool,
+  give,
+  value,
+  GuestCast,
+  Private,
+} from "patron-oop";
+
+const isEven = (v) => v % 2 === 0;
+const isOdd = (v) => v % 2 !== 0;
+
+const nTimesSource = (condition, n, baseSource) => (guest) => {
+  value(
+    baseSource,
+    new GuestCast(guest, (value) => {
+      if (condition(value)) {
+        give(value * n, guest);
+      }
+    })
+  );
+};
+
+const source = new SourceWithPool([1, 2, 3, 4, 5]);
+const guestMapped = new SourceMap(
+  source,
+  new Private(
+    (itemSource) =>
+      new SourceRace([
+        nTimesSource(isEven, 2, itemSource),
+        nTimesSource(isOdd, 3, itemSource),
+      ])
+  )
+);
+
+guestMapped.value((v) => {
+  document.querySelector(".guest-result").textContent = v.join();
+});
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Результат = 0</span>
+</div>
+<script type="module">
+  import {
+    SourceMap,
+    SourceRace,
+    Source,
+    SourceWithPool,
+    give,
+    value,
+    GuestCast,
+    Private,
+  } from "patron-oop";
+
+  const isEven = (v) => v % 2 === 0;
+  const isOdd = (v) => v % 2 !== 0;
+
+  const nTimesSource = (condition, n, baseSource) => (guest) => {
+    value(
+      baseSource,
+      new GuestCast(guest, (value) => {
+        if (condition(value)) {
+          give(value * n, guest);
+        }
+      })
+    );
+  };
+
+  const source = new SourceWithPool([1, 2, 3, 4, 5]);
+  const guestMapped = new SourceMap(
+    source,
+    new Private(
+      (itemSource) =>
+        new SourceRace([
+          nTimesSource(isEven, 2, itemSource),
+          nTimesSource(isOdd, 3, itemSource),
+        ])
+    )
+  );
+
+  guestMapped.value((v) => {
+    document.querySelector(".guest-result").textContent = v.join();
+  });
+</script>
+
+<p class="text-gray-600 text-lg mb-4">
+  В программе использованы классы и функции:
+</p>
+
+<ul>
+  <li>
+    <link-dynamic href="/terminology/the-source">SourceMap</link-dynamic>
+    - для применения источника на каждый элемент внутри итерируемого источника
+  </li>
+  <li>
+    <link-dynamic href="/terminology/the-source">SourceRace</link-dynamic>
+    - для оборачивания набора источников, которым подходит значение на текущем
+    цикле итерации.
+  </li>
+  <li>
+    <link-dynamic href="/terminology/the-source">Source</link-dynamic>
+    - для представления данных итерируемых
+  </li>
+  <li>
+    <link-dynamic href="/terminology/the-source">give</link-dynamic>
+    - для передачи данных источнику
+  </li>
+  <li>
+    <link-dynamic href="/terminology/the-source">value</link-dynamic>
+    - для получения данных от источника
+  </li>
+  <li>
+    <link-dynamic href="/terminology/the-source">GuestCast</link-dynamic>
+    - для наследования представления гостя, возможно данные нужны патрону
+  </li>
+  <li>
+    <link-dynamic href="/terminology/the-source">Private</link-dynamic>
+    - для объявления новой композиции
+  </li>
+</ul>
+
+<p>&nbsp;</p>
+<p class="text-gray-600 text-lg mb-4">
+  Можно сказать, что код примера слишком сложный для такой простой задачи. Да
+  это правда, но пример показывает, что можно построить код таким образом, чтобы
+  классы или функции сами в зависимости от значения решали должны ли они
+  выполнять свою работу или нет
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Эта возможность - принимать решение давать свой ответ или нет внутри объектов
+  - может быть очень ценной для инкапсуляции логики и переиспользования
+</p>

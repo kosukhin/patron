@@ -1,0 +1,66 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс PatronApplied</h1>
+
+<a href="https://github.com/kosukhin/patron/blob/main/src/Patron/PatronApplied.ts" target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4">
+  <img src="./assets/img/github_16.jpg" width="16" height="16" />
+  PatronApplied на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Класс PatronApplied под капотом использует GuestApplied, только является патроном.
+</p>
+
+
+<p class="text-gray-600 text-lg mb-4">
+  Полезен когда мы работаем с источниками данных обладающими пулом патронов, которые могут присылать новые значения.
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">import { Guest, PatronApplied, SourceWithPool } from "patron-oop";
+
+window.source = new SourceWithPool(20);
+
+const guest = new Guest((value) => {
+  document.querySelector(
+    ".guest-result"
+  ).textContent = `Double value is ${value}`;
+});
+
+window.source.value(
+  new PatronApplied(guest, (x) => x * 2)
+);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Result here</span>
+</div>
+<button
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+  onclick="source.give(40)"
+>
+  Дать источнику значение 40
+</button>
+<button
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+  onclick="source.give(25)"
+>
+  Дать источнику значение 25
+</button>
+<script type="module">
+  import { Guest, PatronApplied, SourceWithPool } from "patron-oop";
+
+  window.source = new SourceWithPool(20);
+
+  const guest = new Guest((value) => {
+    document.querySelector(
+      ".guest-result"
+    ).textContent = `Double value is ${value}`;
+  });
+
+  window.source.value(
+    new PatronApplied(guest, (x) => x * 2)
+  );
+</script>

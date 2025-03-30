@@ -1,0 +1,219 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс GuestCast</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Guest/GuestCast.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  GuestCast на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Предназначен для наследования
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/introduction"
+    >
+      представления
+    </a>
+  </span>
+  посетителя (introduction). Принимает 2 аргумента, если первый посетитель
+  является -
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-guest"
+    >
+      гостем
+    </a>
+  </span>
+  ('guest' или функция), то результирующий объект возьмет функциональность
+  второго посетителя и будет тоже гостем. Если первый посетитель является
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-patron"
+    >
+      патроном
+    </a>
+  </span>
+  , то результирующий объект возьмет функциональность второго посетителя, но
+  будет так же патроном как и первый посетитель
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Это наследование полезно в случаях, когда нужно имея оригинальный посетитель,
+  приходящий в метод, наследовать его представление для уже существующих
+  посетителей, созданных по внутренней логике
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+    give,
+    Patron,
+    SourceWithPool,
+    GuestCast,
+    removePatronFromPools,
+    isPatronInPools,
+  } from "patron-oop";
+
+  class NumberOnceATime {
+    constructor(number, delay) {
+      this.delay = delay;
+      this.theNumber = number;
+    }
+
+    number(guest) {
+      const source = new SourceWithPool(this.theNumber);
+      source.value(guest);
+      const repeat = () => {
+        if (!isPatronInPools(guest)) {
+          return;
+        }
+
+        setTimeout(() => {
+          source.give(this.theNumber);
+          repeat();
+        }, this.delay);
+      };
+      repeat();
+    }
+  }
+
+  class TotalSum {
+    constructor(numbers) {
+      this.numbers = numbers;
+    }
+
+    sum(guest) {
+      let totalSum = 0;
+      const source = new SourceWithPool(totalSum);
+      source.value(guest);
+      const numbersGuests = [];
+      this.numbers.forEach((numberSource, index) => {
+        const numberGuest = new GuestCast(guest, (value) => {
+          totalSum += value;
+          source.give(totalSum);
+        });
+        numberSource.number(numberGuest);
+        numbersGuests.push(numberGuest);
+      });
+
+      return numbersGuests;
+    }
+  }
+
+  let totalSumGuests = [];
+  const renderResult = new Patron((value) => {
+    const resultEl = document.querySelector(".guest-cast-result");
+    if (resultEl) {
+      resultEl.textContent = `Результат = ${value}`;
+    } else {
+      removePatronFromPools(renderResult);
+      totalSumGuests.forEach(removePatronFromPools);
+    }
+  }, "renderResult");
+  totalSumGuests = new TotalSum([
+    new NumberOnceATime(1, 1000),
+    new NumberOnceATime(10, 5000),
+    new NumberOnceATime(100, 10000),
+  ]).sum(renderResult);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-cast-result">Результат = 0</span>
+</div>
+<script type="module">
+  import {
+    give,
+    Patron,
+    SourceWithPool,
+    GuestCast,
+    removePatronFromPools,
+    isPatronInPools,
+  } from "patron-oop";
+
+  class NumberOnceATime {
+    constructor(number, delay) {
+      this.delay = delay;
+      this.theNumber = number;
+    }
+
+    number(guest) {
+      const source = new SourceWithPool(this.theNumber);
+      source.value(guest);
+      const repeat = () => {
+        if (!isPatronInPools(guest)) {
+          return;
+        }
+
+        setTimeout(() => {
+          source.give(this.theNumber);
+          repeat();
+        }, this.delay);
+      };
+      repeat();
+    }
+  }
+
+  class TotalSum {
+    constructor(numbers) {
+      this.numbers = numbers;
+    }
+
+    sum(guest) {
+      let totalSum = 0;
+      const source = new SourceWithPool(totalSum);
+      source.value(guest);
+      const numbersGuests = [];
+      this.numbers.forEach((numberSource, index) => {
+        const numberGuest = new GuestCast(guest, (value) => {
+          totalSum += value;
+          source.give(totalSum);
+        });
+        numberSource.number(numberGuest);
+        numbersGuests.push(numberGuest);
+      });
+
+      return numbersGuests;
+    }
+  }
+
+  let totalSumGuests = [];
+  const renderResult = new Patron((value) => {
+    const resultEl = document.querySelector(".guest-cast-result");
+    if (resultEl) {
+      resultEl.textContent = `Результат = ${value}`;
+    } else {
+      removePatronFromPools(renderResult);
+      totalSumGuests.forEach(removePatronFromPools);
+    }
+  }, "renderResult");
+  totalSumGuests = new TotalSum([
+    new NumberOnceATime(1, 1000),
+    new NumberOnceATime(10, 5000),
+    new NumberOnceATime(100, 10000),
+  ]).sum(renderResult);
+</script>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/utils/give"
+    >give</a
+  >
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/patron"
+    >Patron</a
+  >
+</p>

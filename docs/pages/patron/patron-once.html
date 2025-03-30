@@ -1,0 +1,110 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс PatronOnce</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Patron/PatronOnce.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  PatronOnce на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Предназначен для создания
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-patron"
+    >
+      патрона
+    </a>
+  </span>
+  , который будет выполнен только один раз и удалит себя после получения первого
+  значения
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Такое поведение полезно, когда нужно получить значение, которое возможно еще
+  не установлено в
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-source"
+    >
+      источнике данных
+    </a>
+  </span>
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Схожий результат можно получить при использовании классов GuestDisposable или
+  GuestPool или SourceEmpty
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import { SourceWithPool, PatronOnce } from "patron-oop";
+
+const source = new SourceWithPool("один раз");
+source.value(
+  new PatronOnce((value) => {
+    document.querySelector(
+      ".patron-once-result"
+    ).textContent = `Результат ${value}`;
+  })
+);
+
+setTimeout(() => {
+  source.give("два раза");
+});
+setTimeout(() => {
+  source.give("три раза");
+});
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="patron-once-result">Нет результата!</span>
+</div>
+<script type="module">
+  import { SourceWithPool, PatronOnce } from "patron-oop";
+
+  const source = new SourceWithPool("один раз");
+  source.value(
+    new PatronOnce((value) => {
+      document.querySelector(
+        ".patron-once-result"
+      ).textContent = `Результат ${value}`;
+    })
+  );
+
+  setTimeout(() => {
+    source.give("два раза");
+  });
+  setTimeout(() => {
+    source.give("три раза");
+  });
+</script>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/guest/guest-pool"
+    >GuestPool</a
+  >
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/guest/guest-disposable"
+    >GuestDisposable</a
+  >
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/source"
+    >Source</a
+  >
+</p>

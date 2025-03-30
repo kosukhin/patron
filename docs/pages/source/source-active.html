@@ -1,0 +1,113 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс SourceActive</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/SourceActive.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  SourceActive на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Класс
+  <link-dynamic href="/source">Source</link-dynamic> можно
+  назвать пассивным
+  <link-dynamic href="/terminology/the-source">источником данных</link-dynamic>,
+  потому что мы только вызываем его метод <b>value</b> и надеемся получить
+  данные, либо говорим что нас нужно уведомлять о новых данных. При этом никаких
+  активных действий совершать не требуется
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Класс <b>SourceActive</b> можно назвать активным источником данных. Чтобы
+  значение было рассчитано мы должны явно вызывать метод <b>do</b>. Подобные
+  классы полезны в случаях, когда вычисление нужно выполнить не сразу а по
+  событию
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Также можно отдельно использовать
+  <link-reloadable
+    target-blank
+    href="https://github.com/kosukhin/patron/blob/main/src/Guest/SourceActive.ts#L9"
+    >ActionType</link-reloadable
+  >
+  интерфейс для объявления своих собственных классов - активных источников
+  данных, имеющих метод do
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">import { SourceActive, Patron } from "patron-oop";
+
+const eur = new SourceActive((_, source) => {
+    source.give("Loading...");
+    fetch("https://www.cbr.ru/scripts/XML_daily.asp")
+    .then((r) => r.text())
+    .then((r) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(r, "application/xml");
+        const eurNode = doc.querySelector('[ID="R01239"] Value');
+        source.give(eurNode.textContent);
+    });
+});
+
+eur.value(
+    new Patron((val) => {
+        document.querySelector(".guest-result").textContent = `EUR/RUB = ${val}`;
+    })
+);
+
+document
+    .getElementById("get-eur")
+    .addEventListener("click", eur.do.bind(eur));
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-1 font-bold">Результат 1.</p>
+<button
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+  id="get-eur"
+>
+  Get EUR
+</button>
+<div class="example mb-4">
+  <span class="guest-result"> Нажмите кнопку "Get EUR" </span>
+</div>
+
+<script type="module">
+  import { SourceActive, Patron } from "patron-oop";
+
+  const eur = new SourceActive((_, source) => {
+    source.give("Loading...");
+    fetch("https://www.cbr.ru/scripts/XML_daily.asp")
+      .then((r) => r.text())
+      .then((r) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(r, "application/xml");
+        const eurNode = doc.querySelector('[ID="R01239"] Value');
+        source.give(eurNode.textContent);
+      });
+  });
+
+  eur.value(
+    new Patron((val) => {
+      document.querySelector(".guest-result").textContent = `EUR/RUB = ${val}`;
+    })
+  );
+
+  document
+    .getElementById("get-eur")
+    .addEventListener("click", eur.do.bind(eur));
+</script>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <link-dynamic href="/source">Source</link-dynamic>
+</p>

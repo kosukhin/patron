@@ -1,0 +1,167 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Обработка ошибок</h1>
+
+<p class="text-gray-600 text-lg mb-4">
+  При разработке приложений мы можем сделать общие точки перехвата ошибок,
+  например, с помощью window.onerror или window.onunhandledrejection(Для
+  промисов). Также можно использовать обработку ошибок через try-catch если
+  нужно детализировать ошибку.
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  В этом разделе рассмотрим подход при котором класс заранее объявляет, что ему
+  нужен гость для передачи сообщений ошибок.
+</p>
+
+<p class="text-gray-600 text-lg mb-1 font-bold">Результат 1.</p>
+<button
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+  onclick="random.do()"
+>
+  Случайное число
+</button>
+<div class="example mb-4">
+  <div>
+    <b>Число:</b>
+    <span class="guest-result"> Нажмите кнопку "Случайное число" </span>
+  </div>
+  <div>
+    <b>Сообщение:</b>
+    <span class="guest-message"> нет сообщений </span>
+  </div>
+  <div><b>Ошибка: </b><span class="guest-error"> нет ошибок </span></div>
+</div>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">import { SourceActive, SourceEmpty, GuestCast, Patron } from "patron-oop";
+
+  class Random {
+    constructor(till) {
+      this.activeSource = new SourceActive((_, source) => {
+        source.give(Math.round(Math.random() * till));
+      });
+    }
+
+    do() {
+      this.activeSource.do();
+      return this;
+    }
+
+    value(guest) {
+      this.activeSource.value(guest);
+      return this;
+    }
+  }
+
+  window.random = new Random(99);
+
+  class EvenNumberMessage {
+    constructor(baseNumber, errorGuest) {
+      this.baseNumber = baseNumber;
+      this.errorGuest = errorGuest;
+    }
+
+    value(guest) {
+      this.baseNumber.value(
+        new GuestCast(guest, (value) => {
+          if (value % 2 === 0) {
+            guest.give(`${value} - четное!`);
+          } else {
+            this.errorGuest.give(`${value} - не четное!`);
+          }
+        })
+      );
+      return this;
+    }
+  }
+
+  const randomErrors = new SourceEmpty();
+  const randomMessage = new EvenNumberMessage(random, randomErrors);
+
+  random.value(
+    new Patron((val) => {
+      document.querySelector(".guest-result").textContent = val;
+    })
+  );
+  randomMessage.value(
+    new Patron((val) => {
+      document.querySelector(".guest-message").textContent = val;
+    })
+  );
+  randomErrors.value(
+    new Patron((val) => {
+      document.querySelector(".guest-error").textContent = val;
+    })
+  );
+</code></pre>
+
+<script type="module">
+  import { SourceActive, SourceEmpty, GuestCast, Patron } from "patron-oop";
+
+  class Random {
+    constructor(till) {
+      this.activeSource = new SourceActive((_, source) => {
+        source.give(Math.round(Math.random() * till));
+      });
+    }
+
+    do() {
+      this.activeSource.do();
+      return this;
+    }
+
+    value(guest) {
+      this.activeSource.value(guest);
+      return this;
+    }
+  }
+
+  window.random = new Random(99);
+
+  class EvenNumberMessage {
+    constructor(baseNumber, errorGuest) {
+      this.baseNumber = baseNumber;
+      this.errorGuest = errorGuest;
+    }
+
+    value(guest) {
+      this.baseNumber.value(
+        new GuestCast(guest, (value) => {
+          if (value % 2 === 0) {
+            guest.give(`${value} - четное!`);
+          } else {
+            this.errorGuest.give(`${value} - не четное!`);
+          }
+        })
+      );
+      return this;
+    }
+  }
+
+  const randomErrors = new SourceEmpty();
+  const randomMessage = new EvenNumberMessage(random, randomErrors);
+
+  random.value(
+    new Patron((val) => {
+      document.querySelector(".guest-result").textContent = val;
+    })
+  );
+  randomMessage.value(
+    new Patron((val) => {
+      document.querySelector(".guest-message").textContent = val;
+    })
+  );
+  randomErrors.value(
+    new Patron((val) => {
+      document.querySelector(".guest-error").textContent = val;
+    })
+  );
+</script>
+
+<p class="text-gray-600 text-lg mb-4">
+  На уровне приложения, если нам нужно обрабатывать ошибки централизованно можно
+  создать один объект от класса SourceEmpty и передавать этот объект в качестве
+  посетителя для любых ошибок, что позволит собрать все ошибки в одном месте и
+  обработать.
+</p>

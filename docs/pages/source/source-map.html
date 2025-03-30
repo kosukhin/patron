@@ -1,0 +1,192 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс SourceMap</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/SourceMap.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  SourceMap на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Класс <b>SourceMap</b> нужен в случаях обработки множества значений, через
+  создание на основе этих значений объектов -
+  <link-dynamic href="/terminology/the-source">источников данных</link-dynamic>.
+  Например у нас есть класс - результат умножения числа на 2. SourceMap
+  позволит применить этот класс к какому-то итерируемому источнику данных,
+  преобразовывая каждое значение в новое, в результате получим новый итерируемый
+  источник данных, в котором все числа умножены на 2.
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">import { Source, SourceWithPool, GuestCast, SourceMap, PrivateClass, give } from "patron-oop";
+
+class X2 {
+  constructor(baseNumber) {
+    this.baseNumber = baseNumber;
+  }
+
+  value(guest) {
+    this.baseNumber.value(
+      new GuestCast(guest, (v) => {
+        give(v * 2, guest);
+      })
+    );
+    return this;
+  }
+}
+
+const source = new SourceWithPool([1, 2, 3, 9]);
+const guestMapped = new SourceMap(source, new PrivateClass(X2));
+
+guestMapped.value((v) => {
+  document.querySelector(".guest-result").textContent = v.join();
+});
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Result here</span>
+</div>
+
+<script type="module">
+  import { Source, SourceWithPool, GuestCast, SourceMap, PrivateClass, give } from "patron-oop";
+
+  class X2 {
+    constructor(baseNumber) {
+      this.baseNumber = baseNumber;
+    }
+
+    value(guest) {
+      this.baseNumber.value(
+        new GuestCast(guest, (v) => {
+          give(v * 2, guest);
+        })
+      );
+      return this;
+    }
+  }
+
+  const source = new SourceWithPool([1, 2, 3, 9]);
+  const guestMapped = new SourceMap(source, new PrivateClass(X2));
+
+  guestMapped.value((v) => {
+    document.querySelector(".guest-result").textContent = v.join();
+  });
+</script>
+
+<p class="text-gray-600 text-lg mb-4">
+  Так же можно передавать итерируемый источник источников данных. Благодаря
+  этому можно параллельно вычислить общий результат нескольких источников.
+  Пример использования ниже
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 2.</p>
+<pre class="mb-4"><code class="language-js">import {
+  Source,
+  SourceWithPool,
+  GuestCast,
+  SourceMap,
+  PrivateClass,
+  give,
+  isSource,
+} from "patron-oop";
+
+(() => {
+  class X3 {
+    constructor(baseNumber) {
+      this.baseNumber = baseNumber;
+    }
+
+    value(guest) {
+      this.baseNumber.value(
+        new GuestCast(guest, (v) => {
+          give(v * 3, guest);
+        })
+      );
+      return this;
+    }
+  }
+
+  const numSource = (num) =>
+    new Source((guest) =>
+      setTimeout(() => {
+        give(num, guest);
+      }, 8000)
+    );
+
+  const source = new SourceWithPool([
+    numSource(1),
+    numSource(2),
+    numSource(3),
+    numSource(4),
+    numSource(5),
+  ]);
+  const map = new SourceMap(source, new PrivateClass(X3));
+
+  map.value((v) => {
+    document.querySelector(".guest-result-2").textContent = v.join();
+  });
+})();
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 2.</p>
+<div class="example mb-4">
+  <span class="guest-result-2">Все результаты через 8 сек.</span>
+</div>
+
+<script type="module">
+  import {
+    Source,
+    SourceWithPool,
+    GuestCast,
+    SourceMap,
+    PrivateClass,
+    give,
+    isSource,
+  } from "patron-oop";
+
+  (() => {
+    class X3 {
+      constructor(baseNumber) {
+        this.baseNumber = baseNumber;
+      }
+
+      value(guest) {
+        this.baseNumber.value(
+          new GuestCast(guest, (v) => {
+            give(v * 3, guest);
+          })
+        );
+        return this;
+      }
+    }
+
+    const numSource = (num) =>
+      new Source((guest) =>
+        setTimeout(() => {
+          give(num, guest);
+        }, 8000)
+      );
+
+    const source = new SourceWithPool([
+      numSource(1),
+      numSource(2),
+      numSource(3),
+      numSource(4),
+      numSource(5),
+    ]);
+    const map = new SourceMap(source, new PrivateClass(X3));
+
+    map.value((v) => {
+      document.querySelector(".guest-result-2").textContent = v.join();
+    });
+  })();
+</script>

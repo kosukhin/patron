@@ -1,0 +1,73 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс SourceApplied</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/SourceApplied.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  SourceApplied на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+    Иногда к занчению источника нужно применить какую-нибудь существующую функцию, для этого можно использовать класс SourceApplied
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">import { Source, SourceApplied, Patron } from "patron-oop";
+
+const guest = v => {
+  const r = document.querySelector(".guest-result");
+  if (r) {
+    r.textContent = v;
+  }
+}
+
+const max = 10;
+let iterations = 0;
+const timer = new Source((g) => {
+  const tick = () => {
+    iterations++;
+    g.give(iterations);
+    setTimeout(tick, 1000);
+  }
+tick();
+});
+
+new SourceApplied(timer, x => x * 2).value(new Patron(guest));
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Через 1 сек...</span>
+</div>
+
+<script type="module">
+import { Source, SourceApplied, Patron } from "patron-oop";
+
+const guest = v => {
+    const r = document.querySelector(".guest-result");
+    if (r) {
+        r.textContent = v;
+    }
+}
+
+const max = 10;
+let iterations = 0;
+const timer = new Source((g) => {
+    const tick = () => {
+        iterations++;
+        g.give(iterations);
+        setTimeout(tick, 1000);
+    }
+    tick();
+});
+
+new SourceApplied(timer, x => x * 2).value(new Patron(guest));
+</script>

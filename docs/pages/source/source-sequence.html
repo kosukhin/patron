@@ -1,0 +1,160 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">
+  Класс SourceSequence
+</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/SourceSequence.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  SourceSequence на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Класс <b>SourceSequence</b> работает так же как и
+  <link-dynamic href="/source/source-map">SourceMap</link-dynamic>
+  , но перебирает источнники данных последовательно а не параллельно
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Такое поведение - последовательного перебора элементов может быть полезно либо
+  в случаях перебора синхронных данных, что позволяет экономить память не
+  оборачивая каждый источник данных в лишние объекты, либо в случаях когда по
+  бизнес логике нужно сделать последовательный перебор источников данных.
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+  Source,
+  Patron,
+  GuestCast,
+  SourceWithPool,
+  SourceSequence,
+  PrivateClass,
+  give,
+  isSource,
+} from "patron-oop";
+
+class X3 {
+  constructor(baseNumber) {
+    this.baseNumber = baseNumber;
+  }
+
+  value(guest) {
+    this.baseNumber.value(
+      new GuestCast(guest, (v) => {
+        give(v * 3, guest);
+      })
+    );
+    return this;
+  }
+}
+
+const tillResult = new SourceWithPool(9);
+const numSource = (num) =>
+  new Source((guest) =>
+    setTimeout(() => {
+      tillResult.value((theValue) => {
+        tillResult.give(theValue - 1);
+      });
+      give(num, guest);
+    }, 1000)
+  );
+
+const source = new SourceWithPool([
+  numSource(1),
+  numSource(2),
+  numSource(3),
+  numSource(4),
+  numSource(5),
+  numSource(6),
+  numSource(7),
+  numSource(8),
+  numSource(9),
+]);
+const sequence = new SourceSequence(source, new PrivateClass(X3));
+
+sequence.value((v) => {
+  document.querySelector(".guest-result").textContent = v.join();
+});
+tillResult.value(
+  new Patron((v) => {
+    document.querySelector(
+      ".guest-result"
+    ).textContent = `Результат через ${v} сек.`;
+  })
+);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Result here</span>
+</div>
+
+<script type="module">
+  import {
+    Source,
+    Patron,
+    GuestCast,
+    SourceWithPool,
+    SourceSequence,
+    PrivateClass,
+    give,
+    isSource,
+  } from "patron-oop";
+
+  class X3 {
+    constructor(baseNumber) {
+      this.baseNumber = baseNumber;
+    }
+
+    value(guest) {
+      this.baseNumber.value(
+        new GuestCast(guest, (v) => {
+          give(v * 3, guest);
+        })
+      );
+      return this;
+    }
+  }
+
+  const tillResult = new SourceWithPool(9);
+  const numSource = (num) =>
+    new Source((guest) =>
+      setTimeout(() => {
+        tillResult.value((theValue) => {
+          tillResult.give(theValue - 1);
+        });
+        give(num, guest);
+      }, 1000)
+    );
+
+  const source = new SourceWithPool([
+    numSource(1),
+    numSource(2),
+    numSource(3),
+    numSource(4),
+    numSource(5),
+    numSource(6),
+    numSource(7),
+    numSource(8),
+    numSource(9),
+  ]);
+  const sequence = new SourceSequence(source, new PrivateClass(X3));
+
+  sequence.value((v) => {
+    document.querySelector(".guest-result").textContent = v.join();
+  });
+  tillResult.value(
+    new Patron((v) => {
+      document.querySelector(
+        ".guest-result"
+      ).textContent = `Результат через ${v} сек.`;
+    })
+  );
+</script>

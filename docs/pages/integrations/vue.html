@@ -1,0 +1,102 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Vue</h1>
+
+<p class="text-gray-600 text-lg mb-4">
+  Библиотека Patron интегрируется в Vue без каких-либо проблем. Например, чтобы
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-source"
+    >
+      источник данных
+    </a>
+  </span>
+  привязать к ref можно использовать такой класс (Листинг 1).
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Листинг 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">class VueRefPatron&lt;T&gt; implements GuestType&lt;T&gt; {
+    private readonly innerRef: Ref&lt;T | undefined&gt;;
+
+    public constructor(defaultValue: T | undefined = undefined) {
+        this.innerRef = ref(defaultValue);
+    }
+
+    public ref() {
+        return this.innerRef;
+    }
+
+    public give(value: T) {
+        this.innerRef.value = value;
+        return this;
+    }
+
+    public introduction() {
+        return &#39;patron&#39; as const;
+    }
+}
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-4">
+  Класс VueRefPatron можно использовать как посетителя для разных источников
+  данных, связывая таким образом источники данных с системой реактивности Vue.
+</p>
+
+<h3 class="pb-3 text-xl font-semibold text-gray-600">
+  Источники в шаблоне Vue
+</h3>
+
+<p class="text-gray-600 text-lg mb-4">
+  Также в шаблонах можно использовать заготовку из листинга 2, для того, чтобы
+  концентрироваться на разработке чистых компонентов, ожидающих простые данные,
+  вместо того, чтобы смешивать логику получения данных и логику компонентов.
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Листинг 2.</p>
+<pre class="mb-4"><code class="language-html">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;slot v-if=&quot;!data&quot; name=&quot;fallback&quot; /&gt;
+    &lt;slot v-else :data=&quot;data&quot; /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script lang=&quot;ts&quot;&gt;
+import { Source, Guest, Patron } from &#39;patron-oop&#39;;
+import { defineComponent, ref } from &#39;vue&#39;;
+import { PropType } from &#39;vue/types/v3-component-props&#39;;
+
+export default defineComponent({
+  name: &#39;Source&#39;,
+  emits: [&#39;input&#39;],
+  props: {
+    source: {
+      type: Object as PropType&lt;Source&lt;any&gt;&gt;,
+      required: true,
+    },
+  },
+  setup(props, { emit }) {
+    const data = ref(null);
+    props.source.value(
+      new Patron(
+        new Guest(value =&gt; {
+          data.value = value;
+          emit(&#39;input&#39;, value);
+        })
+      )
+    );
+    return {
+      data,
+    };
+  },
+});
+&lt;/script&gt;
+
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-4">
+  В результате компонент Source можно использовать, чтобы оборачивать другие
+  компоненты, требующие данные, передать в компонент источник данных, результат
+  работы которого будет в пропсе data в слоте default.
+</p>

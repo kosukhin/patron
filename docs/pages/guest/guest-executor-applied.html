@@ -1,0 +1,65 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс GuestExecutorApplied</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Guest/GuestExecutorApplied.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  GuestExecutorApplied на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Иногда нам нужно контроллировать не значение, которое приходит гостю, а процесс передачи значения, например если мы хотим применить к гостю функцию debounce или функцию throttle, чтобы снизить количество срабатываний логики гостя.
+</p>
+
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4 w-full"
+><code class="language-js">import { Guest, GuestExecutorApplied, sourceOf } from "patron-oop";
+
+  const guest = new Guest((value) => {
+    document.querySelector(
+      ".guest-result"
+    ).textContent = `value is ${value}`;
+  });
+
+  sourceOf(40).value(
+    new GuestExecutorApplied(guest, (guestFn) => {
+      return v => {
+        setTimeout(() => {
+          guestFn(v);
+        }, 5000)
+      }
+    })
+  );
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Результат через 5 сек...</span>
+</div>
+<script type="module">
+  import { Guest, GuestExecutorApplied, sourceOf } from "patron-oop";
+
+  const guest = new Guest((value) => {
+    document.querySelector(
+      ".guest-result"
+    ).textContent = `value is ${value}`;
+  });
+
+  sourceOf(40).value(
+    new GuestExecutorApplied(guest, (guestFn) => {
+      return v => {
+        setTimeout(() => {
+          guestFn(v);
+        }, 5000)
+      }
+    })
+  );
+</script>

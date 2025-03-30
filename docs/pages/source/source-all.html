@@ -1,0 +1,129 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс SourceAll</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Guest/SourceAll.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  SourceAll на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Предназначен для объединения результатов из нескольких
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-source"
+    >
+      источников данных
+    </a>
+  </span>
+  в один источник
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Полезное поведение в случаях, когда есть множество источников данных, на
+  основе которых нужно принимать решение в момент, когда все источники отдадут
+  свои данные
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+    Source,
+    SourceAll
+} from 'patron-oop';
+
+const one = new Source(1);
+const two = new Source(2);
+
+const all = new SourceAll();
+one.value(all.guestKey('one'));
+two.value(all.guestKey('two'));
+
+all.value(({one, two}) => {
+    document
+        .querySelector('.guest-result')
+        .textContent = `Результат = ${one + two}`;
+});
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Результат = 0</span>
+</div>
+<script type="module">
+  import { give, Patron, SourceWithPool, GuestCast, SourceAll } from "patron-oop";
+
+  const one = new SourceWithPool(1);
+  const two = new SourceWithPool(2);
+
+  const all = new SourceAll();
+  one.value(all.guestKey("one"));
+  two.value(all.guestKey("two"));
+
+  all.value(({ one, two }) => {
+    document.querySelector(".guest-result").textContent = `Результат = ${
+      one + two
+    }`;
+  });
+</script>
+
+<p class="text-gray-600 text-lg mb-4">
+  Также предусмотрена возможность собрать результаты в массив а не объект.
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+  SourceWithPool,
+  SourceAll
+} from 'patron-oop';
+
+const one = new SourceWithPool(1);
+const two = new SourceWithPool(2);
+
+const all = new SourceAll();
+one.value(all.guestKey('0'));
+two.value(all.guestKey('1'));
+
+all.valueArray((numbers) => {
+    document.querySelector('.guest-result-array').textContent = `Результат = ${numbers}`;
+});
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result-array">Результат = 0</span>
+</div>
+<script type="module">
+  import { give, Patron, SourceWithPool, GuestCast, SourceAll } from "patron-oop";
+
+  (() => {
+    const one = new SourceWithPool(1);
+    const two = new SourceWithPool(2);
+
+    const all = new SourceAll();
+    one.value(all.guestKey("0"));
+    two.value(all.guestKey("1"));
+
+    all.valueArray((numbers) => {
+      document.querySelector(
+        ".guest-result-array"
+      ).textContent = `Результат = ${numbers}`;
+    });
+  })();
+</script>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/source"
+    >Source</a
+  >
+</p>

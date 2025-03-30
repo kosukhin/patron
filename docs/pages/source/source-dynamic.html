@@ -1,0 +1,93 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс SourceDynamic</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/SourceDynamic.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  SourceDynamic на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Иногда необходимо соединить разные объекты
+  <link-dynamic href="/terminology/the-source">источник данных</link-dynamic>
+  и <link-dynamic href="/terminology/visitor">посетитель</link-dynamic> в одном
+  объекте как общий источник данных, который можно изменять
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Например, источником данных структуры <b>Х</b> может быть объект <b>А</b>, а
+  посетителем, получающим новую версию структуры <b>X</b> может быть объект
+  <b>B</b>. В таком случае можно объединить объекты <b>A</b> и <b>B</b> в один
+  общий SourceType, что упростит манипуляции над структурой <b>X</b>
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Для таких случаев подходит класс SourceDynamic объединяющий
+  <link-reloadable
+    target-blank
+    href="https://github.com/kosukhin/patron/blob/main/src/Guest/Guest.ts#L17"
+  >
+    GuestType
+  </link-reloadable>
+  и
+  <link-reloadable
+    target-blank
+    href="https://github.com/kosukhin/patron/blob/main/src/Source/Source.ts#L3"
+  >
+    SourceType
+  </link-reloadable>
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">import { SourceDynamic, Guest, Source } from "patron-oop";
+
+let theValue = 1;
+const sourceDynamic = new SourceDynamic(
+    new Guest((value) => {
+        theValue = value;
+    }),
+    new Source((guest) => {
+        give(theValue, guest);
+    })
+);
+
+sourceDynamic.give(42);
+sourceDynamic.value((value) => {
+    document.querySelector(
+    ".source-dynamic-result"
+    ).textContent = `Результат = ${value}`;
+});
+</code></pre>
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <div class="source-dynamic-result">Нет результата!</div>
+</div>
+
+<script type="module">
+  import { SourceDynamic, Guest, Source, give } from "patron-oop";
+
+  let theValue = 1;
+  const sourceDynamic = new SourceDynamic(
+    new Guest((value) => {
+      theValue = value;
+    }),
+    new Source((guest) => {
+      give(theValue, guest);
+    })
+  );
+
+  sourceDynamic.give(42);
+  sourceDynamic.value((value) => {
+    document.querySelector(
+      ".source-dynamic-result"
+    ).textContent = `Результат = ${value}`;
+  });
+</script>

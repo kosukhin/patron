@@ -1,0 +1,140 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс Patron</h1>
+
+<a href="https://github.com/kosukhin/patron/blob/main/src/Patron/Patron.ts" target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4">
+  <img src="./assets/img/github_16.jpg" width="16" height="16" />
+  Patron на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Предназначен для динамического превращения
+  <span class="dynamic-navigation">
+    <a class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-guest">
+      гостя
+    </a>
+  </span>
+  в
+  <span class="dynamic-navigation">
+    <a class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-patron">
+      патрона
+    </a>
+  </span>
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Это поведение полезно в случаях, когда нужно из просто посетителя(гостя)
+  сделать постоянного посетиеля(патрона). Это будет означать что если у
+  <span class="dynamic-navigation">
+    <a class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-source">
+      источника данных
+    </a>
+  </span>
+  есть новые данные, то источник отдаст эту новую порцию данных всем своим
+  постоянным посетителям(патронам)
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+  Patron,
+  SourceWithPool,
+  Source,
+  GuestDisposable,
+  isPatronInPools,
+} from "patron-oop";
+
+const source = new SourceWithPool(1);
+const timer = new Source((guest) => {
+  source.value(guest);
+  const repeat = () => {
+    if (!isPatronInPools(guest)) {
+      return;
+    }
+    source.value((value) => {
+      setTimeout(() => {
+        source.give(value + 1);
+        repeat();
+      }, 1000);
+    });
+  };
+  repeat();
+});
+
+timer.value(
+  new Patron(
+    new GuestDisposable(
+      (value) => {
+        const el = document.querySelector(".patron-result");
+        if (el) {
+          el.textContent = `Секунд прошло ${value}`;
+        }
+      },
+      () => {
+        return !document.querySelector(".patron-result");
+      }
+    )
+  )
+);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="patron-result">Result here</span>
+</div>
+<script type="module">
+  import {
+    Patron,
+    SourceWithPool,
+    Source,
+    GuestDisposable,
+    isPatronInPools,
+  } from "patron-oop";
+
+  const source = new SourceWithPool(1);
+  const timer = new Source((guest) => {
+    source.value(guest);
+    const repeat = () => {
+      if (!isPatronInPools(guest)) {
+        return;
+      }
+      source.value((value) => {
+        setTimeout(() => {
+          source.give(value + 1);
+          repeat();
+        }, 1000);
+      });
+    };
+    repeat();
+  });
+
+  timer.value(
+    new Patron(
+      new GuestDisposable(
+        (value) => {
+          const el = document.querySelector(".patron-result");
+          if (el) {
+            el.textContent = `Секунд прошло ${value}`;
+          }
+        },
+        () => {
+          return !document.querySelector(".patron-result");
+        }
+      )
+    )
+  );
+</script>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <a class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/source">Source</a>
+  <a class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/guest/guest-disposable">GuestDisposable</a>
+  <a class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/source/source-with-pool">SourceWithPool</a>
+  <a class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/utils/is-patron-in-pools">isPatronInPools</a>
+</p>

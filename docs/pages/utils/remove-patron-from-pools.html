@@ -1,0 +1,57 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">
+  Функция removePatronFromPools
+</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Patron/PatronPool.ts#L7-L11"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  removePatronFromPools на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Позволяет удалить патрона из всех пулов. Полезно в случаях когда по бизнес
+  логике патрон больше не должен получать обновления
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Этого же эффекта - удаление патрона из пула можно добиться другими способами,
+  например если у вас есть доступ к объекту-пулу патронов, в этом случае можно
+  вызвать метод remove от пула
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Второй способ использовать класс GuestDisposable, который принимает 2
+  аргумента. Первый аргумент - это гость, который мы превращаем в
+  самоотменяемого гостя. Второй аргумент - это функция проверки нужно ли
+  отменять(удалять) патрон из пулов
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Третий способ - вы можете сделать собственный класс патрон, имплементировать
+  интерфейс GuestDisposableType - в котором описан метод disposed, в случаях,
+  когда этот метод возвращает true - патрон удаляется из пула
+</p>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/guest/guest-disposable"
+  >
+    GuestDisposable
+  </a>
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/patron/patron-pool"
+  >
+    PatronPool
+  </a>
+</p>

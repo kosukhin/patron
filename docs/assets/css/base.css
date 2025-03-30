@@ -1,0 +1,42 @@
+.active {
+    text-decoration: underline;
+    color: black;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.body-loading {
+    background: #eee;
+    opacity: 0;
+}
+
+.example {
+    border: solid 2px #333;
+    padding: 15px;
+    color: #abb2bf;
+    background: #282c34;
+    font-family: monospace;
+    font-size: 16px;
+}
+
+.hljs-ln-numbers.hljs-ln-numbers {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    text-align: center;
+    color: #ccc;
+    border-right: 1px solid #CCC;
+    vertical-align: top;
+    padding-right: 5px;
+}
+
+.hljs-ln-code.hljs-ln-code {
+    padding-left: 10px;
+}

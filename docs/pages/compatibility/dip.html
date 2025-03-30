@@ -1,0 +1,82 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">
+  Dependency Inversion Principal
+</h1>
+
+<p class="text-gray-600 text-lg mb-4">
+  <b>DIP</b> - принцип инверсии зависимостей, описанный Робертом Мартином.
+  Принцип говорит о том, что архитектор системы может изменить направление
+  зависимости от процедурного - когда большее зависит от меньшего на
+  противополложное когда меньшее зависит от большего. Большее - это higher
+  policy (бизнес логика) и от потребностей бизнес логики зависят плагины
+  конкретных систем, например плагин работы с БД, обеспечивающий нашу бизнес
+  логику данными из БД.
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Библиотека Patron - это реализация DIP принципа. Ваша бизнес логика может
+  зависеть от интерфейсов
+  <link-reloadable
+    target-blank
+    href="https://github.com/kosukhin/patron/blob/main/src/Source/Source.ts#L9"
+  >
+    SourceType
+  </link-reloadable>
+  или
+  <link-reloadable
+    target-blank
+    href="https://github.com/kosukhin/patron/blob/main/src/Guest/Guest.ts#L17"
+  >
+    GuestType
+  </link-reloadable>
+  или
+  <link-reloadable
+    target-blank
+    href="https://github.com/kosukhin/patron/blob/main/src/Source/SourceActive.ts#L9"
+  >
+    ActionType
+  </link-reloadable>
+  . Эти общие интерфейсы позволяют либо получить данные(SourceType) либо
+  принять того кому данные нужно передать(GuestType) либо принять объект который
+  умеет делать действия(ActionType)
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">
+  Схема 1. Пример приложения с DIP + Patron
+</p>
+
+<iframe
+  src="./assets/schemes/dip.html"
+  border="0"
+  width="100%"
+  height="500"
+></iframe>
+
+<p>&nbsp;</p>
+<p class="text-gray-600 text-lg mb-4">
+  Как видно из схемы 1 все классы зависят только от интерфейсов из библиотеки
+  Patron, только дополняя параметры дженериков нужными типами.
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Прикладной код может выглядеть следующим образом, как показано в примере 1.
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">// Условный код, для демонстрации композиции классов схемы 1
+const credentials = new CredentialsFromPostRequest(request);
+
+const user = new UserStatus(
+    new SQLUserOfCredentials(credentials)
+);
+
+const card = new UserCard();
+user.value(card);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-4">
+  Выгода использования Patron - хорошо видна, каждый класс не зависит ни от чего
+  кроме библиотеки Patron и тех библиотек плагином которых является, а в случае
+  класса бизнес - логики зависимость будет только от Patron.
+</p>
