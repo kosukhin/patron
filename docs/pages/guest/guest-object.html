@@ -1,0 +1,101 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс GuestObject</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Guest/GuestObject.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  GuestObject на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Предназначен для перевода любого
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/visitor"
+    >
+      посетителя
+    </a>
+  </span>
+  в объектный вид, чтобы можно было вызывать .give метод
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Этот функционал может быть полезен, если нужно написать код в котором мы будем
+  уверены, что посетитель - это объект, вне зависимости будет это патрон или
+  гость
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Этот класс может быть заменен функцией give, которой неважно какой посетитель
+  к ней пришел функция,
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-guest"
+    >
+      гость
+    </a>
+  </span>
+  или
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-patron"
+    >
+      патрон
+    </a>
+  </span>
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">import { GuestObject } from 'patron-oop';
+
+class HelloWorld {
+    greeting(guest) {
+        new GuestObject(guest).give('Hello world!');
+    }
+}
+
+const fnGuest = (value) => {
+    document.querySelector('.guest-result').textContent = value;
+}
+new HelloWorld().greeting(fnGuest);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Ждем результат</span>
+</div>
+<script type="module">
+  import { GuestObject } from "patron-oop";
+
+  class HelloWorld {
+    greeting(guest) {
+      new GuestObject(guest).give("Hello world!");
+    }
+  }
+
+  const fnGuest = (value) => {
+    document.querySelector(".guest-result").textContent = value;
+  };
+  new HelloWorld().greeting(fnGuest);
+</script>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/utils/give"
+    >give</a
+  >
+</p>

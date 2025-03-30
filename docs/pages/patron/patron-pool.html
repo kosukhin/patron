@@ -1,0 +1,99 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс PatronPool</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Patron/PatronPool.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  PatronPool на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+  Предназначен для хранения списка
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-patron"
+    >
+      патронов
+    </a>
+  </span>
+  , которым нужно передавать значения
+</p>
+
+<p class="text-gray-600 text-lg mb-4">
+  Полезно для организации списка подписчиков на обновление данных какого-то
+  <span class="dynamic-navigation">
+    <a
+      class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+      href="/terminology/the-source"
+    >
+      источника
+    </a>
+  </span>
+  . Сам по себе класс PatronPool - достаточно низкоуровневый и желательно
+  использовать класс Source, который именно является источником значений (у
+  Source под капотом работает PatornPool)
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre class="mb-4"><code class="language-js">import {
+    PatronPool,
+    Patron
+} from 'patron-oop';
+
+const pool = new PatronPool();
+
+pool.add(new Patron((value) => {
+    document.querySelector('.patron-pool-result1').textContent = value + ' 1';
+}));
+pool.add(new Patron((value) => {
+    document.querySelector('.patron-pool-result2').textContent = value + ' 2';
+}));
+
+pool.give('Значение из пула');
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <div class="patron-pool-result1">Нет результата 1!</div>
+  <div class="patron-pool-result2">Нет результата 2!</div>
+</div>
+<script type="module">
+  import { PatronPool, Patron } from "patron-oop";
+
+  const pool = new PatronPool();
+
+  pool.add(
+    new Patron((value) => {
+      document.querySelector(".patron-pool-result1").textContent = value + " 1";
+    })
+  );
+  pool.add(
+    new Patron((value) => {
+      document.querySelector(".patron-pool-result2").textContent = value + " 2";
+    })
+  );
+
+  pool.give("Значение из пула");
+</script>
+
+<div class="font-bold mt-8">Смотрите также</div>
+
+<p class="text-gray-600 text-lg mb-4 dynamic-navigation">
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/source"
+    >Source</a
+  >
+  <a
+    class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
+    href="/patron"
+    >Patron</a
+  >
+</p>
