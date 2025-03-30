@@ -1,6 +1,6 @@
 {
   "name": "patron-oop",
-  "version": "1.45.0",
+  "version": "1.46.0",
   "description": "",
   "type": "module",
   "main": "dist/patron.js",

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.46.0](https://github.com/kosukhin/patron/compare/v1.45.0...v1.46.0) (2025-03-30)
+
+
+### Features
+
+* **43-issue:** documentation inside repo ([3d9ce71](https://github.com/kosukhin/patron/commit/3d9ce71bed6568f3b21e90eb742735d8289bcd15))
+* **43-issue:** fix existed source docs ([bdc7c9f](https://github.com/kosukhin/patron/commit/bdc7c9f67389c74dd5c8b87ae0c169a544bf4808))
+* **43-issue:** goes thru guest part ([4abaff8](https://github.com/kosukhin/patron/commit/4abaff86c0a3d3812c5d7507fa395286554fd213))
+* **43-issue:** guest part done ([00329bc](https://github.com/kosukhin/patron/commit/00329bcd04d713fd7a035a586f36e6653f6f980f))
+* **43-issue:** patron applied done ([7c1af0b](https://github.com/kosukhin/patron/commit/7c1af0b4ee99e276e3d7b9303e8a52bd730c1380))
+* **43-issue:** source section done ([e280a39](https://github.com/kosukhin/patron/commit/e280a39483fd6f6adf59e3d6a3b571921f3d04dc))
+
 ## [1.45.0](https://github.com/kosukhin/patron/compare/v1.44.1...v1.45.0) (2025-03-23)
 
 
