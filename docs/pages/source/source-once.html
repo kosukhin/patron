@@ -1,0 +1,73 @@
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс SourceOnce</h1>
+
+<a
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/SourceOnce.ts"
+  target="_blank"
+  class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
+>
+  <img
+    src="./assets/img/github_16.jpg"
+    width="16"
+    height="16"
+  />
+  SourceOnce на GitHub
+</a>
+
+<p class="text-gray-600 text-lg mb-4">
+    Класс SourceOnce используется в случаях когда нужно создать источник данных в котором на
+    старте не будет значения, оно будет установлено позже но только один раз, последующие установки
+    новых значений будут игнорироваться.
+</p>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
+<pre
+  class="mb-4"
+><code class="language-js">import { SourceOnce, Patron } from "patron-oop";
+
+const source = new SourceOnce();
+
+source.value(new Patron((v) => {
+    document.querySelector(".guest-result").textContent = v;
+}));
+
+setTimeout(() => {
+    source.give(10)
+}, 1000);
+
+// Код ниже не имеет эффекта
+setTimeout(() => {
+    source.give(20)
+}, 2000);
+
+setTimeout(() => {
+    source.give(30)
+}, 3000);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-result">Через 1 сек...</span>
+</div>
+
+<script type="module">
+import { SourceOnce, Patron } from "patron-oop";
+
+const source = new SourceOnce();
+
+source.value(new Patron((v) => {
+    document.querySelector(".guest-result").textContent = v;
+}));
+
+setTimeout(() => {
+    source.give(10)
+}, 1000);
+
+// Код ниже не имеет эффекта
+setTimeout(() => {
+    source.give(20)
+}, 2000);
+
+setTimeout(() => {
+    source.give(30)
+}, 3000);
+</script>

@@ -21,5 +21,6 @@ export * from "./Source/SourceWithPool";
 export * from "./Source/SourceDynamic";
 export * from "./Source/SourceApplied";
 export * from "./Source/SourceExecutorApplied";
+export * from "./Source/SourceOnce";
 export * from "./Private/PrivateClass";
 export * from "./Private/Private";
