@@ -33,9 +33,9 @@
   Source,
   Patron,
   GuestCast,
-  Source,
+  SourceWithPool,
   SourceSequence,
-  Factory,
+  PrivateClass,
   give,
   isSource,
 } from "patron-oop";
@@ -55,7 +55,7 @@ class X3 {
   }
 }
 
-const tillResult = new Source(9);
+const tillResult = new SourceWithPool(9);
 const numSource = (num) =>
   new Source((guest) =>
     setTimeout(() => {
@@ -66,7 +66,7 @@ const numSource = (num) =>
     }, 1000)
   );
 
-const source = new Source([
+const source = new SourceWithPool([
   numSource(1),
   numSource(2),
   numSource(3),
@@ -77,7 +77,7 @@ const source = new Source([
   numSource(8),
   numSource(9),
 ]);
-const sequence = new SourceSequence(source, new Factory(X3));
+const sequence = new SourceSequence(source, new PrivateClass(X3));
 
 sequence.value((v) => {
   document.querySelector(".guest-result").textContent = v.join();
@@ -101,9 +101,9 @@ tillResult.value(
     Source,
     Patron,
     GuestCast,
-    Source,
+    SourceWithPool,
     SourceSequence,
-    Factory,
+    PrivateClass,
     give,
     isSource,
   } from "patron-oop";
@@ -123,7 +123,7 @@ tillResult.value(
     }
   }
 
-  const tillResult = new Source(9);
+  const tillResult = new SourceWithPool(9);
   const numSource = (num) =>
     new Source((guest) =>
       setTimeout(() => {
@@ -134,7 +134,7 @@ tillResult.value(
       }, 1000)
     );
 
-  const source = new Source([
+  const source = new SourceWithPool([
     numSource(1),
     numSource(2),
     numSource(3),
@@ -145,7 +145,7 @@ tillResult.value(
     numSource(8),
     numSource(9),
   ]);
-  const sequence = new SourceSequence(source, new Factory(X3));
+  const sequence = new SourceSequence(source, new PrivateClass(X3));
 
   sequence.value((v) => {
     document.querySelector(".guest-result").textContent = v.join();

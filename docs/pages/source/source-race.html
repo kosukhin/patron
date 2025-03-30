@@ -36,10 +36,11 @@
   SourceMap,
   SourceRace,
   Source,
+  SourceWithPool,
   give,
   value,
   GuestCast,
-  Module,
+  Private,
 } from "patron-oop";
 
 const isEven = (v) => v % 2 === 0;
@@ -56,10 +57,10 @@ const nTimesSource = (condition, n, baseSource) => (guest) => {
   );
 };
 
-const source = new Source([1, 2, 3, 4, 5]);
+const source = new SourceWithPool([1, 2, 3, 4, 5]);
 const guestMapped = new SourceMap(
   source,
-  new Module(
+  new Private(
     (itemSource) =>
       new SourceRace([
         nTimesSource(isEven, 2, itemSource),
@@ -82,10 +83,11 @@ guestMapped.value((v) => {
     SourceMap,
     SourceRace,
     Source,
+    SourceWithPool,
     give,
     value,
     GuestCast,
-    Module,
+    Private,
   } from "patron-oop";
 
   const isEven = (v) => v % 2 === 0;
@@ -102,10 +104,10 @@ guestMapped.value((v) => {
     );
   };
 
-  const source = new Source([1, 2, 3, 4, 5]);
+  const source = new SourceWithPool([1, 2, 3, 4, 5]);
   const guestMapped = new SourceMap(
     source,
-    new Module(
+    new Private(
       (itemSource) =>
         new SourceRace([
           nTimesSource(isEven, 2, itemSource),
@@ -150,7 +152,7 @@ guestMapped.value((v) => {
     - для наследования представления гостя, возможно данные нужны патрону
   </li>
   <li>
-    <link-dynamic href="/terminology/the-source">Module</link-dynamic>
+    <link-dynamic href="/terminology/the-source">Private</link-dynamic>
     - для объявления новой композиции
   </li>
 </ul>

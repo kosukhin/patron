@@ -26,7 +26,7 @@
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
 <pre
   class="mb-4"
-><code class="language-js">import { Source, GuestCast, SourceMap, Factory, give } from "patron-oop";
+><code class="language-js">import { Source, SourceWithPool, GuestCast, SourceMap, PrivateClass, give } from "patron-oop";
 
 class X2 {
   constructor(baseNumber) {
@@ -43,8 +43,8 @@ class X2 {
   }
 }
 
-const source = new Source([1, 2, 3, 9]);
-const guestMapped = new SourceMap(source, new Factory(X2));
+const source = new SourceWithPool([1, 2, 3, 9]);
+const guestMapped = new SourceMap(source, new PrivateClass(X2));
 
 guestMapped.value((v) => {
   document.querySelector(".guest-result").textContent = v.join();
@@ -57,7 +57,7 @@ guestMapped.value((v) => {
 </div>
 
 <script type="module">
-  import { Source, GuestCast, SourceMap, Factory, give } from "patron-oop";
+  import { Source, SourceWithPool, GuestCast, SourceMap, PrivateClass, give } from "patron-oop";
 
   class X2 {
     constructor(baseNumber) {
@@ -74,8 +74,8 @@ guestMapped.value((v) => {
     }
   }
 
-  const source = new Source([1, 2, 3, 9]);
-  const guestMapped = new SourceMap(source, new Factory(X2));
+  const source = new SourceWithPool([1, 2, 3, 9]);
+  const guestMapped = new SourceMap(source, new PrivateClass(X2));
 
   guestMapped.value((v) => {
     document.querySelector(".guest-result").textContent = v.join();
@@ -91,48 +91,50 @@ guestMapped.value((v) => {
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 2.</p>
 <pre class="mb-4"><code class="language-js">import {
   Source,
+  SourceWithPool,
   GuestCast,
-  Source,
   SourceMap,
-  Factory,
+  PrivateClass,
   give,
   isSource,
 } from "patron-oop";
 
-class X3 {
-  constructor(baseNumber) {
-    this.baseNumber = baseNumber;
+(() => {
+  class X3 {
+    constructor(baseNumber) {
+      this.baseNumber = baseNumber;
+    }
+
+    value(guest) {
+      this.baseNumber.value(
+        new GuestCast(guest, (v) => {
+          give(v * 3, guest);
+        })
+      );
+      return this;
+    }
   }
 
-  value(guest) {
-    this.baseNumber.value(
-      new GuestCast(guest, (v) => {
-        give(v * 3, guest);
-      })
+  const numSource = (num) =>
+    new Source((guest) =>
+      setTimeout(() => {
+        give(num, guest);
+      }, 8000)
     );
-    return this;
-  }
-}
 
-const numSource = (num) =>
-  new Source((guest) =>
-    setTimeout(() => {
-      give(num, guest);
-    }, 8000)
-  );
+  const source = new SourceWithPool([
+    numSource(1),
+    numSource(2),
+    numSource(3),
+    numSource(4),
+    numSource(5),
+  ]);
+  const map = new SourceMap(source, new PrivateClass(X3));
 
-const source = new Source([
-  numSource(1),
-  numSource(2),
-  numSource(3),
-  numSource(4),
-  numSource(5),
-]);
-const map = new SourceMap(source, new Factory(X3));
-
-map.value((v) => {
-  document.querySelector(".guest-result-2").textContent = v.join();
-});
+  map.value((v) => {
+    document.querySelector(".guest-result-2").textContent = v.join();
+  });
+})();
 </code></pre>
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Результат 2.</p>
@@ -143,10 +145,10 @@ map.value((v) => {
 <script type="module">
   import {
     Source,
+    SourceWithPool,
     GuestCast,
-    Source,
     SourceMap,
-    Factory,
+    PrivateClass,
     give,
     isSource,
   } from "patron-oop";
@@ -174,14 +176,14 @@ map.value((v) => {
         }, 8000)
       );
 
-    const source = new Source([
+    const source = new SourceWithPool([
       numSource(1),
       numSource(2),
       numSource(3),
       numSource(4),
       numSource(5),
     ]);
-    const map = new SourceMap(source, new Factory(X3));
+    const map = new SourceMap(source, new PrivateClass(X3));
 
     map.value((v) => {
       document.querySelector(".guest-result-2").textContent = v.join();

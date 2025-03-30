@@ -43,21 +43,24 @@
 </p>
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
-<pre class="mb-4"><code class="language-js">import {
-    Source,
-    Patron,
-} from 'patron-oop';
+<pre class="mb-4"><code class="language-js">import { SourceWithPool, Patron } from "patron-oop";
 
-const source = new Source('один');
+const source = new SourceWithPool("один");
 source.value((value) => {
-    document.querySelector('.source-result-1').textContent = `Результат гостя = ${value}`;
+  document.querySelector(
+    ".source-result-1"
+  ).textContent = `Результат гостя = ${value}`;
 });
-source.value(new Patron((value) => {
-    document.querySelector('.source-result-2').textContent = `Результат патрона = ${value}`;
-}));
+source.value(
+  new Patron((value) => {
+    document.querySelector(
+      ".source-result-2"
+    ).textContent = `Результат патрона = ${value}`;
+  })
+);
 
 setTimeout(() => {
-    source.give('два');
+  source.give("два");
 });
 </code></pre>
 
@@ -67,9 +70,9 @@ setTimeout(() => {
   <div class="source-result-2">Нет результата!</div>
 </div>
 <script type="module">
-  import { Source, Patron } from "patron-oop";
+  import { SourceWithPool, Patron } from "patron-oop";
 
-  const source = new Source("один");
+  const source = new SourceWithPool("один");
   source.value((value) => {
     document.querySelector(
       ".source-result-1"
