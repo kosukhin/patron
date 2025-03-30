@@ -1,7 +1,7 @@
-<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс GuestAware</h1>
+<h1 class="pb-3 text-xl font-semibold text-gray-600">Класс Source</h1>
 
 <a
-  href="https://github.com/kosukhin/patron/blob/main/src/Guest/GuestAware.ts"
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/Source.ts"
   target="_blank"
   class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
 >
@@ -10,7 +10,7 @@
     width="16"
     height="16"
   />
-  GuestAware на GitHub
+  Source на GitHub
 </a>
 
 <p class="text-gray-600 text-lg mb-4">
@@ -33,11 +33,11 @@
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
 <pre class="mb-4"><code class="language-js">import {
-    GuestAware,
+    Source,
     give
 } from 'patron-oop';
 
-const timestamp = new GuestAware((guest) => {
+const timestamp = new Source((guest) => {
     give(Date.now(), guest);
 });
 timestamp.value((timestamp) => {
@@ -50,9 +50,9 @@ timestamp.value((timestamp) => {
   <span class="guest-result">Result here</span>
 </div>
 <script type="module">
-  import { GuestAware, give } from "patron-oop";
+  import { Source, give } from "patron-oop";
 
-  const timestamp = new GuestAware((guest) => {
+  const timestamp = new Source((guest) => {
     give(Date.now(), guest);
   });
   timestamp.value((timestamp) => {
@@ -68,7 +68,7 @@ timestamp.value((timestamp) => {
   источнику через функцию
   <link-reloadable
     target-blank
-    href="https://github.com/kosukhin/patron/blob/main/src/Guest/GuestAware.ts#L11"
+    href="https://github.com/kosukhin/patron/blob/main/src/Source/Source.ts#L11"
   >
     value
   </link-reloadable>
@@ -114,19 +114,19 @@ value(helloSource, (greeting) => {
 
 <p class="text-gray-600 text-lg mb-4">
   Или можно передать источник-функцию в виде зависимости объектам, которые
-  ожидают интерфейс GuestAwareType, в примере ниже используется комбинация
-  <link-dynamic href="/guest/guest-aware-all">GuestAwareAll</link-dynamic>
+  ожидают интерфейс SourceType, в примере ниже используется комбинация
+  <link-dynamic href="/guest/source-all">SourceAll</link-dynamic>
   и источников-фукнций
 </p>
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 3.</p>
 <pre class="mb-4"><code class="language-js">import {
-  GuestAwareAll,
+  SourceAll,
   give,
   value
 } from "patron-oop";
 
-const all = new GuestAwareAll();
+const all = new SourceAll();
 value(give.bind(null, 1), all.guestKey("one"));
 value(give.bind(null, 2), all.guestKey("two"));
 
@@ -141,9 +141,9 @@ all.value(({ one, two }) => {
   <span class="guest-result-3">Result here</span>
 </div>
 <script type="module">
-  import { GuestAwareAll, give, value } from "patron-oop";
+  import { SourceAll, give, value } from "patron-oop";
 
-  const all = new GuestAwareAll();
+  const all = new SourceAll();
   value(give.bind(null, 1), all.guestKey("one"));
   value(give.bind(null, 2), all.guestKey("two"));
 

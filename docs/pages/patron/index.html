@@ -52,14 +52,14 @@
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
 <pre class="mb-4"><code class="language-js">import {
     Patron,
-    GuestAware,
+    Source,
     GuestDisposable,
     Source,
     isPatronInPools
 } from 'patron-oop';
 
 const source = new Source(1);
-const timer = new GuestAware((guest) => {
+const timer = new Source((guest) => {
     source.value(guest);
     const repeat = () => {
         if (!isPatronInPools(guest)) {
@@ -94,14 +94,14 @@ timer.value(new Patron(
 <script type="module">
   import {
     Patron,
-    GuestAware,
+    Source,
     GuestDisposable,
     Source,
     isPatronInPools,
   } from "patron-oop";
 
   const source = new Source(1);
-  const timer = new GuestAware((guest) => {
+  const timer = new Source((guest) => {
     source.value(guest);
     const repeat = () => {
       if (!isPatronInPools(guest)) {
@@ -139,8 +139,8 @@ timer.value(new Patron(
 <p class="text-gray-600 text-lg mb-4 dynamic-navigation">
   <a
     class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
-    href="/guest/guest-aware"
-    >GuestAware</a
+    href="/source/source"
+    >Source</a
   >
   <a
     class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"

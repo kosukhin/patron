@@ -1,9 +1,9 @@
 <h1 class="pb-3 text-xl font-semibold text-gray-600">
-  Класс GuestAwareSequence
+  Класс SourceSequence
 </h1>
 
 <a
-  href="https://github.com/kosukhin/patron/blob/main/src/Guest/GuestAwareSequence.ts"
+  href="https://github.com/kosukhin/patron/blob/main/src/Source/SourceSequence.ts"
   target="_blank"
   class="inline-flex gap-1 items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 mb-4"
 >
@@ -12,12 +12,12 @@
     width="16"
     height="16"
   />
-  GuestAwareSequence на GitHub
+  SourceSequence на GitHub
 </a>
 
 <p class="text-gray-600 text-lg mb-4">
-  Класс <b>GuestAwareSequence</b> работает так же как и
-  <link-dynamic href="/guest/guest-aware-map">GuestAwareMap</link-dynamic>
+  Класс <b>SourceSequence</b> работает так же как и
+  <link-dynamic href="/source/source-map">SourceMap</link-dynamic>
   , но перебирает источнники данных последовательно а не параллельно
 </p>
 
@@ -33,11 +33,11 @@
   Source,
   Patron,
   GuestCast,
-  GuestAware,
-  GuestAwareSequence,
+  Source,
+  SourceSequence,
   Factory,
   give,
-  isGuestAware,
+  isSource,
 } from "patron-oop";
 
 class X3 {
@@ -57,7 +57,7 @@ class X3 {
 
 const tillResult = new Source(9);
 const numSource = (num) =>
-  new GuestAware((guest) =>
+  new Source((guest) =>
     setTimeout(() => {
       tillResult.value((theValue) => {
         tillResult.give(theValue - 1);
@@ -77,7 +77,7 @@ const source = new Source([
   numSource(8),
   numSource(9),
 ]);
-const sequence = new GuestAwareSequence(source, new Factory(X3));
+const sequence = new SourceSequence(source, new Factory(X3));
 
 sequence.value((v) => {
   document.querySelector(".guest-result").textContent = v.join();
@@ -101,11 +101,11 @@ tillResult.value(
     Source,
     Patron,
     GuestCast,
-    GuestAware,
-    GuestAwareSequence,
+    Source,
+    SourceSequence,
     Factory,
     give,
-    isGuestAware,
+    isSource,
   } from "patron-oop";
 
   class X3 {
@@ -125,7 +125,7 @@ tillResult.value(
 
   const tillResult = new Source(9);
   const numSource = (num) =>
-    new GuestAware((guest) =>
+    new Source((guest) =>
       setTimeout(() => {
         tillResult.value((theValue) => {
           tillResult.give(theValue - 1);
@@ -145,7 +145,7 @@ tillResult.value(
     numSource(8),
     numSource(9),
   ]);
-  const sequence = new GuestAwareSequence(source, new Factory(X3));
+  const sequence = new SourceSequence(source, new Factory(X3));
 
   sequence.value((v) => {
     document.querySelector(".guest-result").textContent = v.join();

@@ -38,23 +38,23 @@
   и
   <link-reloadable
     target-blank
-    href="https://github.com/kosukhin/patron/blob/main/src/Guest/GuestAware.ts#L3"
+    href="https://github.com/kosukhin/patron/blob/main/src/Source/Source.ts#L3"
   >
-    GuestAwareType
+    SourceType
   </link-reloadable>
 </p>
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
 <pre
   class="mb-4"
-><code class="language-js">import { SourceDynamic, Guest, GuestAware } from "patron-oop";
+><code class="language-js">import { SourceDynamic, Guest, Source } from "patron-oop";
 
 let theValue = 1;
 const sourceDynamic = new SourceDynamic(
     new Guest((value) => {
         theValue = value;
     }),
-    new GuestAware((guest) => {
+    new Source((guest) => {
         give(theValue, guest);
     })
 );
@@ -72,14 +72,14 @@ sourceDynamic.value((value) => {
 </div>
 
 <script type="module">
-  import { SourceDynamic, Guest, GuestAware, give } from "patron-oop";
+  import { SourceDynamic, Guest, Source, give } from "patron-oop";
 
   let theValue = 1;
   const sourceDynamic = new SourceDynamic(
     new Guest((value) => {
       theValue = value;
     }),
-    new GuestAware((guest) => {
+    new Source((guest) => {
       give(theValue, guest);
     })
   );

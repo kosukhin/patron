@@ -93,7 +93,7 @@
     Guest,
     Source,
     Patron,
-    GuestAwareAll,
+    SourceAll,
     GuestCast,
     GuestDisposable,
   } from "patron-oop";
@@ -169,7 +169,7 @@
     }
 
     number(guest) {
-      const all = new GuestAwareAll();
+      const all = new SourceAll();
       this.num1.number(new GuestCast(guest, all.guestKey("n1")));
       this.num2.number(new GuestCast(guest, all.guestKey("n2")));
       all.value(
@@ -187,7 +187,7 @@
     }
 
     number(guest) {
-      const all = new GuestAwareAll();
+      const all = new SourceAll();
       this.num1.number(new GuestCast(guest, all.guestKey("n1")));
       this.num2.number(new GuestCast(guest, all.guestKey("n2")));
       all.value(
@@ -242,7 +242,7 @@
   Guest,
   Source,
   Patron,
-  GuestAwareAll,
+  SourceAll,
   GuestCast,
   GuestDisposable,
 } from "patron-oop";
@@ -338,7 +338,7 @@ class Addition {
   }
 
   number(guest) {
-    const all = new GuestAwareAll();
+    const all = new SourceAll();
     this.num1.number(new GuestCast(guest, all.guestKey("n1")));
     this.num2.number(new GuestCast(guest, all.guestKey("n2")));
     all.value(
@@ -356,7 +356,7 @@ class Multiplication {
   }
 
   number(guest) {
-    const all = new GuestAwareAll();
+    const all = new SourceAll();
     this.num1.number(new GuestCast(guest, all.guestKey("n1")));
     this.num2.number(new GuestCast(guest, all.guestKey("n2")));
     all.value(

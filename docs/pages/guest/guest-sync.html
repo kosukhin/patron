@@ -32,10 +32,10 @@
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
 <pre
   class="mb-4"
-><code class="language-js">import { Source, GuestSync } from 'patron-oop';
+><code class="language-js">import { SourceWithPool, GuestSync } from 'patron-oop';
 
-const source = new Source('Успешно установлено синхронно!');
-const syncGuest = new GuestSync();
+const source = new SourceWithPool('Успешно установлено синхронно!');
+const syncGuest = new GuestSync('');
 source.value(syncGuest);
 
 document.querySelector('.guest-result').textContent = syncGuest.value();
@@ -46,10 +46,10 @@ document.querySelector('.guest-result').textContent = syncGuest.value();
   <span class="guest-result">Значение установится синхронно!</span>
 </div>
 <script type="module">
-  import { Source, GuestSync } from "patron-oop";
+  import { SourceWithPool, GuestSync } from "patron-oop";
 
-  const source = new Source("Успешно установлено синхронно!");
-  const syncGuest = new GuestSync();
+  const source = new SourceWithPool("Успешно установлено синхронно!");
+  const syncGuest = new GuestSync('');
   source.value(syncGuest);
 
   document.querySelector(".guest-result").textContent = syncGuest.value();

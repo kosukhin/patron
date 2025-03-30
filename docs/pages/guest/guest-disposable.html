@@ -38,7 +38,7 @@
       class="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-white bg-slate-900"
       href="/terminology/the-patron"
     >
-      патрономGuestDisposable
+      патроном
     </a>
   </span>
 </p>
@@ -74,34 +74,30 @@
 </p>
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
-<pre class="mb-4"><code class="language-js">import {
-    Source,
-    Patron,
-    GuestDisposable
- } from 'patron-oop';
+<pre class="mb-4"><code class="language-js">import { SourceWithPool, Patron, GuestDisposable } from "patron-oop";
 
-const source = new Source('Один');
+  const source = new SourceWithPool("Один");
 
-source.value(
+  source.value(
     new Patron(
-        new GuestDisposable(
-            (value) => {
-                document.querySelector('.guest-result').textContent = value;
-            },
-            (value) => {
-                return value !== 'Один';
-            },
-        ),
-    ),
-);
+      new GuestDisposable(
+        (value) => {
+          document.querySelector(".guest-result").textContent = value;
+        },
+        (value) => {
+          return value !== "Один";
+        }
+      )
+    )
+  );
 
-setTimeout(() => {
-    source.give('Два');
-});
+  setTimeout(() => {
+    source.give("Два");
+  });
 
-setTimeout(() => {
-    source.give('Три');
-}, 100);
+  setTimeout(() => {
+    source.give("Три");
+  }, 100);
 </code></pre>
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
@@ -109,9 +105,9 @@ setTimeout(() => {
   <span class="guest-result">Нет значения</span>
 </div>
 <script type="module">
-  import { Source, Patron, GuestDisposable } from "patron-oop";
+  import { SourceWithPool, Patron, GuestDisposable } from "patron-oop";
 
-  const source = new Source("Один");
+  const source = new SourceWithPool("Один");
 
   source.value(
     new Patron(

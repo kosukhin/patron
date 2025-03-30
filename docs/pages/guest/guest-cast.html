@@ -57,61 +57,7 @@
 <pre class="mb-4"><code class="language-js">import {
     give,
     Patron,
-    GuestCast
-} from 'patron-oop';
-
-class NumberOnceATime {
-    constructor(number, delay) {
-        this.delay = delay;
-        this.theNumber = number;
-    }
-
-    number(guest) {
-        const repeat = () => {
-            setTimeout(() => {
-                give(this.theNumber, guest);
-                repeat();
-            }, this.delay)
-        }
-        repeat();
-    }
-}
-
-class TotalSum {
-    constructor(numbers) {
-        this.numbers = numbers;
-    }
-
-    sum(guest) {
-        let totalSum = 0;
-        this.numbers.forEach((numberSource, index) => {
-            numberSource.number(new GuestCast(guest, (value) => {
-                totalSum += value;
-                give(totalSum, guest);
-            }));
-        });
-    }
-}
-
-new TotalSum([
-    new NumberOnceATime(1, 1000),
-    new NumberOnceATime(10, 5000),
-    new NumberOnceATime(100, 10000)
-])
-    .sum(new Patron((value) => {
-        document.querySelector('.guest-result').textContent = `Результат = ${value}`;
-    }));
-</code></pre>
-
-<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
-<div class="example mb-4">
-  <span class="guest-cast-result">Результат = 0</span>
-</div>
-<script type="module">
-  import {
-    give,
-    Patron,
-    Source,
+    SourceWithPool,
     GuestCast,
     removePatronFromPools,
     isPatronInPools,
@@ -124,7 +70,7 @@ new TotalSum([
     }
 
     number(guest) {
-      const source = new Source(this.theNumber);
+      const source = new SourceWithPool(this.theNumber);
       source.value(guest);
       const repeat = () => {
         if (!isPatronInPools(guest)) {
@@ -147,7 +93,84 @@ new TotalSum([
 
     sum(guest) {
       let totalSum = 0;
-      const source = new Source(totalSum);
+      const source = new SourceWithPool(totalSum);
+      source.value(guest);
+      const numbersGuests = [];
+      this.numbers.forEach((numberSource, index) => {
+        const numberGuest = new GuestCast(guest, (value) => {
+          totalSum += value;
+          source.give(totalSum);
+        });
+        numberSource.number(numberGuest);
+        numbersGuests.push(numberGuest);
+      });
+
+      return numbersGuests;
+    }
+  }
+
+  let totalSumGuests = [];
+  const renderResult = new Patron((value) => {
+    const resultEl = document.querySelector(".guest-cast-result");
+    if (resultEl) {
+      resultEl.textContent = `Результат = ${value}`;
+    } else {
+      removePatronFromPools(renderResult);
+      totalSumGuests.forEach(removePatronFromPools);
+    }
+  }, "renderResult");
+  totalSumGuests = new TotalSum([
+    new NumberOnceATime(1, 1000),
+    new NumberOnceATime(10, 5000),
+    new NumberOnceATime(100, 10000),
+  ]).sum(renderResult);
+</code></pre>
+
+<p class="text-gray-600 text-lg mb-0 font-bold">Результат 1.</p>
+<div class="example mb-4">
+  <span class="guest-cast-result">Результат = 0</span>
+</div>
+<script type="module">
+  import {
+    give,
+    Patron,
+    SourceWithPool,
+    GuestCast,
+    removePatronFromPools,
+    isPatronInPools,
+  } from "patron-oop";
+
+  class NumberOnceATime {
+    constructor(number, delay) {
+      this.delay = delay;
+      this.theNumber = number;
+    }
+
+    number(guest) {
+      const source = new SourceWithPool(this.theNumber);
+      source.value(guest);
+      const repeat = () => {
+        if (!isPatronInPools(guest)) {
+          return;
+        }
+
+        setTimeout(() => {
+          source.give(this.theNumber);
+          repeat();
+        }, this.delay);
+      };
+      repeat();
+    }
+  }
+
+  class TotalSum {
+    constructor(numbers) {
+      this.numbers = numbers;
+    }
+
+    sum(guest) {
+      let totalSum = 0;
+      const source = new SourceWithPool(totalSum);
       source.value(guest);
       const numbersGuests = [];
       this.numbers.forEach((numberSource, index) => {

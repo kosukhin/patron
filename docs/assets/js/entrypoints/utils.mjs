@@ -40,9 +40,9 @@ const main = () => {
       page: new Page("removePatronFromPools"),
     },
     {
-      url: "/utils/is-guest-aware",
-      template: "pages/utils/is-guest-aware.html",
-      page: new Page("isGuestAware"),
+      url: "/utils/is-source",
+      template: "pages/utils/is-source.html",
+      page: new Page("isSource"),
     },
     {
       url: "/utils/is-guest",

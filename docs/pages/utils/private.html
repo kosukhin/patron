@@ -32,7 +32,7 @@
 
 <p class="text-gray-600 text-lg mb-0 font-bold">Пример 1.</p>
 <pre class="mb-4"><code class="language-js">class SomeAction {
-  public constructor(private source: PrivateType&lt;GuestAwareType&lt;number>>) { }
+  public constructor(private source: PrivateType&lt;SourceType&lt;number>>) { }
 
   do() {
     // Тут мы уверены что 'hello' передано лично и никто его не получит

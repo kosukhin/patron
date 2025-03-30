@@ -63,7 +63,7 @@
 &lt;/template&gt;
 
 &lt;script lang=&quot;ts&quot;&gt;
-import { GuestAware, Guest, Patron } from &#39;patron-oop&#39;;
+import { Source, Guest, Patron } from &#39;patron-oop&#39;;
 import { defineComponent, ref } from &#39;vue&#39;;
 import { PropType } from &#39;vue/types/v3-component-props&#39;;
 
@@ -72,7 +72,7 @@ export default defineComponent({
   emits: [&#39;input&#39;],
   props: {
     source: {
-      type: Object as PropType&lt;GuestAware&lt;any&gt;&gt;,
+      type: Object as PropType&lt;Source&lt;any&gt;&gt;,
       required: true,
     },
   },
