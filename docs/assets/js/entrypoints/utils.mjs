@@ -50,6 +50,11 @@ const main = () => {
       page: new Page("isGuest"),
     },
     {
+      url: "/utils/source-of",
+      template: "pages/utils/source-of.html",
+      page: new Page("sourceOf"),
+    },
+    {
       url: "",
       template: "pages/404.html",
       page: new Page("Страница не найдена"),
